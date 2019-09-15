@@ -33,9 +33,6 @@
       }
     })
     map.addControl(geolocate);
-    map.on('load', function() {
-      geolocate.trigger();
-    });
 
     // Add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
@@ -43,9 +40,6 @@
     map.trackUserLocation.enable();
     map.BoxZoomHandler.enable();
     map.TouchZoomRotateHandler.enable();
-
-
-
 
   </script>
 
