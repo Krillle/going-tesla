@@ -26,10 +26,10 @@
     // Add geolocate control to the map.
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
-        enableHighAccuracy: false
+        enableHighAccuracy: true
       },
       fitBoundsOptions: {
-        maxZoom: 15
+        maxZoom: 10
       }
     })
     map.addControl(geolocate);
