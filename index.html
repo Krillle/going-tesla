@@ -32,9 +32,13 @@
         maxZoom: 10
       }
     }));
+    map.addControl(new mapboxgl.NavigationControl());
     map.trackUserLocation.enable();
     map.BoxZoomHandler.enable();
     map.TouchZoomRotateHandler.enable();
+
+    // Add zoom and rotation controls to the map.
+
 
   </script>
 
