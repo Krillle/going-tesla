@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>Display a map with a custom style</title>
+  <title>Goingtesla</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
@@ -28,8 +28,14 @@
       positionOptions: {
         enableHighAccuracy: false
       },
-      trackUserLocation: true
+      fitBoundsOptions: {
+        maxZoom: 15
+      }
     }));
+    map.trackUserLocation.enable();
+    map.BoxZoomHandler.enable();
+    map.TouchZoomRotateHandler.enable();
+
   </script>
 
 </body>
