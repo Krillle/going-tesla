@@ -24,20 +24,27 @@
     });
 
     // Add geolocate control to the map.
-    map.addControl(new mapboxgl.GeolocateControl({
+    const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: false
       },
       fitBoundsOptions: {
         maxZoom: 10
       }
-    }));
+    })
+    map.addControl(geolocate);
+    map.on('load', function() {
+      geolocate.trigger();
+    });
+
+    // Add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
+
     map.trackUserLocation.enable();
     map.BoxZoomHandler.enable();
     map.TouchZoomRotateHandler.enable();
 
-    // Add zoom and rotation controls to the map.
+
 
 
   </script>
