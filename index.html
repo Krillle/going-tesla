@@ -29,10 +29,13 @@
         enableHighAccuracy: false
       },
       fitBoundsOptions: {
-        maxZoom: 10
+        maxZoom: 15
       }
     })
     map.addControl(geolocate);
+    map.on('load', function() {
+      geolocate.trigger();
+    });
 
     // Add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
