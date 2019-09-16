@@ -18,7 +18,7 @@
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
       container: 'map', // container id
-      style: 'mapbox://styles/mapbox/dark-v10', //hosted style id
+      style: 'mapbox://styles/krillle/ck0m95zut05iy1cpfpckx1nxs', //hosted style id
       center: [10.46, 50.83], // starting position
       zoom: 6 // starting zoom
     });
@@ -39,7 +39,7 @@
     // });
 
     map.on('load', function() {
-      map.loadImage('https://img.icons8.com/material-sharp/48/ff0000/tesla-supercharger-pin--v1.png', function(error, image) {
+      map.loadImage('https://img.icons8.com/material-sharp/24/ff514a/tesla-supercharger-pin--v1.png', function(error, image) {
         if (error) throw error;
         map.addImage('charger', image);
         map.addLayer({
@@ -53,7 +53,7 @@
                 "type": "Feature",
                 "geometry": {
                   "type": "Point",
-                  "coordinates": [0, 0]
+                  "coordinates": [10.46, 50.83]
                 }
               }]
             }
