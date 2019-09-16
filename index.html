@@ -34,14 +34,14 @@
     })
     map.addControl(geolocate);
 
-    map.on('load', function() {
-      geolocate.trigger();
-    });
+    // map.on('load', function() {
+    //   geolocate.trigger();
+    // });
 
-    map.on('movend', function() {
-      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
+    map.on('load', function() {
+      map.loadImage('https://img.icons8.com/material-sharp/48/ff0000/tesla-supercharger-pin--v1.png', function(error, image) {
         if (error) throw error;
-        map.addImage('cat', image);
+        map.addImage('charger', image);
         map.addLayer({
           "id": "points",
           "type": "symbol",
@@ -59,8 +59,8 @@
             }
           },
           "layout": {
-            "icon-image": "cat",
-            "icon-size": 0.25
+            "icon-image": "charger",
+            // "icon-size": 0.25
           }
         });
       });
