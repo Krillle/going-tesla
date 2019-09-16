@@ -15,10 +15,14 @@
 
   <div id='map'></div>
   <script>
+    const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
+    const chargerBigSize = '44';
+    const chargerSmallSize = '34';
+
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
       container: 'map', // container id
-      style: 'mapbox://styles/krillle/ck0m95zut05iy1cpfpckx1nxs', //hosted style id
+      style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', //hosted style id
       center: [10.46, 50.83], // starting position
       zoom: 6 // starting zoom
     });
@@ -34,12 +38,16 @@
     })
     map.addControl(geolocate);
 
-    // map.on('load', function() {
-    //   geolocate.trigger();
-    // });
-
     map.on('load', function() {
-      map.loadImage('https://img.icons8.com/material-sharp/24/ff514a/tesla-supercharger-pin--v1.png', function(error, image) {
+      geolocate.trigger();
+    });
+
+    map.on('moveend', function() {
+
+      var chargerList = getChargersInBounds(map.getBounds())
+      console.log(chargerList);
+
+      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/ff514a/tesla-supercharger-pin--v1.png`, function(error, image) {
         if (error) throw error;
         map.addImage('charger', image);
         map.addLayer({
@@ -70,10 +78,22 @@
     // Add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
 
-    map.trackUserLocation.enable();
-    map.BoxZoomHandler.enable();
-    map.TouchZoomRotateHandler.enable();
 
+    function httpGet(url) {
+      var httpReq = new XMLHttpRequest(); // a new request
+      httpReq.open("GET",url,false);
+      httpReq.send(null);
+      return httpReq.responseText;
+    };
+
+
+    function getChargersInBounds(searchField) {
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?' +
+        `key=${goingelectricToken}&`+
+        `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
+        `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
+      return JSON.parse(httpGet(geUrl));
+    };
   </script>
 
 </body>
