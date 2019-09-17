@@ -43,35 +43,8 @@
     });
 
     map.on('moveend', function() {
-
-      var chargerList = getChargersInBounds(map.getBounds())
-      console.log(chargerList);
-
-      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/ff514a/tesla-supercharger-pin--v1.png`, function(error, image) {
-        if (error) throw error;
-        map.addImage('charger', image);
-        map.addLayer({
-          "id": "points",
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": [{
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [10.46, 50.83]
-                }
-              }]
-            }
-          },
-          "layout": {
-            "icon-image": "charger",
-            // "icon-size": 0.25
-          }
-        });
-      });
+      console.log("Invoke Uopdate");
+      updateChargers()
 
     });
 
@@ -86,13 +59,48 @@
       return httpReq.responseText;
     };
 
-
     function getChargersInBounds(searchField) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?' +
         `key=${goingelectricToken}&`+
         `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
       return JSON.parse(httpGet(geUrl));
+    };
+
+    function updateChargers() {
+      var chargerList = getChargersInBounds(map.getBounds())
+      console.log(chargerList);
+      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+      if (chargerList.startkey == 500) {console.console.log("More thah 500 chargers in area");}
+
+      chargerList.chargelocations.forEach(chargeLocation => {
+        map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/ff514a/tesla-supercharger-pin--v1.png`, function(error, image) {
+          if (error) throw error;
+          map.addImage('charger', image);
+          map.addLayer({
+            "id": "points",
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
+                  }
+                }]
+              }
+            },
+            "layout": {
+              "icon-image": "charger",
+              // "icon-size": 0.25
+            }
+          });
+        });
+      });
+
     };
   </script>
 
