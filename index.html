@@ -21,12 +21,21 @@
     const chargerBigSize = '44';
     const chargerSmallSize = '34';
 
+    const minPowerSuperCharger = '100';
+    const minPowerHigwayCharger = '50';
+    const minPowerDestinationCharger = '11';
+
+    var minPower = minPowerSuperCharger;
+
+    const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
+
+
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', //hosted style id
-      center: [10.46, 50.83], // starting position
-      zoom: 6 // starting zoom
+      center: [12.137,51.290], // starting position
+      zoom: 14 // starting zoom
     });
 
     // Add geolocate control to the map.
@@ -38,20 +47,55 @@
         maxZoom: 10
       }
     })
+    // Add locate, zoom and rotation controls to the map.
     map.addControl(geolocate);
+    map.addControl(new mapboxgl.NavigationControl());
 
     map.on('load', function() {
-      geolocate.trigger();
+
+      // Create Supercharger Image
+      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/ff514a/tesla-supercharger-pin--v1.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('charger', image);
+      });
+
+      // Prepare empty Supercharger Layer
+      map.addSource('Supercharger', {
+        "type": "geojson",
+        "data": {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        "id": "Supercharger",
+        "type": "symbol",
+        "source": "Supercharger",
+        "layout": {
+          // "text-field": ["get", "description"],
+          // "text-variable-anchor": ["top"],
+          // "text-radial-offset": 1.5,
+          // "text-justify": "auto",
+          "icon-image": "charger"
+          // "icon-size": 0.25
+        }
+      });
+
+      // geolocate.trigger();
+
+      // setup the viewport
+      // map.jumpTo({ 'center': [10.5,53], 'zoom': 10 });
+      // map.setPitch(30);
+
+      console.log("Initalize Chargers");
+      updateChargers();
+
     });
 
-    map.on('click', function() {
+    map.on('moveend', function() {
       console.log("Invoke Update");
-      updateChargers()
-
+      updateChargers();
     });
-
-    // Add zoom and rotation controls to the map.
-    map.addControl(new mapboxgl.NavigationControl());
 
 
     function httpGet(url) {
@@ -62,8 +106,9 @@
     };
 
     function getChargersInBounds(searchField) {
-      var geUrl = 'https://api.goingelectric.de/chargepoints/?' +
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
+        `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
       return JSON.parse(httpGet(geUrl));
@@ -71,40 +116,30 @@
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
-      console.log(chargerList);
+      console.log("GE Reply: ", chargerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-      if (chargerList.startkey == 500) {console.console.log("More thah 500 chargers in area");}
+      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
-      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/ff514a/tesla-supercharger-pin--v1.png`, function(error, image) {
-        if (error) throw error;
-        map.addImage('charger', image);
-      });
-
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
       chargerList.chargelocations.forEach(chargeLocation => {
-
-        map.addLayer({
+        newList.features.push({
           "id": chargeLocation.ge_id.toString(),
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": [{
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
-                }
-              }]
-            }
+          "type": "Feature",
+          "properties": {
+            "description": chargeLocation.name.toString(),
+            // "icon": "music"
           },
-          "layout": {
-            "icon-image": "charger",
-            // "icon-size": 0.25
+          "geometry": {
+            "type": "Point",
+            "coordinates": [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
           }
         });
       });
-
+      // console.log("New x list: ", newList);
+      map.getSource('Supercharger').setData(newList);
     };
   </script>
 
