@@ -147,7 +147,7 @@
           "type": "Feature",
           "properties": {
             "description": chargeLocation.name.toString(),
-            "icon": (chargeLocation.name.toString().toLowerCase().includes("tesla")) ? "teslaSuperCharger" : "thirdSuperCharger"
+            "icon": (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" : "thirdSuperCharger"
           },
           "geometry": {
             "type": "Point",
