@@ -21,6 +21,9 @@
     const chargerBigSize = '44';
     const chargerSmallSize = '34';
 
+    const chargerTeslaColor = "ff514a";
+    const chargerThirdColor = "4b535a";
+
     const minPowerSuperCharger = '100';
     const minPowerHigwayCharger = '50';
     const minPowerDestinationCharger = '11';
@@ -52,15 +55,20 @@
     map.addControl(new mapboxgl.NavigationControl());
 
     map.on('load', function() {
-
-      // Create Supercharger Image
-      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/ff514a/tesla-supercharger-pin--v1.png`, function(error, image) {
+      // Create Tesla Supercharger Image
+      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
         if (error) throw error;
-        map.addImage('charger', image);
+        map.addImage('teslaSuperCharger', image);
       });
 
-      // Prepare empty Supercharger Layer
-      map.addSource('Supercharger', {
+      // Create Third Party Supercharger Image
+      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('thirdSuperCharger', image);
+      });
+
+      // Prepare empty Charger Layer
+      map.addSource('Charger', {
         "type": "geojson",
         "data": {
           "type": "FeatureCollection",
@@ -68,15 +76,15 @@
         }
       });
       map.addLayer({
-        "id": "Supercharger",
+        "id": "Charger",
         "type": "symbol",
-        "source": "Supercharger",
+        "source": "Charger",
         "layout": {
           // "text-field": ["get", "description"],
           // "text-variable-anchor": ["top"],
           // "text-radial-offset": 1.5,
           // "text-justify": "auto",
-          "icon-image": "charger"
+          "icon-image": "{icon}" //""teslaSuperCharger"
           // "icon-size": 0.25
         }
       });
@@ -139,7 +147,7 @@
           "type": "Feature",
           "properties": {
             "description": chargeLocation.name.toString(),
-            // "icon": "music"
+            "icon": (chargeLocation.name.toString().toLowerCase().includes("tesla")) ? "teslaSuperCharger" : "thirdSuperCharger"
           },
           "geometry": {
             "type": "Point",
@@ -148,7 +156,7 @@
         });
       });
       // console.log("New x list: ", newList);
-      map.getSource('Supercharger').setData(newList);
+      map.getSource('Charger').setData(newList);
     };
   </script>
 
