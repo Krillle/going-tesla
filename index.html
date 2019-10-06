@@ -36,9 +36,10 @@
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
       container: 'map', // container id
-      style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', //hosted style id
+//      style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', // Light Tesla
+      style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f', // Dark Tesla
       center: [12.137,51.290], // starting position
-      zoom: 14 // starting zoom
+      zoom: 9 // starting zoom
     });
 
     // Add geolocate control to the map.
@@ -51,7 +52,7 @@
       }
     })
     // Add locate, zoom and rotation controls to the map.
-    // map.addControl(geolocate);
+    map.addControl(geolocate);
     map.addControl(new mapboxgl.NavigationControl());
 
     map.on('load', function() {
