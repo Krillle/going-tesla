@@ -9,9 +9,16 @@
   <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
+
   </style>
 </head>
 <body>
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
+  <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
   <div id='map'></div>
   <script>
@@ -42,15 +49,22 @@
       zoom: 9 // starting zoom
     });
 
+    // Add geocoder search field
+    map.addControl(new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl
+    }),"top-left");
+
     // Add geolocate control to the map.
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true
       },
       fitBoundsOptions: {
-        maxZoom: 10
+        maxZoom: 9
       }
     })
+
     // Add locate, zoom and rotation controls to the map.
     map.addControl(geolocate);
     map.addControl(new mapboxgl.NavigationControl());
