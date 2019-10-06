@@ -15,27 +15,149 @@
 
   <div id='map'></div>
   <script>
+    console.log("App started");
+
+    const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
+    const chargerBigSize = '44';
+    const chargerSmallSize = '34';
+
+    const chargerTeslaColor = "ff514a";
+    const chargerThirdColor = "4b535a";
+
+    const minPowerSuperCharger = '100';
+    const minPowerHigwayCharger = '50';
+    const minPowerDestinationCharger = '11';
+
+    var minPower = minPowerHigwayCharger;
+
+    const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
+
+
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
       container: 'map', // container id
-      style: 'mapbox://styles/mapbox/dark-v10', //hosted style id
-      center: [10.46, 50.83], // starting position
-      zoom: 6 // starting zoom
+      style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', //hosted style id
+      center: [12.137,51.290], // starting position
+      zoom: 14 // starting zoom
     });
 
     // Add geolocate control to the map.
-    map.addControl(new mapboxgl.GeolocateControl({
+    const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
-        enableHighAccuracy: false
+        enableHighAccuracy: true
       },
       fitBoundsOptions: {
         maxZoom: 10
       }
-    }));
-    map.trackUserLocation.enable();
-    map.BoxZoomHandler.enable();
-    map.TouchZoomRotateHandler.enable();
+    })
+    // Add locate, zoom and rotation controls to the map.
+    // map.addControl(geolocate);
+    map.addControl(new mapboxgl.NavigationControl());
 
+    map.on('load', function() {
+      // Create Tesla Supercharger Image
+      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('teslaSuperCharger', image);
+      });
+
+      // Create Third Party Supercharger Image
+      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('thirdSuperCharger', image);
+      });
+
+      // Prepare empty Charger Layer
+      map.addSource('Charger', {
+        "type": "geojson",
+        "data": {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        "id": "Charger",
+        "type": "symbol",
+        "source": "Charger",
+        "layout": {
+          // "text-field": ["get", "description"],
+          // "text-variable-anchor": ["top"],
+          // "text-radial-offset": 1.5,
+          // "text-justify": "auto",
+          "icon-image": "{icon}" //""teslaSuperCharger"
+          // "icon-size": 0.25
+        }
+      });
+
+      // geolocate.trigger();
+
+      // setup the viewport
+      // map.jumpTo({ 'center': [10.5,53], 'zoom': 10 });
+      // map.setPitch(30);
+
+      // console.log("Tesla Position");
+      // getTeslaState();
+
+      console.log("Initalize Chargers");
+      updateChargers();
+
+    });
+
+    map.on('moveend', function() {
+      console.log("Invoke Update");
+      updateChargers();
+    });
+
+
+    function httpGet(url, authToken) {
+      var httpReq = new XMLHttpRequest(); // a new request
+      httpReq.open("GET",url,false);
+      // if (authToken) {httpReq.setRequestHeader("Authorization", "Bearer " + authToken);};
+      httpReq.send(null);
+      return httpReq.responseText;
+    };
+
+    function getTeslaState() {
+      var teslaUrl = 'https://owner-api.teslamotors.com/api/1/vehicles/Y/data_request/drive_state';
+      console.log(JSON.parse(httpGet(teslaUrl,"X")));
+    };
+
+    function getChargersInBounds(searchField) {
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
+        `key=${goingelectricToken}&`+
+        `plugs=${compatiblePlugs}&min_power=${minPower}&`+
+        `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
+        `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
+      return JSON.parse(httpGet(geUrl));
+    };
+
+    function updateChargers() {
+      var chargerList = getChargersInBounds(map.getBounds())
+      console.log("GE Reply: ", chargerList);
+      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      chargerList.chargelocations.forEach(chargeLocation => {
+        newList.features.push({
+          "id": chargeLocation.ge_id.toString(),
+          "type": "Feature",
+          "properties": {
+            "description": chargeLocation.name.toString(),
+            "icon": (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" : "thirdSuperCharger"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
+          }
+        });
+      });
+      // console.log("New x list: ", newList);
+      map.getSource('Charger').setData(newList);
+    };
   </script>
 
 </body>
