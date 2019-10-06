@@ -10,6 +10,64 @@
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
 
+    /* Marker tweaks */
+    .mapboxgl-popup {
+      padding-bottom: 25px;
+    }
+    .mapboxgl-popup-close-button {
+      display:none;
+    }
+
+    .mapboxgl-popup-content {
+      font:400 15px/22px 'Gotham Light', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      padding:18px;
+      border-radius:10px 10px 10px 10px;
+      width:240px;
+      background:#0d0d0b;
+      color:#ffffff;
+      line-height: 1.15;
+    }
+    .mapboxgl-popup-content a {
+      color:#ffffff;
+    }
+
+    .mapboxgl-popup-content-wrapper {
+      padding:1%;
+    }
+    .mapboxgl-popup-content h3 {
+      background:#91c949;
+      color:#fff;
+      margin:0;
+      display:block;
+      padding:10px;
+      border-radius:3px 3px 0 0;
+      font-weight:700;
+      margin-top:-15px;
+    }
+
+    .mapboxgl-popup-content h4 {
+      margin:0;
+      display:block;
+      padding: 10px 10px 10px 10px;
+      font-weight:400;
+    }
+
+    .mapboxgl-popup-content div {
+      padding:10px;
+    }
+
+    /* .mapboxgl-container .leaflet-marker-icon {
+      cursor:pointer;
+    } */
+
+    .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+      margin-top: 15px;
+    }
+
+    .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+      border-bottom-color: #0d0d0b;
+    }
+
   </style>
 </head>
 <body>
@@ -29,7 +87,8 @@
     const chargerSmallSize = '34';
 
     const chargerTeslaColor = "ff514a";
-    const chargerThirdColor = "4b535a";
+    // const chargerThirdColor = "4b535a"; // dark marker for light map
+    const chargerThirdColor = "7f8082"; // light marker for dark map
 
     const minPowerSuperCharger = '100';
     const minPowerHigwayCharger = '50';
@@ -43,7 +102,7 @@
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
       container: 'map', // container id
-//      style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', // Light Tesla
+      // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', // Light Tesla
       style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f', // Dark Tesla
       center: [12.137,51.290], // starting position
       zoom: 9 // starting zoom
@@ -82,8 +141,14 @@
         map.addImage('thirdSuperCharger', image);
       });
 
+      // Create Fault Report Image
+      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('faultReport', image);
+      });
+
       // Prepare empty Charger Layer
-      map.addSource('Charger', {
+      map.addSource('chargers', {
         "type": "geojson",
         "data": {
           "type": "FeatureCollection",
@@ -91,9 +156,9 @@
         }
       });
       map.addLayer({
-        "id": "Charger",
+        "id": "chargers",
         "type": "symbol",
-        "source": "Charger",
+        "source": "chargers",
         "layout": {
           // "text-field": ["get", "description"],
           // "text-variable-anchor": ["top"],
@@ -121,6 +186,36 @@
     map.on('moveend', function() {
       console.log("Invoke Update");
       updateChargers();
+    });
+
+
+    // When a click event occurs on a feature in the places layer, open a popup at the
+    // location of the feature, with description HTML from its properties.
+    map.on('click', 'chargers', function (e) {
+      var coordinates = e.features[0].geometry.coordinates.slice();
+      var description = e.features[0].properties.description;
+
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+
+      new mapboxgl.Popup()
+      .setLngLat(coordinates)
+      .setHTML(description)
+      .addTo(map);
+    });
+
+    // Change the cursor to a pointer when the mouse is over the places layer.
+    map.on('mouseenter', 'chargers', function () {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'chargers', function () {
+      map.getCanvas().style.cursor = '';
     });
 
 
@@ -157,12 +252,29 @@
           "features": []
       };
       chargerList.chargelocations.forEach(chargeLocation => {
+
+        var maxPower = 0;
+        var maxType = "";
+        var maxCount = 0;
+        chargeLocation.chargepoints.forEach(chargePoint => {
+          if (chargePoint.power > maxPower) {
+            maxPower = chargePoint.power;
+            maxType = chargePoint.type;
+            maxCount = chargePoint.count;
+          };
+        });
+
         newList.features.push({
           "id": chargeLocation.ge_id.toString(),
           "type": "Feature",
           "properties": {
-            "description": chargeLocation.name.toString(),
-            "icon": (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" : "thirdSuperCharger"
+            "description": `<strong>${chargeLocation.name.toString()} ${chargeLocation.address.city}</strong><p>
+                            ${maxCount}x ${maxPower} kW ${maxType}<br>
+                            <hr>
+                            ${chargeLocation.address.street}<br>
+                            ${chargeLocation.address.postcode} ${chargeLocation.address.city}<p>
+                            <a href=${chargeLocation.url}>Details auf GoingElectric</a>`,
+            "icon": (chargeLocation.fault_report ) ? "faultReport" : (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" : "thirdSuperCharger"
           },
           "geometry": {
             "type": "Point",
@@ -171,7 +283,7 @@
         });
       });
       // console.log("New x list: ", newList);
-      map.getSource('Charger').setData(newList);
+      map.getSource('chargers').setData(newList);
     };
   </script>
 
