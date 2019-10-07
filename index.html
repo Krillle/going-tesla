@@ -10,7 +10,6 @@
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
 
-    /* Marker tweaks */
     .mapboxgl-popup {
       padding-bottom: 25px;
     }
@@ -19,7 +18,8 @@
     }
 
     .mapboxgl-popup-content {
-      font:400 15px/22px 'Gotham Light', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      /* font:400 15px/22px 'Gotham Light', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
+      font:400 15px/22px 'Verdana', Sans-serif;
       padding:18px;
       border-radius:10px 10px 10px 10px;
       width:240px;
@@ -29,6 +29,12 @@
     }
     .mapboxgl-popup-content a {
       color:#ffffff;
+    }
+
+    .mapboxgl-popup-content hr {
+      height: 1px ;
+      border-width: 1px 0 0 0 ;
+      border-top: 1px solid gray ;
     }
 
     .mapboxgl-popup-content-wrapper {
@@ -60,12 +66,17 @@
       cursor:pointer;
     } */
 
-    .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
-      margin-top: 15px;
+    .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
+      border-top-color: #0d0d0b;
     }
-
     .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
       border-bottom-color: #0d0d0b;
+    }
+    .mapboxgl-popup-anchor-left > .mapboxgl-popup-tip {
+      border-right-color: #0d0d0b;
+    }
+    .mapboxgl-popup-anchor-right > .mapboxgl-popup-tip {
+      border-left-color: #0d0d0b;
     }
 
   </style>
@@ -85,10 +96,12 @@
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
     const chargerBigSize = '44';
     const chargerSmallSize = '34';
+    const chargerFaultSize = '24';
 
     const chargerTeslaColor = "ff514a";
     // const chargerThirdColor = "4b535a"; // dark marker for light map
-    const chargerThirdColor = "7f8082"; // light marker for dark map
+    const chargerThirdColor = "787878"; // light marker for dark map
+    const chargerFaultColor = "ffb800";
 
     const minPowerSuperCharger = '100';
     const minPowerHigwayCharger = '50';
@@ -142,7 +155,7 @@
       });
 
       // Create Fault Report Image
-      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+      map.loadImage(`https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`, function(error, image) {
         if (error) throw error;
         map.addImage('faultReport', image);
       });
@@ -164,7 +177,8 @@
           // "text-variable-anchor": ["top"],
           // "text-radial-offset": 1.5,
           // "text-justify": "auto",
-          "icon-image": "{icon}" //""teslaSuperCharger"
+           "icon-image": "{icon}", // teslaSuperCharger"
+           "icon-anchor": "bottom"
           // "icon-size": 0.25
         }
       });
@@ -193,7 +207,7 @@
     // location of the feature, with description HTML from its properties.
     map.on('click', 'chargers', function (e) {
       var coordinates = e.features[0].geometry.coordinates.slice();
-      var description = e.features[0].properties.description;
+      var description = chargerDescription(e.features[0].id);
 
       // Ensure that if the map is zoomed out such that multiple
       // copies of the feature are visible, the popup appears
@@ -202,7 +216,7 @@
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
 
-      new mapboxgl.Popup()
+      new mapboxgl.Popup({ offset: 25 })
       .setLngLat(coordinates)
       .setHTML(description)
       .addTo(map);
@@ -232,6 +246,13 @@
       console.log(JSON.parse(httpGet(teslaUrl,"X")));
     };
 
+    function getChargerDetails(id) {
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
+        `key=${goingelectricToken}&`+
+        `ge_id=${id}`;
+      return JSON.parse(httpGet(geUrl));
+    };
+
     function getChargersInBounds(searchField) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
@@ -252,28 +273,10 @@
           "features": []
       };
       chargerList.chargelocations.forEach(chargeLocation => {
-
-        var maxPower = 0;
-        var maxType = "";
-        var maxCount = 0;
-        chargeLocation.chargepoints.forEach(chargePoint => {
-          if (chargePoint.power > maxPower) {
-            maxPower = chargePoint.power;
-            maxType = chargePoint.type;
-            maxCount = chargePoint.count;
-          };
-        });
-
         newList.features.push({
           "id": chargeLocation.ge_id.toString(),
           "type": "Feature",
           "properties": {
-            "description": `<strong>${chargeLocation.name.toString()} ${chargeLocation.address.city}</strong><p>
-                            ${maxCount}x ${maxPower} kW ${maxType}<br>
-                            <hr>
-                            ${chargeLocation.address.street}<br>
-                            ${chargeLocation.address.postcode} ${chargeLocation.address.city}<p>
-                            <a href=${chargeLocation.url}>Details auf GoingElectric</a>`,
             "icon": (chargeLocation.fault_report ) ? "faultReport" : (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" : "thirdSuperCharger"
           },
           "geometry": {
@@ -285,6 +288,39 @@
       // console.log("New x list: ", newList);
       map.getSource('chargers').setData(newList);
     };
+
+    function chargerDescription (id) {
+      var chargerDetails = getChargerDetails(id);
+      if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
+      var chargeLocation = chargerDetails.chargelocations[0];
+
+      var maxPower = 0;
+      var maxType = "";
+      var maxCount = 0;
+      chargeLocation.chargepoints.forEach(chargePoint => {
+        if (chargePoint.power > maxPower) {
+          maxPower = chargePoint.power;
+          maxType = chargePoint.type;
+          maxCount = chargePoint.count;
+        };
+      });
+
+      description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong><p>
+                     ${maxCount}x ${maxPower} kW ${maxType}<br>`;
+
+      description += (chargeLocation.location_description) ? (`${chargeLocation.location_description}<p>`) : "<p>";
+      description += "<hr>";
+      // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : "";
+      description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : "";
+
+      description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : "";
+      description += `${chargeLocation.address.street}<br>${chargeLocation.address.postcode} ${chargeLocation.address.city}<p>`;
+      description += `<a href=${chargeLocation.url}>Details auf GoingElectric ${id}</a>`;
+
+
+      return description;
+    };
+
   </script>
 
 </body>
