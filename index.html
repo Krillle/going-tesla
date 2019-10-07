@@ -13,19 +13,29 @@
     .mapboxgl-popup {
       padding-bottom: 25px;
     }
+    .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
+      border-top-color: #0d0d0b;
+    }
+    .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+      border-bottom-color: #0d0d0b;
+    }
+    .mapboxgl-popup-anchor-left > .mapboxgl-popup-tip {
+      border-right-color: #0d0d0b;
+    }
+    .mapboxgl-popup-anchor-right > .mapboxgl-popup-tip {
+      border-left-color: #0d0d0b;
+    }
     .mapboxgl-popup-close-button {
       display:none;
     }
 
     .mapboxgl-popup-content {
-      /* font:400 15px/22px 'Gotham Light', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
-      font:400 15px/22px 'Verdana', Sans-serif;
-      padding:18px;
+      font:400 25px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      padding:36px;
       border-radius:10px 10px 10px 10px;
-      width:240px;
+      width:480px;
       background:#0d0d0b;
       color:#ffffff;
-      line-height: 1.15;
     }
     .mapboxgl-popup-content a {
       color:#ffffff;
@@ -40,7 +50,7 @@
     .mapboxgl-popup-content-wrapper {
       padding:1%;
     }
-    .mapboxgl-popup-content h3 {
+    /* .mapboxgl-popup-content h3 {
       background:#91c949;
       color:#fff;
       margin:0;
@@ -56,7 +66,7 @@
       display:block;
       padding: 10px 10px 10px 10px;
       font-weight:400;
-    }
+    } */
 
     .mapboxgl-popup-content div {
       padding:10px;
@@ -66,18 +76,6 @@
       cursor:pointer;
     } */
 
-    .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
-      border-top-color: #0d0d0b;
-    }
-    .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-      border-bottom-color: #0d0d0b;
-    }
-    .mapboxgl-popup-anchor-left > .mapboxgl-popup-tip {
-      border-right-color: #0d0d0b;
-    }
-    .mapboxgl-popup-anchor-right > .mapboxgl-popup-tip {
-      border-left-color: #0d0d0b;
-    }
 
   </style>
 </head>
@@ -212,11 +210,13 @@
       // Ensure that if the map is zoomed out such that multiple
       // copies of the feature are visible, the popup appears
       // over the copy being pointed to.
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
+      // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      // }
 
-      new mapboxgl.Popup({ offset: 25 })
+      map.flyTo({ 'center': e.features[0].geometry.coordinates});
+
+      new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       .setLngLat(coordinates)
       .setHTML(description)
       .addTo(map);
@@ -309,9 +309,9 @@
                      ${maxCount}x ${maxPower} kW ${maxType}<br>`;
 
       description += (chargeLocation.location_description) ? (`${chargeLocation.location_description}<p>`) : "<p>";
+      description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : "";
       description += "<hr>";
       // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : "";
-      description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : "";
 
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : "";
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.postcode} ${chargeLocation.address.city}<p>`;
