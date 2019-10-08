@@ -337,7 +337,7 @@
                      ${maxCount}x ${maxPower} kW ${maxType}`;
 
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : "<p>";
-      description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : "";
+      description += (chargeLocation.fault_report) ? (`<strong>Störung: ${chargeLocation.fault_report.description}</strong><p>`) : "";
       description += "<hr>";
       // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : "";
 
