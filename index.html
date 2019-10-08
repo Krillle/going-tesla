@@ -9,18 +9,18 @@
   <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
-    
+
     #map .mapboxgl-ctrl-group > button {
       width:60px;
       height:60px;
     }
-    
+
     #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow  {
       width:40px;
       height:40px;
     }
-    
-    #map .mapboxgl-ctrl-top-left .mapboxgl-ctrl { // Search field
+
+    #map .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
       width: 400px;
       min-width: 400px;
       max-width:400px;
@@ -32,7 +32,10 @@
     #map .mapboxgl-ctrl-geocoder--icon {
       top:20px !important;
     }
-    
+    #map .mapboxgl-ctrl-geocoder--icon-close {
+      top:20px !important;
+    }
+
     .mapboxgl-popup {
       padding-bottom: 25px;
     }
@@ -78,23 +81,6 @@
     .mapboxgl-popup-content-wrapper {
       padding:1%;
     }
-    /* .mapboxgl-popup-content h3 {
-      background:#91c949;
-      color:#fff;
-      margin:0;
-      display:block;
-      padding:10px;
-      border-radius:3px 3px 0 0;
-      font-weight:700;
-      margin-top:-15px;
-    }
-
-    .mapboxgl-popup-content h4 {
-      margin:0;
-      display:block;
-      padding: 10px 10px 10px 10px;
-      font-weight:400;
-    } */
 
     .mapboxgl-popup-content div {
       padding:10px;
@@ -121,17 +107,20 @@
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
     const chargerBigSize = '44';
-    const chargerSmallSize = '34';
+    const chargerParkSize = '34';
     const chargerFaultSize = '24';
 
     const chargerTeslaColor = "ff514a";
-    const chargerThirdColor = "4b535a"; // dark marker for light map
-    // const chargerThirdColor = "787878"; // light marker for dark map
+    // const chargerThirdColor = "4b535a"; // dark marker for light map
+    const chargerThirdColor = "787878"; // light marker for dark map
+    const chargerParkColor = "e6e6e6"; // light marker for dark map
     const chargerFaultColor = "ffb800";
 
     const minPowerSuperCharger = '100';
-    const minPowerHigwayCharger = '50';
+    const minPowerHighwayCharger = '50';
+    const minZoomHighwayCharger = '11';
     const minPowerDestinationCharger = '11';
+    const minZoomDestinationCharger = '14';
 
     var minPower = minPowerSuperCharger;
 
@@ -180,6 +169,12 @@
         map.addImage('thirdSuperCharger', image);
       });
 
+      // Create Park Charger Image
+      map.loadImage(`https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('parkCharger', image);
+      });
+
       // Create Fault Report Image
       map.loadImage(`https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`, function(error, image) {
         if (error) throw error;
@@ -226,6 +221,13 @@
     map.on('moveend', function() {
       console.log("Invoke Update");
       updateChargers();
+    });
+
+    map.on('zoomend', function() {
+      console.log("Set Charger for zoom level " + map.getZoom());
+      if ( map.getZoom() >= minZoomDestinationCharger ) {minPower = minPowerDestinationCharger}
+      else if (map.getZoom() >= minZoomHighwayCharger) {minPower = minPowerHighwayCharger}
+      else {minPower = minPowerSuperCharger}
     });
 
 
@@ -301,11 +303,17 @@
           "features": []
       };
       chargerList.chargelocations.forEach(chargeLocation => {
+        var maxPower = 0;
+        chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
+
         newList.features.push({
           "id": chargeLocation.ge_id.toString(),
           "type": "Feature",
           "properties": {
-            "icon": (chargeLocation.fault_report ) ? "faultReport" : (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" : "thirdSuperCharger"
+            "icon": (chargeLocation.fault_report ) ? "faultReport" :
+              (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
+              (maxPower >= minPowerSuperCharger) ? "thirdSuperCharger" :
+              "parkCharger"
           },
           "geometry": {
             "type": "Point",
