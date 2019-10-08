@@ -10,30 +10,34 @@
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
     
-    #map .mapboxgl-ctrl-group > button {
+    // Location + Zoom Buttons
+    .mapboxgl-ctrl-group > button {
       width:60px;
       height:60px;
     }
     
-    #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow  {
+    // Kompass Icon
+    .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow  {
       width:40px;
       height:40px;
     }
     
-    #map .mapboxgl-ctrl-geocoder--input {
-      height: 60px;
-    }
-    #map .mapboxgl-ctrl-geocoder--icon {
-      top:20px !important;
-    }
-      
+    // Searchfield
 
-    #map .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
-      width: 400px;
-      min-width: 400px;
-      max-width:400px;
-    }
+    //#map .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
+    //  width: 400px;
+    //  min-width: 400px;
+    //  max-width:400px;
+    // }
     
+    //#map .mapboxgl-ctrl-geocoder--input {
+    //  height: 60px;
+    // }
+    //#map .mapboxgl-ctrl-geocoder--icon {
+    //  top:20px !important;
+    //}
+    
+    // Popup
     .mapboxgl-popup {
       padding-bottom: 25px;
     }
@@ -241,7 +245,7 @@
 
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
-      new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      new mapboxgl.Popup({ offset: 25, anchor: 'bottom', background: #0d0d0b })
       .setLngLat(coordinates)
       .setHTML(description)
       .addTo(map);
