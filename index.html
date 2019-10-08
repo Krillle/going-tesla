@@ -63,6 +63,10 @@
     .mapboxgl-popup-content a {
       color:#ffffff;
     }
+    .mapboxgl-popup-content strong {
+      font: 1000;
+    }
+    
 
     .mapboxgl-popup-content hr {
       height: 1px ;
@@ -329,9 +333,9 @@
       });
 
       description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong><p>
-                     ${maxCount}x ${maxPower} kW ${maxType}<br>`;
+                     ${maxCount}x ${maxPower} kW ${maxType}`;
 
-      description += (chargeLocation.location_description) ? (`${chargeLocation.location_description}<p>`) : "<p>";
+      description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : "<p>";
       description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : "";
       description += "<hr>";
       // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : "";
