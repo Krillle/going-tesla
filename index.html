@@ -210,8 +210,8 @@
       // map.jumpTo({ 'center': [10.5,53], 'zoom': 10 });
       // map.setPitch(30);
 
-      // console.log("Tesla Position");
-      // getTeslaState();
+      console.log("Tesla Position");
+      getTeslaState();
 
       console.log("Initalize Chargers");
       updateChargers();
@@ -266,14 +266,14 @@
     function httpGet(url, authToken) {
       var httpReq = new XMLHttpRequest(); // a new request
       httpReq.open("GET",url,false);
-      // if (authToken) {httpReq.setRequestHeader("Authorization", "Bearer " + authToken);};
+      if (authToken) {httpReq.setRequestHeader("Authorization", "Bearer " + authToken); console.log("Token used")};
       httpReq.send(null);
       return httpReq.responseText;
     };
 
     function getTeslaState() {
       var teslaUrl = 'https://owner-api.teslamotors.com/api/1/vehicles/Y/data_request/drive_state';
-      console.log(JSON.parse(httpGet(teslaUrl,"X")));
+      console.log(JSON.parse(httpGet(teslaUrl,prompt("Please enter your token", "Tesla Token"))));
     };
 
     function getChargerDetails(id) {
