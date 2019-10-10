@@ -187,14 +187,6 @@
         map.addImage('faultReport', image);
       });
 
-      // Create Position Image
-      map.loadImage(`https://img.icons8.com/small/${positionSize}/${positionColor}/gps-device.png`, function(error, image) {
-        if (error) throw error;
-        map.addImage('position', image);
-      });
-
-
-
       // Prepare empty Charger Layer
       map.addSource('chargers', {
         "type": "geojson",
@@ -228,6 +220,38 @@
       // setup the viewport
       console.log("Tesla Position");
       updatePosition();
+
+      // Create Position Image
+      map.loadImage(`https://img.icons8.com/small/${positionSize}/${positionColor}/gps-device.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('position', image);
+
+        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+        map.addLayer({
+          id: "position",
+          type: "symbol",
+          /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+          source: {
+            type: "geojson",
+            data: {
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                    type: "Point",
+                    coordinates: [teslaPosition.longitude,teslaPosition.latitude]
+                  }
+                }
+              ]
+            }
+          },
+          layout: {
+            "icon-image": "position",
+          }
+        });
+      });
 
       // map.setPitch(30);
 
@@ -293,7 +317,6 @@
       // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       console.log ('Cookie: ' + document.cookie);
       console.log ('Token: ' + getCookie('token'));
-      console.log ('Status: ' + getTeslaDriveStatus());
       teslaToken = getCookie('token');
       if (getTeslaDriveStatus() == null) {
         teslaToken = getToken ();
@@ -309,7 +332,7 @@
       console.log(driveStatus);
       teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading};
       map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': 9, 'bearing': teslaPosition.heading });
-      
+
     };
 
     function httpGet(url) {
@@ -323,7 +346,7 @@
       console.log ('Token: ' + teslaToken)
       var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
       result = httpGet(teslaUrl)
-      console.log("Result'" + result);
+      console.log("Result" + result);
       if (result) {
         return JSON.parse(httpGet(teslaUrl));
       } else {
