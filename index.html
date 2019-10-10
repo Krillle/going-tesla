@@ -210,8 +210,8 @@
       // map.jumpTo({ 'center': [10.5,53], 'zoom': 10 });
       // map.setPitch(30);
 
-      // console.log("Tesla Position");
-      // getTeslaState();
+      console.log("Tesla Position");
+      getTeslaState();
 
       console.log("Initalize Chargers");
       updateChargers();
@@ -266,7 +266,13 @@
     function httpGet(url, authToken) {
       var httpReq = new XMLHttpRequest(); // a new request
       httpReq.open("GET",url,false);
-      if (authToken) {httpReq.setRequestHeader("Authorization", "Bearer " + authToken); console.log("Token used")};
+      if (authToken) {
+        httpReq.setRequestHeader("User-Agent", "Mozilla/5.0 (Linux; Android 9.0.0; VS985 4G Build/LRX21Y; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/58.0.3029.83 Mobile Safari/537.36");
+        httpReq.setRequestHeader("X-Tesla-User-Agent", "TeslaApp/3.4.4-350/fad4a582e/android/9.0.0");
+        httpReq.setRequestHeader("content-type", "application/json");
+        httpReq.setRequestHeader("Authorization", "Bearer " + authToken);
+        console.log("Token used")
+      };
       httpReq.send(null);
       return httpReq.responseText;
     };
