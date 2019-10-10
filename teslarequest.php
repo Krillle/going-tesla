@@ -36,6 +36,7 @@
     'authorization' => $_GET['token']
   ));
 
+  var_dump($info, $body);
   echo $json['body'];
 
 ?>
