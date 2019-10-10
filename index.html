@@ -299,6 +299,7 @@
 
     function getTeslaDriveStatus() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
+      console.log(httpGet(teslaUrl));
       return JSON.parse(httpGet(teslaUrl));
     };
 
