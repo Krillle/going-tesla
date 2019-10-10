@@ -283,6 +283,7 @@
       // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       console.log ('Cookie: ' + document.cookie);
       console.log ('Token: ' + getCookie('token'));
+      console.log ('Status: ' + getTeslaDriveStatus());
       teslaToken = getCookie('token');
       if (getTeslaDriveStatus() == null) {
         teslaToken = getToken ();
