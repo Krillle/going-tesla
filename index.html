@@ -125,6 +125,7 @@
     var minPower = minPowerSuperCharger;
 
     var teslaToken = '';
+    var teslaPosition =
 
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
 
@@ -215,10 +216,8 @@
 
       // setup the viewport
       console.log("Tesla Position");
-      var driveStatus = getTeslaDriveStatus();
-      console.log(driveStatus);
-
-      map.jumpTo({ 'center': [driveStatus.response.longitude,driveStatus.response.latitude], 'zoom': 9, 'bearing': driveStatus.response.heading });
+      updatePosition();
+      map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': 9, 'bearing': teslaPosition.heading });
 
       // map.setPitch(30);
 
@@ -293,6 +292,12 @@
         // do cookie exists stuff
       };
       console.log ('Actual Token: ' + teslaToken);
+    };
+
+    function updatePosition() {
+      var driveStatus = getTeslaDriveStatus();
+      teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading},
+      console.log(driveStatus);
     };
 
     function httpGet(url) {
