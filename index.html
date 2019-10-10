@@ -281,7 +281,7 @@
       // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       console.log ('Cookie: ' + document.cookie)
       console.log ('Token: ' + getCookie('token'))
-      var teslaToken = getCookie('token');
+      teslaToken = getCookie('token');
       if (teslaToken == null) {
         teslaToken = getToken ();
         document.cookie = 'token='+teslaToken;
@@ -298,6 +298,7 @@
     };
 
     function getTeslaDriveStatus() {
+        console.log ('Token: ' + teslaToken)
       var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
       console.log(httpGet(teslaUrl));
       return JSON.parse(httpGet(teslaUrl));
