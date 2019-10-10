@@ -126,8 +126,6 @@
 
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
 
-    var teslaToken = '';
-
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
@@ -207,19 +205,21 @@
       });
 
       console.log("Establish Connection to Tesla ");
+      var teslaToken = '';
       connectTesla ();
 
+      // setup the viewport
       console.log("Tesla Position");
-      driveStatus = getTeslaDriveStatus();
+      var driveStatus = getTeslaDriveStatus();
+      conslole.log(driveStatus);
 
-      console.log("Initalize Chargers");
-      updateChargers();
+      map.jumpTo({ 'center': [driveStatus.longitude,driveStatus.latitude], 'zoom': 9 });
+      // map.setPitch(30);
 
       // geolocate.trigger();
 
-      // setup the viewport
-      map.jumpTo({ 'center': [driveStatus.longitude,driveStatus.latitude], 'zoom': 9 });
-      // map.setPitch(30);
+      console.log("Initalize Chargers");
+      updateChargers();
 
     });
 
