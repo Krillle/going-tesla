@@ -213,7 +213,7 @@
       var driveStatus = getTeslaDriveStatus();
       console.log(driveStatus);
 
-      map.jumpTo({ 'center': [driveStatus.longitude,driveStatus.latitude], 'zoom': 9 });
+      map.jumpTo({ 'center': [driveStatus.response.longitude,driveStatus.response.latitude], 'zoom': 9 });
       // map.setPitch(30);
 
       // geolocate.trigger();
