@@ -124,6 +124,8 @@
 
     var minPower = minPowerSuperCharger;
 
+    var teslaToken = '';
+
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
 
 
@@ -209,7 +211,6 @@
 
 
       console.log("Establish Connection to Tesla ");
-      var teslaToken = '';
       connectTesla ();
 
       // setup the viewport
@@ -302,7 +303,7 @@
     };
 
     function getTeslaDriveStatus() {
-        console.log ('Token: ' + teslaToken)
+      console.log ('Token: ' + teslaToken)
       var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
       result = httpGet(teslaUrl)
       console.log("Result'" + result);
