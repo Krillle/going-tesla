@@ -36,6 +36,7 @@
     'authorization:bearer '.$_GET['token']
   ));
 
+  header('content-type: application/json');
   echo $json['body'];
 
 ?>

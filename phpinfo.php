@@ -1,1 +1,5 @@
-<?php phpinfo ();?>
+<?php
+echo "lkhlh" ;
+phpinfo ();
+?>
+<body>Hallo</body>
