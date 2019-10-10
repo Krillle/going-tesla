@@ -1,4 +1,4 @@
-<?php>
+<?php
   function hol_url($url, $header=false, $interface=false, $post = false) {
     $ch = curl_init($url);
     curl_setopt_array($ch, array(
@@ -38,4 +38,4 @@
 
   echo $json['body'];
 
-<php>
+?>
