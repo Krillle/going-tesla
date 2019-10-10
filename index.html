@@ -134,7 +134,7 @@
       container: 'map', // container id
       // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', // Light Tesla
       style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f', // Dark Tesla
-      center: [13.480011,52.491768], // starting position
+      center: [12.480011,51.491768], // starting position
       zoom: 9 // starting zoom
     });
 
@@ -206,20 +206,20 @@
         }
       });
 
-      // geolocate.trigger();
-
-      // setup the viewport
-      // map.jumpTo({ 'center': [10.5,53], 'zoom': 10 });
-      // map.setPitch(30);
-
       console.log("Establish Connection to Tesla ");
       connectTesla ();
 
       console.log("Tesla Position");
-      getTeslaPositon();
+      driveStatus = getTeslaDriveStatus();
 
       console.log("Initalize Chargers");
       updateChargers();
+
+      // geolocate.trigger();
+
+      // setup the viewport
+      // map.jumpTo({ 'center': [driveStatus.longitude,driveStatus.latitude], 'zoom': 9 });
+      // map.setPitch(30);
 
     });
 
@@ -268,28 +268,26 @@
     });
 
     function getCookie(name) {
-        return (document.cookie.match('/^(?:.*;)? \s*'+name+'\s*=\s*([^;]+)(?:.*)?$/')||[,null])[1]
+      var value = "; " + document.cookie;
+      var parts = value.split("; " + name + "=");
+      if (parts.length == 2) return parts.pop().split(";").shift();
     };
 
     function getToken () {
-      if (!teslaToken) {
-        teslaToken = prompt("Please enter your token", "Your Tesla Token here")}
-        document.cookie = 'token='+teslaToken;
+        return prompt("Please enter your token", "Your Tesla Token here")
     };
 
     function connectTesla () {
+      // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       console.log ('Cookie: ' + document.cookie)
-      var teslaToken = getCookie("token");
+      console.log ('Cookie: ' + getCookie('token'))
+      var teslaToken = getCookie('token');
       if (teslaToken == null) {
         teslaToken = getToken ();
+        document.cookie = 'token='+teslaToken;
       } else {
         // do cookie exists stuff
       }
-    };
-
-    function getTeslaPositon() {
-      var teslaUrl = 'https://https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
-      console.log(JSON.parse(httpGet(teslaUrl)));
     };
 
     function httpGet(url) {
@@ -297,6 +295,11 @@
       httpReq.open("GET",url,false);
       httpReq.send(null);
       return httpReq.responseText;
+    };
+
+    function getTeslaDriveStatus() {
+      var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
+      return JSON.parse(httpGet(teslaUrl));
     };
 
     function getChargerDetails(id) {
