@@ -204,6 +204,10 @@
         }
       });
 
+      console.log("Initalize Chargers");
+      updateChargers();
+
+
       console.log("Establish Connection to Tesla ");
       var teslaToken = '';
       connectTesla ();
@@ -213,13 +217,11 @@
       var driveStatus = getTeslaDriveStatus();
       console.log(driveStatus);
 
-      map.jumpTo({ 'center': [driveStatus.response.longitude,driveStatus.response.latitude], 'zoom': 9 });
+      map.jumpTo({ 'center': [driveStatus.response.longitude,driveStatus.response.latitude], 'zoom': 9, 'bearing': driveStatus.response.heading });
+
       // map.setPitch(30);
 
       // geolocate.trigger();
-
-      console.log("Initalize Chargers");
-      updateChargers();
 
     });
 
