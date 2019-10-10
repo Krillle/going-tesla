@@ -125,7 +125,10 @@
     var minPower = minPowerSuperCharger;
 
     var teslaToken = '';
-    var teslaPosition =
+
+    const positionSize = '44';
+    const positionColor = "ff514a";
+    var teslaPosition = '';
 
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
 
@@ -184,6 +187,14 @@
         map.addImage('faultReport', image);
       });
 
+      // Create Position Image
+      map.loadImage(`https://img.icons8.com/small/${positionSize}/${positionColor}/gps-device.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('position', image);
+      });
+
+
+
       // Prepare empty Charger Layer
       map.addSource('chargers', {
         "type": "geojson",
@@ -217,7 +228,6 @@
       // setup the viewport
       console.log("Tesla Position");
       updatePosition();
-      map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': 9, 'bearing': teslaPosition.heading });
 
       // map.setPitch(30);
 
@@ -296,8 +306,10 @@
 
     function updatePosition() {
       var driveStatus = getTeslaDriveStatus();
-      teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading},
       console.log(driveStatus);
+      teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading};
+      map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': 9, 'bearing': teslaPosition.heading });
+      
     };
 
     function httpGet(url) {
