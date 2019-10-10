@@ -276,20 +276,21 @@
     };
 
     function getToken () {
-        return prompt("Please enter your token", "Your Tesla Token here")
+        return prompt("Please enter your token");
     };
 
     function connectTesla () {
       // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      console.log ('Cookie: ' + document.cookie)
-      console.log ('Token: ' + getCookie('token'))
+      console.log ('Cookie: ' + document.cookie);
+      console.log ('Token: ' + getCookie('token'));
       teslaToken = getCookie('token');
-      if (teslaToken == null) {
+      if (getTeslaDriveStatus() == null) {
         teslaToken = getToken ();
-        document.cookie = 'token='+teslaToken;
+        document.cookie = 'token='+teslaToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
       } else {
         // do cookie exists stuff
-      }
+      };
+      console.log ('Actual Token: ' + teslaToken);
     };
 
     function httpGet(url) {
