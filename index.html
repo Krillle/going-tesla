@@ -200,13 +200,16 @@
         "type": "symbol",
         "source": "chargers",
         "layout": {
+           "icon-image": "{icon}", // teslaSuperCharger"
+           "icon-anchor": "bottom"
+
+           // "icon-allow-overlap": true
+          // "icon-size": 0.25
+
           // "text-field": ["get", "description"],
           // "text-variable-anchor": ["top"],
           // "text-radial-offset": 1.5,
           // "text-justify": "auto",
-           "icon-image": "{icon}", // teslaSuperCharger"
-           "icon-anchor": "bottom"
-          // "icon-size": 0.25
         }
       });
 
@@ -250,8 +253,7 @@
           layout: {
             "icon-image": "position",
             "icon-rotate": teslaPosition.heading,
-            "icon-rotation-alignment": "map",
-            "icon-allow-overlap": true
+            "icon-rotation-alignment": "map"
           }
         });
       });
@@ -422,18 +424,18 @@
         };
       });
 
-      description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong><p>
-                     ${maxCount}x ${maxPower} kW ${maxType}`;
+      description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
+      description += (chargeLocation.network) ? (`<br>${chargeLocation.network}<p>`) : (chargeLocation.operator) ? (`<br>${chargeLocation.operator}<p>` : '<p>');
 
-      description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : "<p>";
-      description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : "";
-      description += "<hr>";
-      // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : "";
+      description += `${maxCount}x ${maxPower} kW ${maxType}`;
+      description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
+      description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
+      description += '<hr>';
+      // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : '';
 
-      description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : "";
+      description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
       description += `<a href=${chargeLocation.url}>Details auf GoingElectric ${id}</a>`;
-
 
       return description;
     };

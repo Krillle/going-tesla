@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+
+body { text-align: center; background: #ccc; color: #000; font: 48px Sans-serif; }
+#tag, #nacht { display: none; }
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background: #333; color: #fff;
+	}
+	#tag, #keineahnung { display: none; }
+	#nacht { display: block; }
+}
+
+@media (prefers-color-scheme: light) {
+	body {
+		background: #fff; color: #333;
+	}
+	#nacht, #keineahnung { display: none; }
+	#tag { display: block; }
+}
+
+
+		</style>
+	</head>
+	<body>
+		<p id="tag">Tag</p>
+		<p id="keineahnung">nicht unterstützt</p>
+		<p id="nacht">Nacht</p>
+	</body>
+</html>
