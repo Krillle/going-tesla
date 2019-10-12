@@ -425,7 +425,7 @@
       });
 
       description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
-      description += (chargeLocation.network) ? (`<br>${chargeLocation.network}<p>`) : (chargeLocation.operator) ? `<br>${chargeLocation.operator}<p>` : '<p>');
+      description += (chargeLocation.network) ? (`<br>${chargeLocation.network}<p>`) : (chargeLocation.operator) ? `<br>${chargeLocation.operator}<p>` : '<p>';
 
       description += `${maxCount}x ${maxPower} kW ${maxType}`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
