@@ -234,6 +234,7 @@
       connectTesla ();
 
       console.log("Prepare Tesla Position");
+      map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
       updatePosition();
 
       // Create Position Image
@@ -242,7 +243,6 @@
         map.addImage('position', image);
 
         /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
-        map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
         map.addLayer({
           id: "position",
           type: "symbol",
