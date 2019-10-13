@@ -129,6 +129,7 @@
     const positionSize = '44';
     const positionColor = "ff514a";
 
+    const updatePositionInterval = 5000;
     var teslaPosition = '';
     var positionIcon = {
       type: 'FeatureCollection',
@@ -230,12 +231,12 @@
       console.log("Initalize Chargers");
       updateChargers();
 
+      // Prepare position icon before first update position
+      map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
+
+
       console.log("Establish Connection to Tesla ");
       connectTesla ();
-
-      console.log("Prepare Tesla Position");
-      map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
-      updatePosition();
 
       // Create Position Image
       map.loadImage(`https://img.icons8.com/small/${positionSize}/${positionColor}/gps-device.png`, function(error, image) {
@@ -329,6 +330,9 @@
         // do cookie exists stuff
       };
       console.log ('Actual Token: ' + teslaToken);
+
+      setInterval(updatePosition(), updatePositionInterval)
+
     };
 
     function updatePosition() {
