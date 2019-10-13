@@ -122,14 +122,19 @@
     const minPowerDestinationCharger = '11';
     const minZoomDestinationCharger = '14';
 
-    var minPower = minPowerSuperCharger;
+    const slowSpeed = 30;
+    const highSpeed = 100;
+    const slowSpeedZoom = '17';
+    const highSpeedZoom = '9';
 
+    const updatePositionInterval = 20000;
+
+    var minPower = minPowerSuperCharger;
     var teslaToken = '';
 
     const positionSize = '44';
     const positionColor = "ff514a";
 
-    const updatePositionInterval = 15000;
     var autoZoom = true;
     var teslaPosition = '';
     var positionIcon = {
