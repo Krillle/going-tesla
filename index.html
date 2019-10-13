@@ -331,7 +331,8 @@
       };
       console.log ('Actual Token: ' + teslaToken);
 
-      setInterval(updatePosition(), updatePositionInterval)
+      console.log ('Starting continous update');
+      setInterval(updatePosition, updatePositionInterval)
 
     };
 
