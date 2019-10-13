@@ -130,6 +130,7 @@
     const positionColor = "ff514a";
 
     const updatePositionInterval = 5000;
+    var autoZoom = true;
     var teslaPosition = '';
     var positionIcon = {
       type: 'FeatureCollection',
@@ -264,6 +265,16 @@
 
     });
 
+    map.on('touchstart', function() {
+      console.log("AutoZoom stopped");
+      autoZoom = false;
+    });
+
+    map.on('mousedown', function() {
+      console.log("AutoZoom stopped");
+      autoZoom = false;
+    });
+
     map.on('moveend', function() {
       console.log("Invoke Update");
       updateChargers();
@@ -338,14 +349,16 @@
 
     function updatePosition() {
       var driveStatus = getTeslaDriveStatus();
-      console.log(driveStatus);
+      // console.log(driveStatus);
       teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading, 'speed' : driveStatus.response.speed};
 
       positionIcon.features[0].geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       positionIcon.features[0].properties.rotate = teslaPosition.heading;
       map.getSource('positionIcon').setData(positionIcon);
 
-      map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': 9, 'bearing': teslaPosition.heading });
+      if (autoZoom) {
+        map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': 9, 'bearing': teslaPosition.heading });
+      };
 
     };
 
