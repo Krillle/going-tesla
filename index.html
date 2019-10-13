@@ -128,7 +128,21 @@
 
     const positionSize = '44';
     const positionColor = "ff514a";
+
     var teslaPosition = '';
+    var positionIcon = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {'rotate': null},
+          geometry: {
+            type: 'Point',
+            coordinates: [null,null]
+          }
+        }
+      ]
+    };
 
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
 
@@ -216,12 +230,10 @@
       console.log("Initalize Chargers");
       updateChargers();
 
-
       console.log("Establish Connection to Tesla ");
       connectTesla ();
 
-      // setup the viewport
-      console.log("Tesla Position");
+      console.log("Prepare Tesla Position");
       updatePosition();
 
       // Create Position Image
@@ -230,29 +242,16 @@
         map.addImage('position', image);
 
         /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+        map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
         map.addLayer({
           id: "position",
           type: "symbol",
           /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
-          source: {
-            type: "geojson",
-            data: {
-              type: 'FeatureCollection',
-              features: [
-                {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                    type: "Point",
-                    coordinates: [teslaPosition.longitude,teslaPosition.latitude]
-                  }
-                }
-              ]
-            }
-          },
+          source: 'positionIcon',
           layout: {
             "icon-image": "position",
-            "icon-rotate": teslaPosition.heading,
+            // "icon-rotate": teslaPosition.heading,
+            // "line-opacity": 0.75,
             "icon-rotation-alignment": "map"
           }
         });
@@ -335,7 +334,12 @@
     function updatePosition() {
       var driveStatus = getTeslaDriveStatus();
       console.log(driveStatus);
-      teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading};
+      teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading, 'speed' : driveStatus.response.speed};
+
+      positionIcon.features[0].geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
+      positionIcon.features[0].properties.rotate = teslaPosition.heading;
+      map.getSource('positionIcon').setData(positionIcon);
+
       map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': 9, 'bearing': teslaPosition.heading });
 
     };
@@ -425,7 +429,14 @@
       });
 
       description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
-      description += (chargeLocation.network && chargeLocation.network != chargeLocation.name) ? (`<br>${chargeLocation.network}<p>`) : (chargeLocation.operator && chargeLocation.operator != chargeLocation.name) ? `<br>${chargeLocation.operator}<p>` : '<p>';
+      console.log('Name:<' + chargeLocation.name + ' ' + chargeLocation.address.city +  '>')
+      console.log('Pperator:<' + chargeLocation.operator + '>')
+
+      description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
+                     (`<br>${chargeLocation.network}<p>`) :
+                     (chargeLocation.operator && chargeLocation.operator != chargeLocation.name && chargeLocation.operator != chargeLocation.name + ' ' + chargeLocation.address.city) ?
+                     `<br>${chargeLocation.operator}<p>` :
+                     '<p>';
 
       description += `${maxCount}x ${maxPower} kW ${maxType}`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
