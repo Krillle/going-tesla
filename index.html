@@ -142,7 +142,7 @@
     var teslaPosition = '';
     var positionIcon = {
       type: 'Feature',
-      properties: {'heading': 180},
+      properties: {'rotation': 180},
       geometry: {
         type: 'Point',
         coordinates: [null,null]
@@ -372,8 +372,8 @@
       // positionIcon.features[0].geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
       positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
-      positionIcon.properties.heading = teslaPosition.heading;
-      console.log(positionIcon.properties.heading)
+      positionIcon.properties.rotation = teslaPosition.heading;
+      console.log(positionIcon.properties.rotation)
       map.getSource('positionIcon').setData(positionIcon);
 
       if (autoZoom) {
