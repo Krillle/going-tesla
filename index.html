@@ -106,6 +106,8 @@
     console.log("App started");
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
+    const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
+
     const chargerBigSize = '44';
     const chargerParkSize = '34';
     const chargerFaultSize = '24';
@@ -139,34 +141,19 @@
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
 
-    var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : null};;
-    var positionIcon = {
-      type: 'Feature',
-      properties: {'rotation': 180},
-      geometry: {
-        type: 'Point',
-        coordinates: [null,null]
-      }
-    };
-
-    // var positionIcon = {
-    //   type: 'FeatureCollection',
-    //   features: [
-    //     {
-    //       type: 'Feature',
-    //       properties: {'heading': 147},
-    //       geometry: {
-    //         type: 'Point',
-    //         coordinates: [null,null]
-    //       }
-    //     }
-    //   ]
-    // };
-
-    const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
+    var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : null};
 
     console.log("Establish Connection to Tesla ");
     connectTesla ();
+
+    var positionIcon = {
+      type: 'Feature',
+      properties: {'rotation': teslaPosition.heading},
+      geometry: {
+        type: 'Point',
+        coordinates: [teslaPosition.longitude,teslaPosition.latitude]
+      }
+    };
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
@@ -174,7 +161,8 @@
       // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', // Light Tesla
       style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f', // Dark Tesla
       center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
-      zoom: speedZoom(teslaPosition.speed) // starting zoom
+      zoom: speedZoom(teslaPosition.speed), // starting zoom
+      bearing: teslaPosition.heading
     });
 
     // Add geocoder search field
