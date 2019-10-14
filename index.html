@@ -364,9 +364,8 @@
       positionIcon.features[0].properties.rotate = teslaPosition.heading;
       map.getSource('positionIcon').setData(positionIcon);
 
-      teslaPosition.speed = prompt ("Speed")
       if (autoZoom) {
-        var zoom = teslaPosition.speed * m + b
+        var zoom = (teslaPosition.speed) ? teslaPosition.speed * m + b : slowSpeedZoom;
         zoom = (zoom > slowSpeedZoom) ? slowSpeedZoom : (zoom < highSpeedZoom) ? highSpeedZoom : zoom;
         map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': zoom, 'bearing': teslaPosition.heading });
       };
