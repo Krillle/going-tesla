@@ -155,7 +155,7 @@
         coordinates: [teslaPosition.longitude,teslaPosition.latitude]
       }
     };
-    minPower = zoomPower(teslaPosition.zoom);
+    minPower = zoomToPower(teslaPosition.zoom);
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
@@ -285,7 +285,7 @@
 
     map.on('zoomend', function() {
       console.log("Set Charger for zoom level " + map.getZoom());
-      minPower = zoomPower(map.getZoom());
+      minPower = zoomToPower(map.getZoom());
     });
 
 
@@ -353,7 +353,7 @@
 
     function updatePosition() {
       var driveStatus = getTeslaDriveStatus();
-      // console.log(driveStatus);
+      console.log(driveStatus);
       teslaPosition = {
         'longitude' : driveStatus.response.longitude,
         'latitude' : driveStatus.response.latitude,
@@ -366,7 +366,7 @@
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
       positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       positionIcon.properties.rotation = teslaPosition.heading;
-      // console.log(positionIcon.properties.rotation)
+      console.log(positionIcon.properties.rotation)
       map.getSource('positionIcon').setData(positionIcon);
 
       if (autoZoom) {
@@ -381,7 +381,7 @@
       return zoom;
     };
 
-    function zoomPower(zoom) {
+    function zoomToPower(zoom) {
       return (zoom >= minZoomDestinationCharger) ?
         minPowerDestinationCharger :
         (zoom >= minZoomHighwayCharger) ?
