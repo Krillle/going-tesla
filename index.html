@@ -124,7 +124,7 @@
 
     const slowSpeed = 30;
     const highSpeed = 100;
-    const slowSpeedZoom = '17';
+    const slowSpeedZoom = '16';
     const highSpeedZoom = '9';
 
     const updatePositionInterval = 20000;
@@ -145,7 +145,7 @@
       features: [
         {
           type: 'Feature',
-          properties: {'rotate': null},
+          properties: {'heading': null},
           geometry: {
             type: 'Point',
             coordinates: [null,null]
@@ -361,7 +361,7 @@
       teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading, 'speed' : driveStatus.response.speed};
 
       positionIcon.features[0].geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
-      positionIcon.features[0].properties.rotate = teslaPosition.heading;
+      positionIcon.features[0].properties.heading = teslaPosition.heading;
       map.getSource('positionIcon').setData(positionIcon);
 
       if (autoZoom) {
