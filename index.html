@@ -347,13 +347,13 @@
       console.log ('Actual Token: ' + teslaToken);
 
       console.log ('Starting continous update');
-      setInterval(updatePosition, updatePositionInterval)
+      // setInterval(updatePosition, updatePositionInterval);
 
     };
 
     function updatePosition() {
       var driveStatus = getTeslaDriveStatus();
-      console.log(driveStatus);
+      // console.log(driveStatus);
       teslaPosition = {
         'longitude' : driveStatus.response.longitude,
         'latitude' : driveStatus.response.latitude,
@@ -366,7 +366,7 @@
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
       positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       positionIcon.properties.rotation = teslaPosition.heading;
-      console.log(positionIcon.properties.rotation)
+      // console.log(positionIcon.properties.rotation)
       map.getSource('positionIcon').setData(positionIcon);
 
       if (autoZoom) {
