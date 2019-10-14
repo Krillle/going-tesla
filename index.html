@@ -136,6 +136,9 @@
     const positionColor = "ff514a";
 
     var autoZoom = true;
+    const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
+    const b = slowSpeedZoom - m * slowSpeed;
+
     var teslaPosition = '';
     var positionIcon = {
       type: 'FeatureCollection',
@@ -361,8 +364,11 @@
       positionIcon.features[0].properties.rotate = teslaPosition.heading;
       map.getSource('positionIcon').setData(positionIcon);
 
+      teslaPosition.speed = prompt ("Speed")
       if (autoZoom) {
-        map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': 9, 'bearing': teslaPosition.heading });
+        var zoom = teslaPosition.speed * m + b
+        zoom = (zoom > slowSpeedZoom) ? slowSpeedZoom : (zoom < highSpeedZoom) ? highSpeedZoom : zoom;
+        map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': zoom, 'bearing': teslaPosition.heading });
       };
 
     };
