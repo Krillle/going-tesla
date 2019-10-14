@@ -135,16 +135,17 @@
     var teslaToken = '';
 
     const positionSize = '44';
-    const positionColor = "ff514a";
+    const positionColor = 'ff514a';
 
     var autoZoom = true;
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
 
-    var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : null};
+    var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
-    console.log("Establish Connection to Tesla ");
-    connectTesla ();
+    console.log('Establish Connection to Tesla');
+    try {connectTesla ()}
+    catch {console.log('Tesla not reachable')};
 
     var positionIcon = {
       type: 'Feature',
@@ -154,6 +155,7 @@
         coordinates: [teslaPosition.longitude,teslaPosition.latitude]
       }
     };
+    minPower = zoomPower(teslaPosition.zoom);
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
@@ -161,7 +163,7 @@
       // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', // Light Tesla
       style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f', // Dark Tesla
       center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
-      zoom: speedZoom(teslaPosition.speed), // starting zoom
+      zoom: teslaPosition.zoom, // starting zoom
       bearing: teslaPosition.heading
     });
 
@@ -183,6 +185,9 @@
 
     // Add locate, zoom and rotation controls to the map.
     map.addControl(geolocate);
+    // geolocate.trigger();
+    // map.setPitch(30);
+
     map.addControl(new mapboxgl.NavigationControl());
 
     map.on('load', function() {
@@ -261,12 +266,6 @@
       console.log("Initalize Chargers");
       updateChargers();
 
-
-
-      // map.setPitch(30);
-
-      // geolocate.trigger();
-
     });
 
     map.on('touchstart', function() {
@@ -286,9 +285,7 @@
 
     map.on('zoomend', function() {
       console.log("Set Charger for zoom level " + map.getZoom());
-      if ( map.getZoom() >= minZoomDestinationCharger ) {minPower = minPowerDestinationCharger}
-      else if (map.getZoom() >= minZoomHighwayCharger) {minPower = minPowerHighwayCharger}
-      else {minPower = minPowerSuperCharger}
+      minPower = zoomPower(map.getZoom());
     });
 
 
@@ -357,7 +354,13 @@
     function updatePosition() {
       var driveStatus = getTeslaDriveStatus();
       // console.log(driveStatus);
-      teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading, 'speed' : driveStatus.response.speed};
+      teslaPosition = {
+        'longitude' : driveStatus.response.longitude,
+        'latitude' : driveStatus.response.latitude,
+        'heading': driveStatus.response.heading,
+        'speed' : driveStatus.response.speed,
+        'zoom' : speedZoom(driveStatus.response.speed)
+      };
 
       // positionIcon.features[0].geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
@@ -367,7 +370,7 @@
       map.getSource('positionIcon').setData(positionIcon);
 
       if (autoZoom) {
-        map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': speedZoom(teslaPosition.speed), 'bearing': teslaPosition.heading });
+        map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
       };
 
     };
@@ -376,6 +379,14 @@
       // console.log('Calculated ' + zoom + '(Speed:' + teslaPosition.speed + ')');
       zoom = (zoom > slowSpeedZoom) ? slowSpeedZoom : (zoom < highSpeedZoom) ? highSpeedZoom : zoom;
       return zoom;
+    };
+
+    function zoomPower(zoom) {
+      return (zoom >= minZoomDestinationCharger) ?
+        minPowerDestinationCharger :
+        (zoom >= minZoomHighwayCharger) ?
+        minPowerHighwayCharger :
+        minPowerSuperCharger;
     };
 
     function httpGet(url) {
