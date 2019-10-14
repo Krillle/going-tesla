@@ -186,6 +186,28 @@
     map.addControl(new mapboxgl.NavigationControl());
 
     map.on('load', function() {
+      // Create Position Image
+      map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
+
+      map.loadImage(`https://img.icons8.com/small/${positionSize}/${positionColor}/gps-device.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('position', image);
+
+        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+        map.addLayer({
+          id: "position",
+          type: "symbol",
+          /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+          source: 'positionIcon',
+          layout: {
+            "icon-image": "position",
+            // "icon-rotate": teslaPosition.heading,
+            // "line-opacity": 0.75,
+            "icon-rotation-alignment": "map"
+          }
+        });
+      });
+
       // Create Tesla Supercharger Image
       map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
         if (error) throw error;
@@ -239,28 +261,7 @@
       console.log("Initalize Chargers");
       updateChargers();
 
-      // Prepare position icon before first update position
-      map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
 
-      // Create Position Image
-      map.loadImage(`https://img.icons8.com/small/${positionSize}/${positionColor}/gps-device.png`, function(error, image) {
-        if (error) throw error;
-        map.addImage('position', image);
-
-        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
-        map.addLayer({
-          id: "position",
-          type: "symbol",
-          /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
-          source: 'positionIcon',
-          layout: {
-            "icon-image": "position",
-            // "icon-rotate": teslaPosition.heading,
-            // "line-opacity": 0.75,
-            "icon-rotation-alignment": "map"
-          }
-        });
-      });
 
       // map.setPitch(30);
 
