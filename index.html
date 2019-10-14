@@ -365,9 +365,9 @@
       map.getSource('positionIcon').setData(positionIcon);
 
       if (autoZoom) {
-        var zoom = (teslaPosition.speed != null) ? teslaPosition.speed * m + b : slowSpeedZoom;
+        var zoom = teslaPosition.speed * m + b;
+        console.log('Calculated ' + zoom + '(Speed:' + teslaPosition.speed + ')');
         zoom = (zoom > slowSpeedZoom) ? slowSpeedZoom : (zoom < highSpeedZoom) ? highSpeedZoom : zoom;
-        console.log('Set zoom to ' + zoom + '( Speed:' + teslaPosition.speed + ')');
         map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': zoom, 'bearing': teslaPosition.heading });
       };
 
