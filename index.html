@@ -142,10 +142,10 @@
     const b = slowSpeedZoom - m * slowSpeed;
 
     var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
-    connectTesla ();
-    // console.log('Establish Connection to Tesla');
-    // try {connectTesla ()}
-    // catch {console.log('Tesla not reachable')};
+
+    console.log('Establish Connection to Tesla');
+    try {connectTesla ()}
+    catch {console.log('Tesla not reachable')};
 
     var positionIcon = {
       type: 'Feature',
@@ -342,7 +342,7 @@
         document.cookie = 'token='+teslaToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
       } else {
         // do cookie exists stuff
-        teslaPosition = {'longitude' : driveStatus.response.longitude, 'latitude' : driveStatus.response.latitude, 'heading': driveStatus.response.heading, 'speed' : driveStatus.response.speed};
+        teslaPosition = {'longitude': driveStatus.response.longitude, 'latitude': driveStatus.response.latitude, 'heading': driveStatus.response.heading, 'speed': driveStatus.response.speed};
       };
       console.log ('Actual Token: ' + teslaToken);
 
@@ -353,7 +353,7 @@
 
     function updatePosition() {
       var driveStatus = getTeslaDriveStatus();
-      // console.log(driveStatus);
+      console.log(driveStatus);
       teslaPosition = {
         'longitude' : driveStatus.response.longitude,
         'latitude' : driveStatus.response.latitude,
