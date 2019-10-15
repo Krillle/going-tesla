@@ -337,6 +337,8 @@
       teslaToken = getCookie('token');
 
       var driveStatus = getTeslaDriveStatus();
+      console.log(driveStatus);
+      
       if (driveStatus == null) {
         teslaToken = getToken ();
         document.cookie = 'token='+teslaToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
@@ -353,7 +355,7 @@
 
     function updatePosition() {
       var driveStatus = getTeslaDriveStatus();
-      console.log(driveStatus);
+      // console.log(driveStatus);
       teslaPosition = {
         'longitude' : driveStatus.response.longitude,
         'latitude' : driveStatus.response.latitude,
