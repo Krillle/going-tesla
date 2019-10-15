@@ -332,21 +332,19 @@
 
     function connectTesla () {
       // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      console.log ('Cookie: ' + document.cookie);
       console.log ('Token: ' + getCookie('token'));
       teslaToken = getCookie('token');
 
       var driveStatus = getTeslaDriveStatus();
       console.log(driveStatus);
-      
+
       if (driveStatus == null) {
         teslaToken = getToken ();
         document.cookie = 'token='+teslaToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
-      } else {
-        // do cookie exists stuff
+      } else {  // if car sleeps
+        // do cookie exists stuff driveStatus.response == null
         teslaPosition = {'longitude': driveStatus.response.longitude, 'latitude': driveStatus.response.latitude, 'heading': driveStatus.response.heading, 'speed': driveStatus.response.speed};
       };
-      console.log ('Actual Token: ' + teslaToken);
 
       console.log ('Starting continous update');
       setInterval(updatePosition, updatePositionInterval);
@@ -399,7 +397,6 @@
     };
 
     function getTeslaDriveStatus() {
-      console.log ('Token: ' + teslaToken)
       var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
       result = httpGet(teslaUrl)
       console.log("Result" + result);
