@@ -268,6 +268,7 @@
 
     });
 
+    // Events to disable AutoZoom
     map.on('touchstart', function() {
       console.log("AutoZoom stopped");
       autoZoom = false;
@@ -278,6 +279,12 @@
       autoZoom = false;
     });
 
+    map.on('rotate', function() {
+      console.log("AutoZoom stopped");
+      autoZoom = false;
+    });
+
+    // Events to update chargers
     map.on('moveend', function() {
       console.log("Invoke Update");
       updateChargers();
@@ -289,8 +296,7 @@
     });
 
 
-    // When a click event occurs on a feature in the places layer, open a popup at the
-    // location of the feature, with description HTML from its properties.
+    // Charger places events (Popup)
     map.on('click', 'chargers', function (e) {
       var coordinates = e.features[0].geometry.coordinates.slice();
       var description = chargerDescription(e.features[0].id);
@@ -320,13 +326,14 @@
       map.getCanvas().style.cursor = '';
     });
 
+
     function getCookie(name) {
       var value = "; " + document.cookie;
       var parts = value.split("; " + name + "=");
       if (parts.length == 2) return parts.pop().split(";").shift();
     };
 
-    function getToken () {
+    function getTeslaToken () {
         return prompt("Please enter your token");
     };
 
@@ -339,16 +346,16 @@
       console.log(driveStatus);
 
       if (driveStatus == null) {
-        teslaToken = getToken ();
+        teslaToken = getTeslaToken ();
         document.cookie = 'token='+teslaToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
-      } else {  // if car sleeps: driveStatus.response == null
-        // do cookie exists stuff
+      } else if (driveStatus.response == null) { // Car sleeps
+
+      }
+      else {
         setTeslaPosition(driveStatus);
+        console.log ('Starting continous update');
+        setInterval(updatePosition, updatePositionInterval);
       };
-
-      console.log ('Starting continous update');
-      setInterval(updatePosition, updatePositionInterval);
-
     };
 
     function setTeslaPosition(driveStatus) {
@@ -366,7 +373,6 @@
 
     function updatePosition() {
        setTeslaPosition(getTeslaDriveStatus());
-      // console.log(driveStatus);
 
       // positionIcon.features[0].geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
@@ -396,17 +402,36 @@
       return httpReq.responseText;
     };
 
+    // Tesla requests
     function getTeslaDriveStatus() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
       result = httpGet(teslaUrl)
       console.log("Result" + result);
       if (result) {
-        return JSON.parse(httpGet(teslaUrl));
+        return JSON.parse(result);
       } else {
         return null;
       };
     };
 
+    // OSRM requests
+    function getRoute(start,destination){
+      var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/'+start.longitude+','+start.latitude+';'+destination.lng+','+destination.lat+'?geometries=geojson&overview=false'
+      result = httpGet(osrmUrl)
+      console.log("Result" + result);
+      if (result) {
+        result = JSON.parse(result);
+        if (result.code) {
+          return {'distance': result.routes[0].distance, 'duration': result.routes[0].duration}
+        } else {
+          return null
+        }
+      } else {
+        return null;
+      };
+    };
+
+    // GoingElectric requests
     function getChargerDetails(id) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
@@ -452,7 +477,6 @@
           }
         });
       });
-      // console.log("New x list: ", newList);
       map.getSource('chargers').setData(newList);
     };
 
@@ -472,9 +496,10 @@
         };
       });
 
+      var route = getRoute(teslaPosition,chargeLocation.coordinates);
+      console.log(route)
+
       description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
-      console.log('Name:<' + chargeLocation.name + ' ' + chargeLocation.address.city +  '>')
-      console.log('Pperator:<' + chargeLocation.operator + '>')
 
       description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
                      (`<br>${chargeLocation.network}<p>`) :
@@ -490,6 +515,7 @@
 
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
+      description += (route) ? '<strong>' + (route.distance/1000).toFixed(1) + ' km, ' +  route.duration + '</strong><p>' : '';
       description += `<a href=${chargeLocation.url}>Details auf GoingElectric ${id}</a>`;
 
       return description;
