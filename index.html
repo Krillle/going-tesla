@@ -149,7 +149,7 @@
 
     var positionIcon = {
       type: 'Feature',
-      properties: {'bearing': teslaPosition.heading},
+      properties: {'bearing': teslaPosition.heading, 'status': autoZoom},
       geometry: {
         type: 'Point',
         coordinates: [teslaPosition.longitude,teslaPosition.latitude]
@@ -209,7 +209,12 @@
             "icon-rotate": ["get", "bearing"],
             "icon-rotation-alignment": "map",
             "icon-allow-overlap": true,
-            "icon-ignore-placement": true
+            "icon-ignore-placement": true,
+
+            "text-field": ["get", "status"],
+            "text-variable-anchor": ["top"],
+            "text-radial-offset": 1.5,
+            "text-justify": "auto"
           }
         });
       });
@@ -251,13 +256,13 @@
         "type": "symbol",
         "source": "chargers",
         "layout": {
-           "icon-image": "{icon}", // teslaSuperCharger"
+           "icon-image": "{icon}",
            "icon-anchor": "bottom"
 
            // "icon-allow-overlap": true
           // "icon-size": 0.25
 
-          // "text-field": ["get", "description"],
+          // "text-field": ["get", "status"],
           // "text-variable-anchor": ["top"],
           // "text-radial-offset": 1.5,
           // "text-justify": "auto",
@@ -344,7 +349,7 @@
       teslaToken = getCookie('token');
 
       var driveStatus = getTeslaDriveStatus();
-      console.log(driveStatus);
+      // console.log(driveStatus);
 
       if (driveStatus == null) {
         teslaToken = getTeslaToken ();
@@ -379,6 +384,8 @@
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
       positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       positionIcon.properties.bearing = teslaPosition.heading;
+      positionIcon.properties.status = autoZoom;
+
       map.getSource('positionIcon').setData(positionIcon);
 
       if (autoZoom) {
