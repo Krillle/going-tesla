@@ -414,10 +414,13 @@
       };
     };
 
-    // OSRM requests
+    // mapBox requests
     function getRoute(start,destination){
-      var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/'+start.longitude+','+start.latitude+';'+destination.lng+','+destination.lat+'?geometries=geojson&overview=false'
-      result = httpGet(osrmUrl)
+       var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
+          + start.longitude + ',' + start.latitude + ';'
+          + destination.lng + ',' + destination.lat
+          + '?access_token=' + mapboxgl.accessToken + '&geometries=geojson&overview=false'
+      result = httpGet(routeUrl)
       console.log("Result" + result);
       if (result) {
         result = JSON.parse(result);
