@@ -149,7 +149,7 @@
 
     var positionIcon = {
       type: 'Feature',
-      properties: {'rotation': teslaPosition.heading},
+      properties: {'bearing': teslaPosition.heading},
       geometry: {
         type: 'Point',
         coordinates: [teslaPosition.longitude,teslaPosition.latitude]
@@ -206,9 +206,10 @@
           source: 'positionIcon',
           layout: {
             "icon-image": "position",
-            // "icon-rotate": teslaPosition.heading,
-            // "line-opacity": 0.75,
-            "icon-rotation-alignment": "map"
+            "icon-rotate": ["get", "bearing"],
+            "icon-rotation-alignment": "map",
+            "icon-allow-overlap": true,
+            "icon-ignore-placement": true
           }
         });
       });
@@ -377,7 +378,7 @@
       // positionIcon.features[0].geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
       positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
-      positionIcon.properties.rotation = teslaPosition.heading;
+      positionIcon.properties.bearing = teslaPosition.heading;
       // console.log(positionIcon.properties.rotation)
       map.getSource('positionIcon').setData(positionIcon);
 
@@ -400,7 +401,7 @@
       totalSeconds %= 3600;
       var minutes = Math.floor(totalSeconds / 60);
 
-      return ((hours > 0) ? hours + ' Std ' : '') + minutes + ' Min';
+      return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
     };
 
     function httpGet(url) {
