@@ -379,7 +379,6 @@
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
       positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       positionIcon.properties.bearing = teslaPosition.heading;
-      // console.log(positionIcon.properties.rotation)
       map.getSource('positionIcon').setData(positionIcon);
 
       if (autoZoom) {
@@ -400,7 +399,6 @@
       var hours = Math.floor(totalSeconds / 3600);
       totalSeconds %= 3600;
       var minutes = Math.floor(totalSeconds / 60);
-
       return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
     };
 
@@ -506,7 +504,7 @@
       var maxType = "";
       var maxCount = 0;
       chargeLocation.chargepoints.forEach(chargePoint => {
-        if (chargePoint.power > maxPower) {
+        if (chargePoint.power > maxPower && compatiblePlugs.includes(chargePoint.type)) {
           maxPower = chargePoint.power;
           maxType = chargePoint.type;
           maxCount = chargePoint.count;
