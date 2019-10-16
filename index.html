@@ -352,7 +352,7 @@
     };
 
     function setTeslaPosition(driveStatus) {
-      var zoom = (driveStatus.response.speed) ? driveStatus.response.speed : 0) * m + b;
+      var zoom = ((driveStatus.response.speed) ? driveStatus.response.speed : 0) * m + b;
       zoom = (zoom > slowSpeedZoom) ? slowSpeedZoom : (zoom < highSpeedZoom) ? highSpeedZoom : zoom;
 
       teslaPosition = {
