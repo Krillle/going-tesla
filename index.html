@@ -149,7 +149,7 @@
 
     var positionIcon = {
       type: 'Feature',
-      properties: {'bearing': teslaPosition.heading, 'status': autoZoom},
+      properties: {'bearing': teslaPosition.heading},
       geometry: {
         type: 'Point',
         coordinates: [teslaPosition.longitude,teslaPosition.latitude]
@@ -209,12 +209,7 @@
             "icon-rotate": ["get", "bearing"],
             "icon-rotation-alignment": "map",
             "icon-allow-overlap": true,
-            "icon-ignore-placement": true,
-
-            "text-field": ["get", "status"],
-            "text-variable-anchor": ["top"],
-            "text-radial-offset": 1.5,
-            "text-justify": "auto"
+            "icon-ignore-placement": true
           }
         });
       });
@@ -285,10 +280,10 @@
       autoZoom = false;
     });
 
-    map.on('rotatestart', function() {
-      // console.log("AutoZoom stopped");
-      // autoZoom = false;
-    });
+    // map.on('rotatestart', function() {
+    //   console.log("AutoZoom stopped");
+    //   autoZoom = false;
+    // });
 
     // Events to update chargers
     map.on('moveend', function() {
@@ -384,7 +379,6 @@
       // positionIcon.features[0].properties.heading = teslaPosition.heading;
       positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       positionIcon.properties.bearing = teslaPosition.heading;
-      positionIcon.properties.status = autoZoom;
 
       map.getSource('positionIcon').setData(positionIcon);
 
