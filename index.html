@@ -279,7 +279,7 @@
       autoZoom = false;
     });
 
-    map.on('rotate', function() {
+    map.on('rotatestart', function() {
       console.log("AutoZoom stopped");
       autoZoom = false;
     });
@@ -316,12 +316,12 @@
       .addTo(map);
     });
 
-    // Change the cursor to a pointer when the mouse is over the places layer.
+    // Change the cursor to a pointer when the mouse is over the places layer
     map.on('mouseenter', 'chargers', function () {
       map.getCanvas().style.cursor = 'pointer';
     });
 
-    // Change it back to a pointer when it leaves.
+    // Change it back to a pointer when it leaves
     map.on('mouseleave', 'chargers', function () {
       map.getCanvas().style.cursor = '';
     });
@@ -395,6 +395,14 @@
         minPowerSuperCharger;
     };
 
+    function secondsToTime(totalSeconds) {
+      var hours = Math.floor(totalSeconds / 3600);
+      totalSeconds %= 3600;
+      var minutes = Math.floor(totalSeconds / 60);
+
+      return ((hours > 0) ? hours + ' Std ' : '') + minutes + ' Min';
+    };
+
     function httpGet(url) {
       var httpReq = new XMLHttpRequest(); // a new request
       httpReq.open("GET",url,false);
@@ -425,7 +433,12 @@
       if (result) {
         result = JSON.parse(result);
         if (result.code) {
-          return {'distance': result.routes[0].distance, 'duration': result.routes[0].duration}
+          return {
+            'distanceRaw': result.routes[0].distance,
+            'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km, ',
+            'duration': secondsToTime(result.routes[0].duration),
+            'durationRaw': result.routes[0].duration
+          }
         } else {
           return null
         }
@@ -518,8 +531,8 @@
 
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
-      description += (route) ? '<strong>' + (route.distance/1000).toFixed(1) + ' km, ' +  route.duration + '</strong><p>' : '';
-      description += `<a href=${chargeLocation.url}>Details auf GoingElectric ${id}</a>`;
+      description += (route) ? '<strong>' + route.distance +  route.duration + '</strong><p>' : '';
+      description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a>`;
 
       return description;
     };
