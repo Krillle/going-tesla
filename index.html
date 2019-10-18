@@ -408,7 +408,8 @@
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
 
       console.log(JSON.stringify(body));
-      httpReq.send((body)?JSON.stringify(body):null);
+      httpReq.send(null);
+      // httpReq.send((body)?JSON.stringify(body):null);
       return httpReq.responseText;
     };
 
@@ -433,7 +434,7 @@
       // var password = prompt("Please enter password for your Tesla account");
       // var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
       //     + 'csurl=https://owner-api.teslamotors.com//oauth/token?grant_type=password';
-      // 
+      //
       // var body = {
       //   "grant_type": "password",
       //   "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
