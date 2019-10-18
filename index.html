@@ -407,7 +407,7 @@
       httpReq.open((body) ? 'POST' : 'GET', url, false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
 
-      console.log(JSON.stringify(body));
+      console.log('Body: ' + JSON.stringify(body));
       httpReq.send((body)?JSON.stringify(body):null);
       return httpReq.responseText;
     };
@@ -427,7 +427,7 @@
     };
 
     function getTeslaToken () {
-      return prompt("Please enter your token");
+      // return prompt("Please enter your token");
 
       var email = prompt("Please enter your Tesla account email");
       var password = prompt("Please enter password for your Tesla account");
@@ -440,7 +440,7 @@
         "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
         "email": email,
         "password": password
-      });
+      };
 
       var result = httpGet(teslaUrl, null, body)
       console.log("Result" + result);
