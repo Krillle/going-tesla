@@ -408,7 +408,7 @@
     function httpGet(url, token) {
       var httpReq = new XMLHttpRequest(); // a new request
       httpReq.open('GET',url,false);
-      if (token) {httpReq.setRequestHeader('authorization','bearer '.token)};
+      if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
 
       httpReq.send(null);
       return httpReq.responseText;
@@ -417,7 +417,7 @@
     // Tesla requests (corsproxy.php)
     function getTeslaDriveStatus() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
-          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/'+teslaVehicle+'/data_request/drive_state';
+          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaVehicle + '/data_request/drive_state';
 
       result = httpGet(teslaUrl,teslaToken)
       console.log("Result" + result);
