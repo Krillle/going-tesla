@@ -123,6 +123,7 @@
     const minZoomHighwayCharger = '11';
     const minPowerDestinationCharger = '11';
     const minZoomDestinationCharger = '14';
+    var minPower = minPowerSuperCharger;
 
     const slowSpeed = 30;
     const highSpeed = 100;
@@ -131,8 +132,9 @@
 
     const updatePositionInterval = 20000;
 
-    var minPower = minPowerSuperCharger;
     var teslaToken = '';
+    var teslaVehicle = '44234482861270508';
+    var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
     const positionSize = '44';
     const positionColor = 'ff514a';
@@ -141,11 +143,11 @@
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
 
-    var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
     console.log('Establish Connection to Tesla');
-    try {connectTesla ()}
-    catch {console.log('Tesla not reachable')};
+    connectTesla ()
+    // try {connectTesla ()}
+    // catch {console.log('Tesla not reachable')};
 
     var positionIcon = {
       type: 'Feature',
@@ -403,17 +405,21 @@
       return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
     };
 
-    function httpGet(url) {
+    function httpGet(url, token) {
       var httpReq = new XMLHttpRequest(); // a new request
-      httpReq.open("GET",url,false);
+      httpReq.open('GET',url,false);
+      if (token) {httpReq.setRequestHeader('authorization','bearer '.token)};
+
       httpReq.send(null);
       return httpReq.responseText;
     };
 
-    // Tesla requests
+    // Tesla requests (corsproxy.php)
     function getTeslaDriveStatus() {
-      var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
-      result = httpGet(teslaUrl)
+      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/'+teslaVehicle+'/data_request/drive_state';
+
+      result = httpGet(teslaUrl,teslaToken)
       console.log("Result" + result);
       if (result) {
         return JSON.parse(result);
@@ -421,6 +427,18 @@
         return null;
       };
     };
+
+    // // Tesla requests (teslarequest.php)
+    // function getTeslaDriveStatus() {
+    //   var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
+    //   result = httpGet(teslaUrl)
+    //   console.log("Result" + result);
+    //   if (result) {
+    //     return JSON.parse(result);
+    //   } else {
+    //     return null;
+    //   };
+    // };
 
     // mapBox requests
     function getRoute(start,destination){
