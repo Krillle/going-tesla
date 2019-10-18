@@ -437,7 +437,8 @@ exit;
         }
       });
 
-      xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
+      xhr.open("POST", "https://owner-api.teslamotors.com/oauth/token?grant_type=password");
+      // xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
       xhr.setRequestHeader("Content-Type", "application/json");
       // xhr.setRequestHeader("User-Agent", "PostmanRuntime/7.18.0");
       xhr.setRequestHeader("Accept", "*/*");
