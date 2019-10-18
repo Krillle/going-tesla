@@ -404,7 +404,7 @@
 
     function httpGet(url, token, body) {
       var httpReq = new XMLHttpRequest();
-      httpReq.open((body) ? 'GET' : 'POST',url,false);
+      httpReq.open((body) ? 'POST' : 'GET', url, false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
 
       httpReq.send(body);
