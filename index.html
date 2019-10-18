@@ -408,8 +408,7 @@
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
 
       console.log(JSON.stringify(body));
-      httpReq.send(null);
-      // httpReq.send((body)?JSON.stringify(body):null);
+      httpReq.send((body)?JSON.stringify(body):null);
       return httpReq.responseText;
     };
 
