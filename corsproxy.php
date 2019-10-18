@@ -46,7 +46,7 @@ define('CSAJAX_DEBUG', false);
  */
 $valid_requests = array(
     // 'example.com'
-    'https://owner-api.teslamotors.com'
+    'https://owner-api.teslamotors.com/'
 );
 
 /**
@@ -195,6 +195,6 @@ print($response_content);
 function csajax_debug_message($message)
 {
     // if (true == CSAJAX_DEBUG) {
-        print $message . PHP_EOL;
+        print '{error:' . $message . PHP_EOL . '}';
     // }
 }
