@@ -431,22 +431,15 @@ exit;
       var xhr = new XMLHttpRequest();
       xhr.withCredentials = true;
 
-      xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
-          console.log(this.responseText);
-        }
-      });
-
-      xhr.open("POST", "https://owner-api.teslamotors.com/oauth/token?grant_type=password");
-      // xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
+      xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
       xhr.setRequestHeader("Content-Type", "application/json");
-      // xhr.setRequestHeader("User-Agent", "PostmanRuntime/7.18.0");
-      xhr.setRequestHeader("Accept", "*/*");
-      xhr.setRequestHeader("Cache-Control", "no-cache");
-      // xhr.setRequestHeader("Postman-Token", "1798e7ab-11bc-4b57-a432-673e43287123,9459aeb3-0f98-469c-8ad2-c4d8a178fcbb");
+      // xhr.setRequestHeader("Accept", "*/*");
+      // xhr.setRequestHeader("Cache-Control", "no-cache");
       xhr.setRequestHeader("cache-control", "no-cache");
 
       xhr.send(data);
+      console.log(this.responseText);
+
     };
 
     // Tesla requests
