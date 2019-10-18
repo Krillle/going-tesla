@@ -46,7 +46,7 @@ define('CSAJAX_DEBUG', false);
  */
 $valid_requests = array(
     // 'example.com'
-    'https://goingtesla.herokuapp.com/'
+    'https://owner-api.teslamotors.com'
 );
 
 /**
