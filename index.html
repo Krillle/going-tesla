@@ -337,7 +337,7 @@
     };
 
     function connectTesla () {
-      // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Cookie löschen
       console.log ('Token: ' + getCookie('token'));
       teslaToken = getCookie('token');
 
@@ -427,28 +427,29 @@
     };
 
     function getTeslaToken () {
-      return prompt("Please enter your token");
+      // return prompt("Please enter your token");
 
-    //   var email = prompt("Please enter your Tesla account email");
-    //   var password = prompt("Please enter password for your Tesla account");
-    //   var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
-    //       + 'csurl=https://owner-api.teslamotors.com//oauth/token?grant_type=password';
-    //
-    //   var body = {
-    //     "grant_type": "password",
-    //     "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
-    //     "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
-    //     "email": email,
-    //     "password": password
-    //   };
-    //
-    //   var result = httpGet(teslaUrl, null, body)
-    //   console.log("Result" + result);
-    //   if (result) {
-    //     return JSON.parse(result);
-    //   } else {
-    //     return null;
-    //   };
+      var email = prompt("Please enter your Tesla account email");
+      var password = prompt("Please enter password for your Tesla account");
+      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+          + 'csurl=https://owner-api.teslamotors.com//oauth/token?grant_type=password';
+
+      var body = {
+        "grant_type": "password",
+        "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
+        "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
+        "email": email,
+        "password": password
+      };
+
+      var result = httpGet(teslaUrl, null, body)
+      console.log("Result" + result);
+      if (result) {
+        return JSON.parse(result);
+      } else {
+        return null;
+      };
+      
     };
 
 
