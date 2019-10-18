@@ -29,33 +29,28 @@
     return array('body' => $erg, 'info' => $info);
   }
 
-  // Parameters:
-  // url
-  // header (array)
-  // post parameter (array)
-
-  $json = hol_url($_GET['url'],array(
-      'User-Agent:Mozilla/5.0 (Linux; Android 9.0.0; VS985 4G Build/LRX21Y; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/58.0.3029.83 Mobile Safari/537.36',
-      'X-Tesla-User-Agent:custom/goingtesla',
-      'content-type:application/json',
-      'authorization:bearer '.$_GET['token']
-    ),
-    array(
-
-      // {
-      //     "type": "share_ext_content_raw",
-      //     "value": {
-      //         "android.intent.extra.TEXT": "Sulzbacher Straße 32, 90489 Nürnberg"
-      //     },
-      //     "locale": "en-US",
-      //     "timestamp_ms": "1570913667"
-      // }
-      //
-
-    )
-  );
+  $json = hol_url('https://owner-api.teslamotors.com/api/1/vehicles/44234482861270508/data_request/drive_state',array(
+    'User-Agent:Mozilla/5.0 (Linux; Android 9.0.0; VS985 4G Build/LRX21Y; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/58.0.3029.83 Mobile Safari/537.36',
+    'X-Tesla-User-Agent:custom/goingtesla',
+    'content-type:application/json',
+    'authorization:bearer '.$_GET['token']
+  ));
 
   header('content-type: application/json');
   echo $json['body'];
 
 ?>
+
+
+
+    // // Tesla requests (teslarequest.php)
+    // function getTeslaDriveStatus() {
+    //   var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
+    //   result = httpGet(teslaUrl)
+    //   console.log("Result" + result);
+    //   if (result) {
+    //     return JSON.parse(result);
+    //   } else {
+    //     return null;
+    //   };
+    // };

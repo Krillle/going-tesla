@@ -336,10 +336,6 @@
       if (parts.length == 2) return parts.pop().split(";").shift();
     };
 
-    function getTeslaToken () {
-        return prompt("Please enter your token");
-    };
-
     function connectTesla () {
       // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       console.log ('Token: ' + getCookie('token'));
@@ -370,7 +366,7 @@
         'latitude': driveStatus.response.latitude,
         'heading': driveStatus.response.heading,
         'speed': (driveStatus.response.speed) ? driveStatus.response.speed : 0,
-        'zoom' : zoom
+        'zoom': zoom
       };
     };
 
@@ -405,21 +401,22 @@
       return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
     };
 
-    function httpGet(url, token) {
-      var httpReq = new XMLHttpRequest(); // a new request
-      httpReq.open('GET',url,false);
+
+    function httpGet(url, token, body) {
+      var httpReq = new XMLHttpRequest();
+      httpReq.open((body) ? 'GET' : 'POST',url,false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
 
-      httpReq.send(null);
+      httpReq.send(body);
       return httpReq.responseText;
     };
 
-    // Tesla requests (corsproxy.php)
+    // Tesla requests
     function getTeslaDriveStatus() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaVehicle + '/data_request/drive_state';
 
-      result = httpGet(teslaUrl,teslaToken)
+      var result = httpGet(teslaUrl,teslaToken)
       console.log("Result" + result);
       if (result) {
         return JSON.parse(result);
@@ -428,17 +425,30 @@
       };
     };
 
-    // // Tesla requests (teslarequest.php)
-    // function getTeslaDriveStatus() {
-    //   var teslaUrl = 'https://goingtesla.herokuapp.com/teslarequest.php?token='+teslaToken;
-    //   result = httpGet(teslaUrl)
-    //   console.log("Result" + result);
-    //   if (result) {
-    //     return JSON.parse(result);
-    //   } else {
-    //     return null;
-    //   };
-    // };
+    function getTeslaToken () {
+      // return prompt("Please enter your token");
+      var email = prompt("Please enter your Tesla account email");
+      var password = prompt("Please enter password for your Tesla account");
+      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+          + 'csurl=https://owner-api.teslamotors.com//oauth/token?grant_type=password';
+
+      var body = '{'
+        + '"grant_type": "password",'
+        + '"client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",'
+        + '"client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",'
+        + '"email": ' + email + ','
+        + '"password": ' + password
+      + '}';
+
+      var result = httpGet(teslaUrl, null, body)
+      console.log("Result" + result);
+      if (result) {
+        return JSON.parse(result);
+      } else {
+        return null;
+      };
+    };
+
 
     // mapBox requests
     function getRoute(start,destination){
