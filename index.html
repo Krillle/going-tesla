@@ -431,6 +431,12 @@ exit;
       var xhr = new XMLHttpRequest();
       xhr.withCredentials = true;
 
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+          console.log(this.responseText);
+        }
+      });
+
       xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
       xhr.setRequestHeader("Content-Type", "application/json");
       // xhr.setRequestHeader("Accept", "*/*");
@@ -438,8 +444,6 @@ exit;
       xhr.setRequestHeader("cache-control", "no-cache");
 
       xhr.send(data);
-      console.log(xhr.responseText);
-
     };
 
     // Tesla requests
