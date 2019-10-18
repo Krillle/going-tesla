@@ -341,12 +341,15 @@
       console.log ('Token: ' + getCookie('token'));
       teslaToken = getCookie('token');
 
+      if (!teslaToken) {
+        teslaToken = getTeslaToken ();
+      };
+
       var driveStatus = getTeslaDriveStatus();
       // console.log(driveStatus);
 
       if (driveStatus == null) {
         teslaToken = getTeslaToken ();
-        document.cookie = 'token='+teslaToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
       } else if (driveStatus.response == null) { // Car sleeps
 
       }
@@ -404,10 +407,15 @@
 
     function httpGet(url, token, body) {
       var httpReq = new XMLHttpRequest();
+      httpReq.withCredentials = true;
       httpReq.open((body) ? 'POST' : 'GET', url, false);
+
+      httpReq.setRequestHeader('User-Agent','Mozilla/5.0 (Linux; Android 9.0.0; VS985 4G Build/LRX21Y; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/58.0.3029.83 Mobile Safari/537.36');
+      httpReq.setRequestHeader('X-Tesla-User-Agent','custom/goingtesla');
+      httpReq.setRequestHeader('content-type','application/json');
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
 
-      console.log('Body: ' + JSON.stringify(body));
+      console.log('Body: ' + (body)?JSON.stringify(body):null);
       httpReq.send((body)?JSON.stringify(body):null);
       return httpReq.responseText;
     };
@@ -428,6 +436,7 @@
 
     function getTeslaToken () {
       // return prompt("Please enter your token");
+      // document.cookie = 'token='+teslaToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       var email = prompt("Please enter your Tesla account email");
       var password = prompt("Please enter password for your Tesla account");
@@ -449,7 +458,7 @@
       } else {
         return null;
       };
-      
+
     };
 
 
