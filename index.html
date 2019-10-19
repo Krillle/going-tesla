@@ -440,7 +440,7 @@ httpPut();
 
       xhr.send(data);
 
-      console.log("Result" + xhr.responseText);
+      console.log("Result http put " + xhr.responseText);
     };
 
     // Tesla requests
@@ -493,9 +493,9 @@ httpPut();
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("cache-control", "no-cache");
 
-      xhr.send(data);
+      xhr.send(body);
 
-      console.log("Result" + xhr.responseText);
+      console.log("Result getToken " + xhr.responseText);
 
       if (xhr.responseText) {
         return JSON.parse(xhr.responseText);
