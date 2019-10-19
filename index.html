@@ -104,7 +104,6 @@
   <div id='map'></div>
   <script>
 httpPut();
-exit;
 
     console.log("App started");
 
@@ -407,15 +406,11 @@ exit;
       return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
     };
 
-
-    function httpGet(url, token, body) {
-      httpReq.withCredentials = true;
-      httpReq.open((body) ? 'POST' : 'GET', url, false);
-
+    function httpGet(url, token) {
+      var httpReq = new XMLHttpRequest();
+      httpReq.open('GET', url, false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
-
-      console.log('Body: ' + (body)?JSON.stringify(body):null);
-      httpReq.send((body)?JSON.stringify(body):null);
+      httpReq.send(null);
       return httpReq.responseText;
     };
 
@@ -444,6 +439,8 @@ exit;
       xhr.setRequestHeader("cache-control", "no-cache");
 
       xhr.send(data);
+
+      console.log("Result" + xhr.responseText);
     };
 
     // Tesla requests
@@ -451,10 +448,15 @@ exit;
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaVehicle + '/data_request/drive_state';
 
-      var result = httpGet(teslaUrl,teslaToken)
-      console.log("Result" + result);
-      if (result) {
-        return JSON.parse(result);
+      var httpReq = new XMLHttpRequest();
+      httpReq.open('GET', teslaUrl, false);
+      httpReq.setRequestHeader('authorization','bearer ' + teslaToken);
+      httpReq.send(null);
+
+      console.log("Result" + httpReq.responseText);
+
+      if (httpReq.responseText) {
+        return JSON.parse(httpReq.responseText);
       } else {
         return null;
       };
@@ -466,21 +468,37 @@ exit;
 
       var email = prompt("Please enter your Tesla account email");
       var password = prompt("Please enter password for your Tesla account");
-      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
-          + 'csurl=https://owner-api.teslamotors.com//oauth/token?grant_type=password';
 
-      var body = {
+      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+      + 'csurl=https://owner-api.teslamotors.com//oauth/token?grant_type=password';
+
+      var body = JSON.stringify({
         "grant_type": "password",
         "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
         "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
         "email": email,
         "password": password
-      };
+      });
 
-      var result = httpGet(teslaUrl, null, body)
-      console.log("Result" + result);
-      if (result) {
-        return JSON.parse(result);
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+
+      // xhr.addEventListener("readystatechange", function () {
+      //   if (this.readyState === 4) {
+      //     console.log(this.responseText);
+      //   }
+      // });
+
+      xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader("cache-control", "no-cache");
+
+      xhr.send(data);
+
+      console.log("Result" + xhr.responseText);
+
+      if (xhr.responseText) {
+        return JSON.parse(xhr.responseText);
       } else {
         return null;
       };
