@@ -330,6 +330,29 @@
     });
 
 
+    function zoomToPower(zoom) {
+      return (zoom >= minZoomDestinationCharger) ?
+      minPowerDestinationCharger :
+      (zoom >= minZoomHighwayCharger) ?
+      minPowerHighwayCharger :
+      minPowerSuperCharger;
+    };
+
+    function secondsToTime(totalSeconds) {
+      var hours = Math.floor(totalSeconds / 3600);
+      totalSeconds %= 3600;
+      var minutes = Math.floor(totalSeconds / 60);
+      return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
+    };
+
+    function httpGet(url, token) {
+      var httpReq = new XMLHttpRequest();
+      httpReq.open('GET', url, false);
+      if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
+      httpReq.send(null);
+      return httpReq.responseText;
+    };
+
     function getCookie(name) {
       var value = "; " + document.cookie;
       var parts = value.split("; " + name + "=");
@@ -385,30 +408,6 @@
       if (autoZoom) {
         map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
       };
-
-    };
-
-    function zoomToPower(zoom) {
-      return (zoom >= minZoomDestinationCharger) ?
-        minPowerDestinationCharger :
-        (zoom >= minZoomHighwayCharger) ?
-        minPowerHighwayCharger :
-        minPowerSuperCharger;
-    };
-
-    function secondsToTime(totalSeconds) {
-      var hours = Math.floor(totalSeconds / 3600);
-      totalSeconds %= 3600;
-      var minutes = Math.floor(totalSeconds / 60);
-      return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
-    };
-
-    function httpGet(url, token) {
-      var httpReq = new XMLHttpRequest();
-      httpReq.open('GET', url, false);
-      if (token) {httpReq.setRequestHeader('authorization','bearer ' + token)};
-      httpReq.send(null);
-      return httpReq.responseText;
     };
 
     // function httpPut() {

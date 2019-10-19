@@ -119,7 +119,7 @@ if (preg_match('!' . $_SERVER['SCRIPT_NAME'] . '!', $request_url) || empty($requ
     exit;
 }
 
-// check against valid requests
+// check against valid requests DISABLED TEMPORARILY !!!
 // if (CSAJAX_FILTERS) {
 //     $parsed = $p_request_url;
 //     if (CSAJAX_FILTER_DOMAIN) {
