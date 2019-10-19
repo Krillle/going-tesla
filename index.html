@@ -138,7 +138,7 @@
     var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
     const positionSize = '44';
-    const positionColor = 'ff514a';
+    var positionColor = 'ff514a';
 
     var autoZoom = true;
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
@@ -365,7 +365,7 @@
       teslaToken = getCookie('token');
       refreshToken = getCookie('refresh');
 
-      if (!teslaToken) { // eigentlich
+      if (!teslaToken) {
         teslaToken = getTeslaToken().access_token;
       };
 
@@ -375,6 +375,7 @@
         teslaToken = getTeslaToken().access_token;
       } else if (driveStatus.response == null) {
         // Car sleeps
+        positionColor = '787878';
       }
       else {
         setTeslaPosition(driveStatus);
@@ -480,10 +481,12 @@
 
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
-          console.log("Listener Result getToken " + this.responseText);
+          console.log("GetToken Listener Result: " + this.responseText);
           var result = JSON.parse(this.responseText);
           teslaToken = result.access_token;
           refreshToken = result.refresh_token;
+
+          // document.cookie = 'token='+teslaToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
           // result.expires_in
           // result.created_at
@@ -495,14 +498,6 @@
       xhr.setRequestHeader("cache-control", "no-cache");
 
       xhr.send(body);
-
-      // console.log("Direct Result getToken " + xhr.responseText);
-      //
-      // if (xhr.responseText) {
-      //   return JSON.parse(xhr.responseText);
-      // } else {
-      //   return null;
-      // };
 
     };
 
