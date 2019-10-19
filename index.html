@@ -133,6 +133,7 @@
     const updatePositionInterval = 20000;
 
     var teslaToken = '';
+    var refreshToken = '';
     var teslaVehicle = '44234482861270508';
     var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
@@ -145,9 +146,8 @@
 
 
     console.log('Establish Connection to Tesla');
-    connectTesla ()
-    // try {connectTesla ()}
-    // catch {console.log('Tesla not reachable')};
+    try {connectTesla ()}
+    catch {console.log('Tesla not reachable')};
 
     var positionIcon = {
       type: 'Feature',
@@ -360,11 +360,12 @@
     };
 
     function connectTesla () {
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Cookie löschen
+      // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Cookie löschen
       console.log ('Token: ' + getCookie('token'));
       teslaToken = getCookie('token');
+      refreshToken = getCookie('refresh');
 
-      if (!teslaToken) {
+      if (!teslaToken) { // eigentlich
         teslaToken = getTeslaToken().access_token;
       };
 
@@ -435,8 +436,6 @@
     //   xhr.setRequestHeader("cache-control", "no-cache");
     //
     //   xhr.send(data);
-    //
-    //   console.log("Result http put " + xhr.responseText);
     // };
 
     // Tesla requests
@@ -482,6 +481,12 @@
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
           console.log("Listener Result getToken " + this.responseText);
+          var result = JSON.parse(this.responseText);
+          teslaToken = result.access_token;
+          refreshToken = result.refresh_token;
+
+          // result.expires_in
+          // result.created_at
         }
       });
 
@@ -491,13 +496,13 @@
 
       xhr.send(body);
 
-      console.log("Direct Result getToken " + xhr.responseText);
-
-      if (xhr.responseText) {
-        return JSON.parse(xhr.responseText);
-      } else {
-        return null;
-      };
+      // console.log("Direct Result getToken " + xhr.responseText);
+      //
+      // if (xhr.responseText) {
+      //   return JSON.parse(xhr.responseText);
+      // } else {
+      //   return null;
+      // };
 
     };
 
