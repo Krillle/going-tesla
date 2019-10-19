@@ -103,8 +103,6 @@
 
   <div id='map'></div>
   <script>
-httpPut();
-
     console.log("App started");
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
@@ -344,16 +342,15 @@ httpPut();
       teslaToken = getCookie('token');
 
       if (!teslaToken) {
-        teslaToken = getTeslaToken ();
+        teslaToken = getTeslaToken().access_token;
       };
 
       var driveStatus = getTeslaDriveStatus();
       // console.log(driveStatus);
-
       if (driveStatus == null) {
-        teslaToken = getTeslaToken ();
-      } else if (driveStatus.response == null) { // Car sleeps
-
+        teslaToken = getTeslaToken().access_token;
+      } else if (driveStatus.response == null) {
+        // Car sleeps
       }
       else {
         setTeslaPosition(driveStatus);
@@ -414,34 +411,34 @@ httpPut();
       return httpReq.responseText;
     };
 
-    function httpPut() {
-      var data = JSON.stringify({
-        "grant_type": "password",
-        "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
-        "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
-        "email": "hahn@mediaworx.com",
-        "password": "cha4-yan3-luk2"
-      });
-
-      var xhr = new XMLHttpRequest();
-      xhr.withCredentials = true;
-
-      xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
-          console.log(this.responseText);
-        }
-      });
-
-      xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
-      xhr.setRequestHeader("Content-Type", "application/json");
-      // xhr.setRequestHeader("Accept", "*/*");
-      // xhr.setRequestHeader("Cache-Control", "no-cache");
-      xhr.setRequestHeader("cache-control", "no-cache");
-
-      xhr.send(data);
-
-      console.log("Result http put " + xhr.responseText);
-    };
+    // function httpPut() {
+    //   var data = JSON.stringify({
+    //     "grant_type": "password",
+    //     "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
+    //     "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
+    //     "email": "hahn@mediaworx.com",
+    //     "password": "cha4-yan3-luk2"
+    //   });
+    //
+    //   var xhr = new XMLHttpRequest();
+    //   xhr.withCredentials = true;
+    //
+    //   xhr.addEventListener("readystatechange", function () {
+    //     if (this.readyState === 4) {
+    //       console.log(this.responseText);
+    //     }
+    //   });
+    //
+    //   xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
+    //   xhr.setRequestHeader("Content-Type", "application/json");
+    //   // xhr.setRequestHeader("Accept", "*/*");
+    //   // xhr.setRequestHeader("Cache-Control", "no-cache");
+    //   xhr.setRequestHeader("cache-control", "no-cache");
+    //
+    //   xhr.send(data);
+    //
+    //   console.log("Result http put " + xhr.responseText);
+    // };
 
     // Tesla requests
     function getTeslaDriveStatus() {
@@ -483,11 +480,11 @@ httpPut();
       var xhr = new XMLHttpRequest();
       xhr.withCredentials = true;
 
-      // xhr.addEventListener("readystatechange", function () {
-      //   if (this.readyState === 4) {
-      //     console.log(this.responseText);
-      //   }
-      // });
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+          console.log("Listener Result getToken " + this.responseText);
+        }
+      });
 
       xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
       xhr.setRequestHeader("Content-Type", "application/json");
@@ -495,7 +492,7 @@ httpPut();
 
       xhr.send(body);
 
-      console.log("Result getToken " + xhr.responseText);
+      console.log("Direct Result getToken " + xhr.responseText);
 
       if (xhr.responseText) {
         return JSON.parse(xhr.responseText);
