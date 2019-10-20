@@ -561,7 +561,7 @@
       });
 
       xhr.open("POST", teslaUrl);
-      httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken);
+      xhr.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("cache-control", "no-cache");
 
