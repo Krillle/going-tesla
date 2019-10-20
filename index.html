@@ -365,24 +365,33 @@
 
 
     function settingsPopup () {
-      var popup = new mapboxgl.Popup({closeOnClick: false})
-      .setLngLat(map.getCenter())
-      .setHTML(settingsContent())
-      .addTo(map);
+      // var popup = new mapboxgl.Popup({closeOnClick: false})
+      // .setLngLat(map.getCenter())
+      // .setHTML(settingsContent())
+      // .addTo(map);
+      //
+      // document.getElementById('connect').addEventListener('click', getTeslaToken(document.getElementById("email").value, document.getElementById("password").value));
+      //
+      // document.querySelector('status').textContent = teslaConnection.status;
 
-      document.querySelector('#connect').addEventListener('click', getTeslaToken(document.getElementById("email").value, document.getElementById("password").value));
+      alert(teslaConnection.status);
+      var email = prompt("Please enter your Tesla account email");
+      var password = prompt("Please enter password for your Tesla account");
 
-      document.querySelector('status').textContent = teslaConnection.status;
+      getTeslaToken(email, password);
+
     };
 
     // Tesla connection
 
     function connectTesla () {
       // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Cookie löschen
-      console.log ('Token: ' + getCookie('access'));
+      console.log ('Token: ' + getCookie('token'));
+      console.log ('Access: ' + getCookie('access'));
 
       if (teslaConnection.accessToken = 'undefined') {
         teslaConnection.status = 'Kein Token';
+        console.log('Kein Token');
         return;
       };
 
@@ -390,11 +399,14 @@
       console.log(vehicleData);
       if (vehicleData == null) {
         teslaConnection.status = 'Ungültiges Token';
+        console.log('Ungültiges Token');
         return;
 
       } else if (vehicleData.response == null) {
         // Car sleeps
         teslaConnection.status = 'Fahrzeug nicht erreichbar';
+        console.log('Fahrzeug nicht erreichbar');
+        return;
       }
       else {
         teslaConnection.status = 'Connected to ' + vehicleData.response.vehicle_state.vehicle_name;
