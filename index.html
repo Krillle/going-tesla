@@ -521,7 +521,8 @@
           console.log("Access: " + teslaConnection.accessToken);
           console.log("Refresh: " + teslaConnection.refreshToken);
 
-          teslaConnection.vehicle = getTeslaVehicles().response[0].id;
+          teslaConnection.vehicle = getTeslaVehicles().response[0].id.toString();
+          console.log("Refresh: " + teslaConnection.vehicle);
 
           document.cookie = 'access=' + teslaConnection.accessToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
           document.cookie = 'refresh=' + teslaConnection.refreshToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
