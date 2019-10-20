@@ -132,10 +132,6 @@
 
     const updatePositionInterval = 20000;
 
-    // var teslaToken = '';
-    // var refreshToken = '';
-    // var teslaVehicle = '44234482861270508';
-
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
     var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
@@ -145,7 +141,6 @@
     var autoZoom = true;
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
-
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
@@ -317,8 +312,10 @@
 
       new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       .setLngLat(coordinates)
-      .setHTML(description)
+      .setHTML(description.text)
       .addTo(map);
+
+      sendDestinationToTesla(description.address);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -378,7 +375,7 @@
 
     };
 
-    // Tesla connection
+    // Tesla connection - - - - - -
 
     function connectTesla () {
       // document.cookie = "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Cookie löschen
@@ -517,6 +514,8 @@
           var result = JSON.parse(this.responseText);
           teslaConnection.accessToken = result.access_token;
           teslaConnection.refreshToken = result.refresh_token;
+          // result.expires_in
+          // result.created_at
 
           console.log("Access: " + teslaConnection.accessToken);
           console.log("Refresh: " + teslaConnection.refreshToken);
@@ -529,20 +528,46 @@
           document.cookie = 'vehicle=' + teslaConnection.vehicle + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
           connectTesla();
-
-          // result.expires_in
-          // result.created_at
         }
       });
 
-      xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
+      xhr.open("POST", teslaUrl);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader("cache-control", "no-cache");
+
+      xhr.send(body);
+    };
+
+    function sendDestinationToTesla(destination) {
+      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+      + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/44234482861270508/command/share';
+
+      var body = JSON.stringify({
+        "type": "share_ext_content_raw",
+        "value": {
+          "android.intent.extra.TEXT": destination
+        },
+        "locale": "en-US",
+        "timestamp_ms": Date.now()
+      });
+
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+          console.log('Send destination: ' + this.responseText);
+        }
+      });
+
+      xhr.open("POST", teslaUrl);
+      httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("cache-control", "no-cache");
 
       xhr.send(body);
 
     };
-
 
     // mapBox requests
     function getRoute(start,destination){
@@ -657,7 +682,10 @@
       description += (route) ? '<strong>' + route.distance +  route.duration + '</strong><p>' : '';
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a>`;
 
-      return description;
+      var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
+      console.log(address);
+
+      return {'text': description, 'address': ''};
     };
 
     function settingsContent(){
