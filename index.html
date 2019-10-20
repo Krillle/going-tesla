@@ -375,21 +375,21 @@
       // document.querySelector('status').textContent = teslaConnection.status;
 
       alert(teslaConnection.status);
-      var email = prompt("Please enter your Tesla account email");
-      var password = prompt("Please enter password for your Tesla account");
-
-      getTeslaToken(email, password);
+      // var email = prompt("Please enter your Tesla account email");
+      // var password = prompt("Please enter password for your Tesla account");
+      //
+      // getTeslaToken(email, password);
 
     };
 
     // Tesla connection
 
     function connectTesla () {
-      // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Cookie löschen
-      console.log ('Token: ' + getCookie('token'));
-      console.log ('Access: ' + getCookie('access'));
+      // document.cookie = "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Cookie löschen
+      console.log ('Access cookie: ' + getCookie('access'));
+      console.log ('Access data: ' + teslaConnection.accessToken);
 
-      if (teslaConnection.accessToken = 'undefined') {
+      if (teslaConnection.accessToken == 'undefined') {
         teslaConnection.status = 'Kein Token';
         console.log('Kein Token');
         return;
@@ -444,7 +444,7 @@
       };
     };
 
-    // Tesla requests
+    // - - - - - - - - Tesla requests - - - - - - - - -
     function getTeslaDriveStatus() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
@@ -482,12 +482,6 @@
     };
 
     function getTeslaToken (email, password) {
-      // return prompt("Please enter your token");
-      // document.cookie = 'token='+teslaConnection.accessToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
-
-      // var email = prompt("Please enter your Tesla account email");
-      // var password = prompt("Please enter password for your Tesla account");
-
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
       + 'csurl=https://owner-api.teslamotors.com//oauth/token?grant_type=password';
 
