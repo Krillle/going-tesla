@@ -540,7 +540,7 @@
 
     function sendDestinationToTesla(destination) {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
-      + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/44234482861270508/command/share';
+      + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/command/share';
 
       var body = JSON.stringify({
         "type": "share_ext_content_raw",
