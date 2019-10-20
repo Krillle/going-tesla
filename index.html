@@ -545,7 +545,7 @@
       var body = JSON.stringify({
         "type": "share_ext_content_raw",
         "value": {
-          "android.intent.extra.TEXT": destination
+          "android.intent.extra.TEXT": "Glasbläserallee 4, Berlin, Deutschland"
         },
         "locale": "en-US",
         "timestamp_ms": Date.now()
@@ -561,8 +561,9 @@
       });
 
       xhr.open("POST", teslaUrl);
-      xhr.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken);
+
       xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader("Authorization", 'bearer ' + teslaConnection.accessToken);
       xhr.setRequestHeader("cache-control", "no-cache");
 
       xhr.send(body);
