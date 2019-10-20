@@ -545,7 +545,7 @@
       var body = JSON.stringify({
         "type": "share_ext_content_raw",
         "value": {
-          "android.intent.extra.TEXT": "Glasbläserallee 4, Berlin, Deutschland"
+          "android.intent.extra.TEXT": destination
         },
         "locale": "en-US",
         "timestamp_ms": Date.now()
@@ -684,9 +684,8 @@
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a>`;
 
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
-      console.log(address);
 
-      return {'text': description, 'address': ''};
+      return {'text': description, 'address': address};
     };
 
     function settingsContent(){
