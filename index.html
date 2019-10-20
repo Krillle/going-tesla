@@ -315,7 +315,6 @@
       .setHTML(description.text)
       .addTo(map);
 
-      sendDestinationToTesla(description.address);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -539,6 +538,7 @@
     };
 
     function sendDestinationToTesla(destination) {
+      console.log('Set destination: ' + destination);
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/command/share';
 
@@ -663,6 +663,8 @@
       var route = getRoute(teslaPosition,chargeLocation.coordinates);
       console.log(route)
 
+      var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
+
       var description = '';
       description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
 
@@ -681,30 +683,30 @@
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
       description += (route) ? '<strong>' + route.distance +  route.duration + '</strong><p>' : '';
-      description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a>`;
-
-      var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
+      description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
+      description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
       return {'text': description, 'address': address};
     };
 
-    function settingsContent(){
-      var content = '';
-      content += '';
-      content += '<form>';
-      content += '	<strong>Mit Tesla verbinden</strong><p>';
-      content += '	<label for="email">E-Mail</label>';
-      content += '	<input id="email" name="email" type="text" value="" /> <br />';
+    // function settingsContent(){
+    //   var content = '';
+    //   content += '';
+    //   content += '<form>';
+    //   content += '	<strong>Mit Tesla verbinden</strong><p>';
+    //   content += '	<label for="email">E-Mail</label>';
+    //   content += '	<input id="email" name="email" type="text" value="" /> <br />';
+    //
+    //   content += '  <label for="password">Passwort</label>';
+    //   content += '	<input id="password" name="password" type="text" value="" /> <br />';
+    //
+    //   content += '  <button type="button" id="connect">Aktivieren</button><p>';
+    //   content += '  Status: <status></status>';
+    //   content += '</form>';
+    //
+    //   return content;
+    // };
 
-      content += '  <label for="password">Passwort</label>';
-      content += '	<input id="password" name="password" type="text" value="" /> <br />';
-
-      content += '  <button type="button" id="connect">Aktivieren</button><p>';
-      content += '  Status: <status></status>';
-      content += '</form>';
-
-      return content;
-    };
   </script>
 
 </body>
