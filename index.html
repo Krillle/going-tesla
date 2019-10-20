@@ -103,6 +103,11 @@
 
   <div id='map'></div>
   <script>
+
+x=4468761377452627
+console.log(x);
+exit;
+
     console.log("App started");
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
@@ -521,8 +526,8 @@
           console.log("Access: " + teslaConnection.accessToken);
           console.log("Refresh: " + teslaConnection.refreshToken);
 
-          teslaConnection.vehicle = getTeslaVehicles().response[0].id.toString();
-          console.log("Refresh: " + teslaConnection.vehicle);
+          teslaConnection.vehicle = getTeslaVehicles().response[0].id_s;
+          console.log("Vehicle: " + teslaConnection.vehicle);
 
           document.cookie = 'access=' + teslaConnection.accessToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
           document.cookie = 'refresh=' + teslaConnection.refreshToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
