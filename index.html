@@ -269,6 +269,8 @@
       console.log("Initalize Chargers");
       updateChargers();
 
+      settingsPopup ();
+
     });
 
     // Events to disable AutoZoom
@@ -365,14 +367,14 @@
       teslaToken = getCookie('token');
       refreshToken = getCookie('refresh');
 
-      if (!teslaToken) {
-        teslaToken = getTeslaToken().access_token;
+      if (teslaToken) {
+        // teslaToken = getTeslaToken().access_token;
       };
 
       var driveStatus = getTeslaDriveStatus();
       // console.log(driveStatus);
       if (driveStatus == null) {
-        teslaToken = getTeslaToken().access_token;
+        // teslaToken = getTeslaToken().access_token;
       } else if (driveStatus.response == null) {
         // Car sleeps
         positionColor = '787878';
@@ -412,33 +414,6 @@
       };
     };
 
-    // function httpPut() {
-    //   var data = JSON.stringify({
-    //     "grant_type": "password",
-    //     "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
-    //     "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
-    //     "email": "hahn@mediaworx.com",
-    //     "password": "cha4-yan3-luk2"
-    //   });
-    //
-    //   var xhr = new XMLHttpRequest();
-    //   xhr.withCredentials = true;
-    //
-    //   xhr.addEventListener("readystatechange", function () {
-    //     if (this.readyState === 4) {
-    //       console.log(this.responseText);
-    //     }
-    //   });
-    //
-    //   xhr.open("POST", "https://goingtesla.herokuapp.com/corsproxy.php?csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password");
-    //   xhr.setRequestHeader("Content-Type", "application/json");
-    //   // xhr.setRequestHeader("Accept", "*/*");
-    //   // xhr.setRequestHeader("Cache-Control", "no-cache");
-    //   xhr.setRequestHeader("cache-control", "no-cache");
-    //
-    //   xhr.send(data);
-    // };
-
     // Tesla requests
     function getTeslaDriveStatus() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
@@ -457,6 +432,19 @@
         return null;
       };
     };
+
+    function settingsPopup () {
+      console.log('Test Popup');
+      var popup = new mapboxgl.Popup({closeOnClick: false})
+      .setLngLat(map.getCenter())
+      .setHTML(settingsContent())
+      .addTo(map);
+
+      document.querySelector('#connect').addEventListener('click', getTeslaToken);
+
+      document.querySelector("status").textContent = 'Test';
+    };
+
 
     function getTeslaToken () {
       // return prompt("Please enter your token");
@@ -595,6 +583,7 @@
       var route = getRoute(teslaPosition,chargeLocation.coordinates);
       console.log(route)
 
+      var description = '';
       description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
 
       description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
@@ -617,6 +606,23 @@
       return description;
     };
 
+    function settingsContent(){
+      var content = '';
+      content += '';
+      content += '<form>';
+      content += '	<strong>Mit Tesla verbinden</strong><p>';
+      content += '	<label for="email">E-Mail</label>';
+      content += '	<input name="name" type="text" value="" /> <br />';
+
+      content += '  <label for="password">Passwort</label>';
+      content += '	<input name="password" type="text" value="" /> <br />';
+
+      content += '  <button type="submit" id="connect" value="Submit">Aktivieren</button><p>';
+      content += '  Status: <status></status>';
+      content += '</form>';
+
+      return content;
+    };
   </script>
 
 </body>
