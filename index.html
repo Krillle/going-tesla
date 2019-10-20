@@ -271,8 +271,6 @@
       console.log("Initalize Chargers");
       updateChargers();
 
-      settingsPopup ();
-
     });
 
     // Events to disable AutoZoom
@@ -333,7 +331,6 @@
       map.getCanvas().style.cursor = '';
     });
 
-
     function zoomToPower(zoom) {
       return (zoom >= minZoomDestinationCharger) ?
       minPowerDestinationCharger :
@@ -374,7 +371,7 @@
       //
       // document.querySelector('status').textContent = teslaConnection.status;
 
-      var email = prompt('Connection status: ' + teslaConnection.status + '<br>Please enter your Tesla account email');
+      var email = prompt('Connection status: ' + teslaConnection.status + '\rPlease enter your Tesla account email');
       var password = prompt("Please enter password for your Tesla account");
 
       getTeslaToken(email, password);
@@ -391,6 +388,7 @@
       if (teslaConnection.accessToken == 'undefined') {
         teslaConnection.status = 'Kein Token';
         console.log('Kein Token');
+        settingsPopup ();
         return;
       };
 
@@ -399,6 +397,7 @@
       if (vehicleData == null) {
         teslaConnection.status = 'Ungültiges Token';
         console.log('Ungültiges Token');
+        settingsPopup ();
         return;
 
       } else if (vehicleData.response == null) {
