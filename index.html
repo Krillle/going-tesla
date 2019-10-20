@@ -136,7 +136,7 @@
     // var refreshToken = '';
     // var teslaVehicle = '44234482861270508';
 
-    var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': '44234482861270508', 'status': 'undefined' };
+    var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
     var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
     const positionSize = '44';
@@ -374,11 +374,10 @@
       //
       // document.querySelector('status').textContent = teslaConnection.status;
 
-      alert(teslaConnection.status);
-      // var email = prompt("Please enter your Tesla account email");
-      // var password = prompt("Please enter password for your Tesla account");
-      //
-      // getTeslaToken(email, password);
+      var email = prompt('Connection status: ' + teslaConnection.status + '<br>Please enter your Tesla account email');
+      var password = prompt("Please enter password for your Tesla account");
+
+      getTeslaToken(email, password);
 
     };
 
@@ -432,8 +431,6 @@
     function updatePosition() {
        setTeslaPosition(getTeslaDriveStatus().response);
 
-      // positionIcon.features[0].geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
-      // positionIcon.features[0].properties.heading = teslaPosition.heading;
       positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
       positionIcon.properties.bearing = teslaPosition.heading;
 
@@ -445,6 +442,7 @@
     };
 
     // - - - - - - - - Tesla requests - - - - - - - - -
+
     function getTeslaDriveStatus() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
@@ -466,6 +464,24 @@
     function getTeslaCarData() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
+
+      var httpReq = new XMLHttpRequest();
+      httpReq.open('GET', teslaUrl, false);
+      httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken);
+      httpReq.send(null);
+
+      console.log("Result" + httpReq.responseText);
+
+      if (httpReq.responseText) {
+        return JSON.parse(httpReq.responseText);
+      } else {
+        return null;
+      };
+    };
+
+    function getTeslaVehicles() {
+      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles';
 
       var httpReq = new XMLHttpRequest();
       httpReq.open('GET', teslaUrl, false);
@@ -503,7 +519,14 @@
           teslaConnection.accessToken = result.access_token;
           teslaConnection.refreshToken = result.refresh_token;
 
-          document.cookie = 'access='+teslaConnection.accessToken+';refresh='+teslaConnection.refreshToken+'; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+          console.log("Access: " + teslaConnection.accessToken);
+          console.log("Refresh: " + teslaConnection.refreshToken);
+
+          teslaConnection.vehicle = getTeslaVehicles().response[0].id;
+
+          document.cookie = 'access=' + teslaConnection.accessToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+          document.cookie = 'refresh=' + teslaConnection.refreshToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+          document.cookie = 'vehicle=' + teslaConnection.vehicle + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
           connectTesla();
 
