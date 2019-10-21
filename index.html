@@ -10,6 +10,10 @@
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
 
+    #map .mapboxgl-ctrl {
+      opacity: 0.8;
+    }
+
     #map .mapboxgl-ctrl-group > button {
       width:60px;
       height:60px;
@@ -25,6 +29,11 @@
       min-width: 400px;
       max-width:400px;
     }
+
+    #map .mapboxgl-ctrl-geocoder .suggestions {
+      font: 20px/1.4 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;5
+    }
+
     #map .mapboxgl-ctrl-geocoder--input {
       font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       height: 60px;
@@ -367,8 +376,8 @@
       //
       // document.querySelector('status').textContent = teslaConnection.status;
 
-      var email = prompt('Connection status: ' + teslaConnection.status + '\rPlease enter your Tesla account email');
-      var password = prompt("Please enter password for your Tesla account");
+      var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
+      var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
 
       getTeslaToken(email, password);
 
