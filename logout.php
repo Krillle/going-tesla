@@ -8,8 +8,8 @@
   <?php ?>
   <script>
 
-      console.log("Revoking Tesla Access Token");
       var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
+      console.log("Requesting Revoke Tesla Access Token");
       try {revokeTeslaToken()}
       catch {console.log('Revoking token not successful')};
 
@@ -35,7 +35,7 @@
         });
 
         var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
+        // xhr.withCredentials = true;
 
         xhr.addEventListener("readystatechange", function () {
           if (this.readyState === 4) {
@@ -46,7 +46,7 @@
         xhr.open("POST", teslaUrl);
 
         xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader("Authorization", 'bearer ' + teslaConnection.accessToken);
+        // xhr.setRequestHeader("Authorization", 'bearer ' + teslaConnection.accessToken);
         xhr.setRequestHeader("cache-control", "no-cache");
 
         xhr.send(body);
