@@ -25,7 +25,7 @@
       };
 
       function revokeTeslaToken() {
-        console.log('Set destination: ' + destination);
+        console.log('Revoke Tesla Token: ' + teslaConnection.accessToken);
         var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
         + 'csurl=https://owner-api.teslamotors.com/oauth/token';
 
