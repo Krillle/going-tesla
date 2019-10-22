@@ -46,7 +46,7 @@
         xhr.open("POST", teslaUrl);
 
         xhr.setRequestHeader("Content-Type", "application/json");
-        // xhr.setRequestHeader("Authorization", 'bearer ' + teslaConnection.accessToken);
+        xhr.setRequestHeader("Authorization", 'bearer ' + teslaConnection.accessToken);
         xhr.setRequestHeader("cache-control", "no-cache");
 
         xhr.send(body);
