@@ -13,10 +13,10 @@
       try {revokeTeslaToken()}
       catch {console.log('Revoking token not successful')};
 
-      document.cookie = "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Access Cookie löschen
-      document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Refresh Cookie löschen
-      document.cookie = "vehicle=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Legacy Tesla Toke Cookie löschen
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Legacy Tesla Toke Cookie löschen
+      // document.cookie = "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Access Cookie löschen
+      // document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Refresh Cookie löschen
+      // document.cookie = "vehicle=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Legacy Tesla Toke Cookie löschen
+      // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Legacy Tesla Toke Cookie löschen
       console.log("Tesla Token Cookies entfernt");
 
       function getCookie(name) {
@@ -28,7 +28,7 @@
       function revokeTeslaToken() {
         console.log('Revoke Tesla Token: ' + teslaConnection.accessToken);
         var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
-        + 'csurl=https://owner-api.teslamotors.com/oauth/token';
+        + 'csurl=https://owner-api.teslamotors.com/oauth/revoke';
 
         var body = JSON.stringify({
           "token": teslaConnection.accessToken
