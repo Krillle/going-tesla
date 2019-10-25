@@ -589,7 +589,7 @@
       console.log("Result" + result);
       if (result) {
         result = JSON.parse(result);
-        if (result.code) {
+        if (result.code == "Ok") {
           return {
             'distanceRaw': result.routes[0].distance,
             'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km, ',
