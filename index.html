@@ -189,7 +189,8 @@
       style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f', // Dark Tesla
       center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
       zoom: teslaPosition.zoom, // starting zoom
-      bearing: teslaPosition.heading
+      bearing: teslaPosition.heading,
+      attributionControl: false
     });
 
     // Add geocoder search field
@@ -451,7 +452,7 @@
       console.log ('Access cookie: ' + getCookie('access'));
       console.log ('Access data: ' + teslaConnection.accessToken);
 
-      if (teslaConnection.accessToken == 'undefined') {
+      if (typeof(teslaConnection.accessToken) == 'undefined') {
         teslaConnection.status = 'Kein Token';
         console.log('Kein Token');
         settingsPopup ();
