@@ -48,10 +48,13 @@
       height: 60px;
     }
     #map .mapboxgl-ctrl-geocoder--icon {
-      top:20px !important;
+      top: 18px !important;
+      left: 5px !important;
+      width: 25px !important;
+      height: 25px !important;
     }
     #map .mapboxgl-ctrl-geocoder--icon-close {
-      top:20px !important;
+      margin-top:11px !important;
     }
 
     .mapboxgl-popup {
@@ -121,7 +124,7 @@
 
   <div id='map'></div>
   <script>
-    if (location.protocol !== "https:") {location.protocol = "https:"; throw new Error('Changing to secure connection');};
+    // if (location.protocol !== "https:") {location.protocol = "https:"; throw new Error('Changing to secure connection');};
 
     console.log("App started");
 
