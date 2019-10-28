@@ -121,6 +121,8 @@
 
   <div id='map'></div>
   <script>
+    if (location.protocol !== "https:") {location.protocol = "https:"; throw new Error('Changing to secure connection');};
+
     console.log("App started");
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
