@@ -155,7 +155,7 @@
     const updatePositionInterval = 20000;
 
     var zoomToogle = [
-      {name:'AutoZoom', zoom:null, autoZoom:true, autoFollow:true, headUp:false, icon:'url("https://img.icons8.com/small/40/333333/gps-device.png"'},
+      {name:'AutoZoom', zoom:null, autoZoom:true, autoFollow:true, headUp:true, icon:'url("https://img.icons8.com/small/40/333333/gps-device.png"'},
       {name:'DestinationCharger', zoom:slowSpeedZoom, autoZoom:false, autoFollow:true, headUp:false, icon:'url("https://img.icons8.com/ios-glyphs/40/333333/park-and-charge.png"'},
       {name:'SuperCharger', zoom:highSpeedZoom, autoZoom:false, autoFollow:true, headUp:false, icon:'url("https://img.icons8.com/material-sharp/40/333333/tesla-supercharger-pin--v1.png"'}
     ];
@@ -169,7 +169,7 @@
 
     var autoZoom = true;
     var autoFollow = true;
-    var headUp = false;
+    var headUp = true;
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
 
