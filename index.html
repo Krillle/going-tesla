@@ -124,7 +124,7 @@
 
   <div id='map'></div>
   <script>
-    // if (location.protocol !== "https:") {location.protocol = "https:"; throw new Error('Changing to secure connection');};
+    if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
 
     console.log("App started");
 
