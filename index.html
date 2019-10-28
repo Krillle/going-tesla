@@ -30,6 +30,15 @@
       max-width:400px;
     }
 
+    #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-autozoom > .mapboxgl-ctrl-autozoom-icon {
+      width: 40px;
+      height: 40px;
+      margin: 5px;
+      background-image: url("https://img.icons8.com/small/40/333333/gps-device.png");
+      background-repeat: no-repeat;
+      display: inline-block;
+    }
+
     #map .mapboxgl-ctrl-geocoder .suggestions {
       font: 20px/1.4 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;5
     }
@@ -39,10 +48,13 @@
       height: 60px;
     }
     #map .mapboxgl-ctrl-geocoder--icon {
-      top:20px !important;
+      top: 18px !important;
+      left: 5px !important;
+      width: 25px !important;
+      height: 25px !important;
     }
     #map .mapboxgl-ctrl-geocoder--icon-close {
-      top:20px !important;
+      margin-top:11px !important;
     }
 
     .mapboxgl-popup {
@@ -112,6 +124,8 @@
 
   <div id='map'></div>
   <script>
+    if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
+
     console.log("App started");
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
@@ -127,12 +141,11 @@
     const chargerParkColor = "e6e6e6"; // light marker for dark map
     const chargerFaultColor = "ffb800";
 
-    const minPowerSuperCharger = '100';
-    const minPowerHighwayCharger = '50';
-    const minZoomHighwayCharger = '11';
-    const minPowerDestinationCharger = '11';
-    const minZoomDestinationCharger = '14';
-    var minPower = minPowerSuperCharger;
+    const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
+    const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
+    const destinationCharger = {'minPower':'11', 'minZoom':14, 'toggle':1}
+
+    var minPower = superCharger.minPower;
 
     const slowSpeed = 30;
     const highSpeed = 100;
@@ -141,6 +154,13 @@
 
     const updatePositionInterval = 20000;
 
+    var zoomToogle = [
+      {name:'AutoZoom', zoom:null, autoZoom:true, autoFollow:true, headUp:true, icon:'url("https://img.icons8.com/small/40/333333/gps-device.png"'},
+      {name:'DestinationCharger', zoom:slowSpeedZoom, autoZoom:false, autoFollow:true, headUp:false, icon:'url("https://img.icons8.com/ios-glyphs/40/333333/park-and-charge.png"'},
+      {name:'SuperCharger', zoom:highSpeedZoom, autoZoom:false, autoFollow:true, headUp:false, icon:'url("https://img.icons8.com/material-sharp/40/333333/tesla-supercharger-pin--v1.png"'}
+    ];
+    var zoomToggleState = 0;
+
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
     var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
@@ -148,6 +168,8 @@
     var positionColor = 'ff514a';
 
     var autoZoom = true;
+    var autoFollow = true;
+    var headUp = true;
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
 
@@ -163,7 +185,7 @@
         coordinates: [teslaPosition.longitude,teslaPosition.latitude]
       }
     };
-    minPower = zoomToPower(teslaPosition.zoom);
+    zoomToPower(teslaPosition.zoom);
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
@@ -172,7 +194,8 @@
       style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f', // Dark Tesla
       center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
       zoom: teslaPosition.zoom, // starting zoom
-      bearing: teslaPosition.heading
+      bearing: teslaPosition.heading,
+      attributionControl: false
     });
 
     // Add geocoder search field
@@ -196,7 +219,30 @@
     // geolocate.trigger();
     // map.setPitch(30);
 
-    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(new mapboxgl.NavigationControl({
+      showCompass: true,
+      showZoom: false,
+      visualizePitch: false
+    }));
+
+    map.addControl(new mapboxgl.NavigationControl({
+      showCompass: false,
+      showZoom: true,
+      visualizePitch: false
+    }));
+
+    nav = new mapboxgl.NavigationControl({
+      showCompass: false,
+      showZoom: false,
+      visualizePitch: false
+    })
+
+    nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-autozoom', 'Toggle Autozoom', () => toggleAutoZoom());
+    const el = window.document.createElement('span');
+    el.className = 'mapboxgl-ctrl-autozoom-icon';
+    nav._icon = nav._toggle.appendChild(el);
+    map.addControl(nav, 'bottom-right');
+
 
     map.on('load', function() {
       // Create Position Image
@@ -279,24 +325,28 @@
 
     // Events to disable AutoZoom
     map.on('touchstart', function() {
-      console.log("AutoZoom stopped");
+      console.log("AutoZoom, AutoFollow, HeadUp stopped");
       autoZoom = false;
+      autoFollow = false;
+      headUp = false;
     });
 
     map.on('mousedown', function() {
-      console.log("AutoZoom stopped");
+      console.log("AutoZoom, AutoFollow, HeadUp stopped");
       autoZoom = false;
+      autoFollow = false;
+      headUp = false;
     });
 
     // Events to update chargers
     map.on('moveend', function() {
-      console.log("Invoke Update");
+      console.log("Move End: Invoke Update");
       updateChargers();
     });
 
     map.on('zoomend', function() {
-      console.log("Set Charger for zoom level " + map.getZoom());
-      minPower = zoomToPower(map.getZoom());
+      console.log("Zoom End: Set Charger for zoom level " + map.getZoom());
+      zoomToPower(map.getZoom());
     });
 
 
@@ -331,12 +381,33 @@
       map.getCanvas().style.cursor = '';
     });
 
+    function toggleAutoZoom() {
+      zoomToggleState = zoomToggleState < 2 ? ++zoomToggleState : 0;
+
+      console.log(`${zoomToogle[zoomToggleState].name}: Zoom ${zoomToogle[zoomToggleState].zoom}, AutoZoom ${zoomToogle[zoomToggleState].autoZoom}, AutoFollow ${zoomToogle[zoomToggleState].autoFollow}, HeadUp ${zoomToogle[zoomToggleState].headUp} `);
+
+      nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon;
+
+      if (zoomToogle[zoomToggleState].zoom) {
+        map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
+      }
+      autoZoom = zoomToogle[zoomToggleState].autoZoom;
+      autoFollow = zoomToogle[zoomToggleState].autoFollow;
+      headUp = zoomToogle[zoomToggleState].headUp;
+    };
+
     function zoomToPower(zoom) {
-      return (zoom >= minZoomDestinationCharger) ?
-      minPowerDestinationCharger :
-      (zoom >= minZoomHighwayCharger) ?
-      minPowerHighwayCharger :
-      minPowerSuperCharger;
+      if (zoom >= destinationCharger.minZoom) {
+        minPower = destinationCharger.minPower;
+        zoomToggleState = destinationCharger.toggle;
+      } else if (zoom >= highwayCharger.minZoom) {
+        minPower = highwayCharger.minPower;
+        zoomToggleState = highwayCharger.toggle;
+      } else {
+        minPower = superCharger.minPower;
+        zoomToggleState = superCharger.toggle;
+      }
+      if (!autoZoom) {nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon};
     };
 
     function secondsToTime(totalSeconds) {
@@ -351,7 +422,7 @@
       httpReq.open('GET', url, false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
       httpReq.send(null);
-      console.log("Result" + httpReq.responseText);
+      console.log("Result: " + httpReq.responseText);
       return httpReq.responseText;
     };
 
@@ -386,7 +457,7 @@
       console.log ('Access cookie: ' + getCookie('access'));
       console.log ('Access data: ' + teslaConnection.accessToken);
 
-      if (teslaConnection.accessToken == 'undefined') {
+      if (typeof(teslaConnection.accessToken) == 'undefined') {
         teslaConnection.status = 'Kein Token';
         console.log('Kein Token');
         settingsPopup ();
@@ -429,15 +500,23 @@
     };
 
     function updatePosition() {
-       setTeslaPosition(getTeslaDriveStatus().response);
+      setTeslaPosition(getTeslaDriveStatus().response);
 
-      positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
-      positionIcon.properties.bearing = teslaPosition.heading;
+      if (positionIcon.geometry.coordinates != [teslaPosition.longitude,teslaPosition.latitude]
+          && positionIcon.properties.bearing != teslaPosition.heading) {
+        positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
+        positionIcon.properties.bearing = teslaPosition.heading;
 
-      map.getSource('positionIcon').setData(positionIcon);
+        map.getSource('positionIcon').setData(positionIcon);
 
-      if (autoZoom) {
-        map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
+        var jumpTarget = {};
+        if (autoFollow) {jumpTarget.center = [teslaPosition.longitude,teslaPosition.latitude]};
+        if (autoZoom) {jumpTarget.zoom = teslaPosition.zoom};
+        if (headUp) {jumpTarget.bearing = teslaPosition.heading};
+        if (autoFollow || autoZoom || headUp) {
+          map.jumpTo(jumpTarget);
+          // map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
+        };
       };
     };
 
@@ -454,54 +533,21 @@
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
 
-      var httpReq = new XMLHttpRequest();
-      httpReq.open('GET', teslaUrl, false);
-      httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken);
-      httpReq.send(null);
-
-      console.log("Result" + httpReq.responseText);
-
-      if (httpReq.responseText) {
-        return JSON.parse(httpReq.responseText);
-      } else {
-        return null;
-      };
+      return JSON.parse(httpGet(teslaUrl,true));
     };
 
     function getTeslaCarData() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
 
-      var httpReq = new XMLHttpRequest();
-      httpReq.open('GET', teslaUrl, false);
-      httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken);
-      httpReq.send(null);
-
-      console.log("Result" + httpReq.responseText);
-
-      if (httpReq.responseText) {
-        return JSON.parse(httpReq.responseText);
-      } else {
-        return null;
-      };
+      return JSON.parse(httpGet(teslaUrl,true));
     };
 
     function getTeslaVehicles() {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles';
 
-      var httpReq = new XMLHttpRequest();
-      httpReq.open('GET', teslaUrl, false);
-      httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken);
-      httpReq.send(null);
-
-      console.log("Result" + httpReq.responseText);
-
-      if (httpReq.responseText) {
-        return JSON.parse(httpReq.responseText);
-      } else {
-        return null;
-      };
+      return JSON.parse(httpGet(teslaUrl,true));
     };
 
     function createTeslaToken (email, password) {
@@ -644,7 +690,7 @@
           "properties": {
             "icon": (chargeLocation.fault_report) ? "faultReport" :
               (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
-              (maxPower >= minPowerSuperCharger) ? "thirdSuperCharger" :
+              (maxPower >= superCharger.minPower) ? "thirdSuperCharger" :
               "parkCharger"
           },
           "geometry": {
