@@ -394,7 +394,7 @@
       if (zoomToogle[zoomToggleState].zoom) {
         map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
       } else {
-        updatePosition();
+        updateMapFocus();
       }
     };
 
@@ -502,6 +502,17 @@
       };
     };
 
+    function updateMapFocus() {
+      var jumpTarget = {};
+      if (autoFollow) {jumpTarget.center = [teslaPosition.longitude,teslaPosition.latitude]};
+      if (autoZoom) {jumpTarget.zoom = teslaPosition.zoom};
+      if (headUp) {jumpTarget.bearing = teslaPosition.heading};
+      if (autoFollow || autoZoom || headUp) {
+        map.jumpTo(jumpTarget);
+        // map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
+      };
+    };
+
     function updatePosition() {
       setTeslaPosition(getTeslaDriveStatus().response);
 
@@ -512,14 +523,8 @@
 
         map.getSource('positionIcon').setData(positionIcon);
 
-        var jumpTarget = {};
-        if (autoFollow) {jumpTarget.center = [teslaPosition.longitude,teslaPosition.latitude]};
-        if (autoZoom) {jumpTarget.zoom = teslaPosition.zoom};
-        if (headUp) {jumpTarget.bearing = teslaPosition.heading};
-        if (autoFollow || autoZoom || headUp) {
-          map.jumpTo(jumpTarget);
-          // map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
-        };
+        updateMapFocus ();
+
       };
     };
 
