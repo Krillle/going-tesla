@@ -20,14 +20,14 @@
  * Enables or disables filtering for cross domain requests.
  * Recommended value: true
  */
-define('CSAJAX_FILTERS', true);
+define('CSAJAX_FILTERS', false);
 
 /**
  * If set to true, $valid_requests should hold only domains i.e. a.example.com, b.example.com, usethisdomain.com
  * If set to false, $valid_requests should hold the whole URL ( without the parameters ) i.e. http://example.com/this/is/long/url/
  * Recommended value: false (for security reasons - do not forget that anyone can access your proxy)
  */
-define('CSAJAX_FILTER_DOMAIN', false);
+define('CSAJAX_FILTER_DOMAIN', true);
 
 /**
  * Enables or disables Expect: 100-continue header. Some webservers don't
@@ -46,9 +46,7 @@ define('CSAJAX_DEBUG', false);
  */
 $valid_requests = array(
     // 'example.com'
-    'https://owner-api.teslamotors.com/',
-    'https://owner-api.teslamotors.com/api/1/vehicles/44234482861270508/data_request/drive_state',
-    'https://owner-api.teslamotors.com//oauth/token?grant_type=password'
+    'owner-api.teslamotors.com'
 );
 
 /**
@@ -119,26 +117,26 @@ if (preg_match('!' . $_SERVER['SCRIPT_NAME'] . '!', $request_url) || empty($requ
     exit;
 }
 
-// check against valid requests DISABLED TEMPORARILY !!!
-// if (CSAJAX_FILTERS) {
-//     $parsed = $p_request_url;
-//     if (CSAJAX_FILTER_DOMAIN) {
-//         if (!in_array($parsed['host'], $valid_requests)) {
-//             csajax_debug_message('Invalid domain - ' . $parsed['host'] . ' does not included in valid requests');
-//             exit;
-//         }
-//     } else {
-//         $check_url = isset($parsed['scheme']) ? $parsed['scheme'] . '://' : '';
-//         $check_url .= isset($parsed['user']) ? $parsed['user'] . ($parsed['pass'] ? ':' . $parsed['pass'] : '') . '@' : '';
-//         $check_url .= isset($parsed['host']) ? $parsed['host'] : '';
-//         $check_url .= isset($parsed['port']) ? ':' . $parsed['port'] : '';
-//         $check_url .= isset($parsed['path']) ? $parsed['path'] : '';
-//         if (!in_array($check_url, $valid_requests)) {
-//             csajax_debug_message('Invalid domain - ' . $request_url . ' does not included in valid requests');
-//             exit;
-//         }
-//     }
-// }
+// check against valid requests (WAS DISABLED TEMPORARILY)
+if (CSAJAX_FILTERS) {
+    $parsed = $p_request_url;
+    if (CSAJAX_FILTER_DOMAIN) {
+        if (!in_array($parsed['host'], $valid_requests)) {
+            csajax_debug_message('Invalid domain - ' . $parsed['host'] . ' does not included in valid requests');
+            exit;
+        }
+    } else {
+        $check_url = isset($parsed['scheme']) ? $parsed['scheme'] . '://' : '';
+        $check_url .= isset($parsed['user']) ? $parsed['user'] . ($parsed['pass'] ? ':' . $parsed['pass'] : '') . '@' : '';
+        $check_url .= isset($parsed['host']) ? $parsed['host'] : '';
+        $check_url .= isset($parsed['port']) ? ':' . $parsed['port'] : '';
+        $check_url .= isset($parsed['path']) ? $parsed['path'] : '';
+        if (!in_array($check_url, $valid_requests)) {
+            csajax_debug_message('Invalid domain - ' . $request_url . ' does not included in valid requests');
+            exit;
+        }
+    }
+}
 
 // append query string for GET requests
 if ($request_method == 'GET' && count($request_params) > 0 && (!array_key_exists('query', $p_request_url) || empty($p_request_url['query']))) {

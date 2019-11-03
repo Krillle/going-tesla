@@ -387,13 +387,15 @@
       console.log(`${zoomToogle[zoomToggleState].name}: Zoom ${zoomToogle[zoomToggleState].zoom}, AutoZoom ${zoomToogle[zoomToggleState].autoZoom}, AutoFollow ${zoomToogle[zoomToggleState].autoFollow}, HeadUp ${zoomToogle[zoomToggleState].headUp} `);
 
       nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon;
-
-      if (zoomToogle[zoomToggleState].zoom) {
-        map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
-      }
       autoZoom = zoomToogle[zoomToggleState].autoZoom;
       autoFollow = zoomToogle[zoomToggleState].autoFollow;
       headUp = zoomToogle[zoomToggleState].headUp;
+
+      if (zoomToogle[zoomToggleState].zoom) {
+        map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
+      } else {
+        updatePosition();
+      }
     };
 
     function zoomToPower(zoom) {
@@ -480,6 +482,7 @@
       }
       else {
         teslaConnection.status = 'Connected to ' + vehicleData.response.vehicle_state.vehicle_name;
+        console.log('Connected to ' + vehicleData.response.vehicle_state.vehicle_name);
         setTeslaPosition(vehicleData.response.drive_state);
         console.log ('Starting continous update');
         setInterval(updatePosition, updatePositionInterval);
