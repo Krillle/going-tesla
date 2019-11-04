@@ -353,8 +353,8 @@
     });
 
     map.on('dragstart', function() {
-      stopAutoZoom();
       stopHeadUp();
+      stopAutoZoom();
       console.log("AutoFollow stopped");
       autoFollow = false;
     });
