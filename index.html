@@ -439,8 +439,11 @@
     };
 
     function stopHeadUp() {
-      console.log("HeadUp stopped");
-      headUp = false;
+      if (headUp) {
+        console.log("HeadUp stopped");
+        infoMessage('Norden oben');
+        headUp = false;
+      }
     };
 
     function updateZoomIcon() {
