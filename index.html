@@ -223,21 +223,7 @@
       mapboxgl: mapboxgl
     }),'top-left');
 
-    // Add geolocate control to the map.
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      fitBoundsOptions: {
-        maxZoom: 9
-      }
-    })
-
-    // Add locate, zoom and rotation controls to the map.
-    map.addControl(geolocate);
-    // geolocate.trigger();
-    // map.setPitch(30);
-
+    // Add zoom and rotation controls to the map.
     var comp = new mapboxgl.NavigationControl({
       showCompass: true,
       showZoom: false,
@@ -265,6 +251,19 @@
     el.className = 'mapboxgl-ctrl-autozoom-icon';
     nav._icon = nav._toggle.appendChild(el);
     map.addControl(nav, 'bottom-right');
+
+    // Add geolocate control to the map.
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true
+      },
+      fitBoundsOptions: {
+        maxZoom: 9
+      }
+    })
+    map.addControl(geolocate, 'bottom-right');
+    // geolocate.trigger();
+    // map.setPitch(30);
 
 
     map.on('load', function() {
