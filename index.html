@@ -551,7 +551,7 @@
         return;
       }
       else {
-        teslaConnection.status = 'Connected to ' + vehicleData.response.vehicle_state.vehicle_name;
+        teslaConnection.status = 'Verbunden mit ' + vehicleData.response.vehicle_state.vehicle_name;
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
         setTeslaPosition(vehicleData.response.drive_state);
