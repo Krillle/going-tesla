@@ -239,24 +239,28 @@
     // geolocate.trigger();
     // map.setPitch(30);
 
-    map.addControl(new mapboxgl.NavigationControl({
+    var comp = new mapboxgl.NavigationControl({
       showCompass: true,
       showZoom: false,
-      visualizePitch: false
-    }));
+      visualizePitch: true
+    });
+    comp._compass.addEventListener('click', () => stopHeadUp());
+    map.addControl(comp);
 
-    map.addControl(new mapboxgl.NavigationControl({
+    var zoom = new mapboxgl.NavigationControl({
       showCompass: false,
       showZoom: true,
       visualizePitch: false
-    }));
+    });
+    zoom._zoomInButton.addEventListener('click', () => stopAutoZoom());
+    zoom._zoomOutButton.addEventListener('click', () => stopAutoZoom());
+    map.addControl(zoom);
 
-    nav = new mapboxgl.NavigationControl({
+    var nav = new mapboxgl.NavigationControl({
       showCompass: false,
       showZoom: false,
       visualizePitch: false
     })
-
     nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-autozoom', 'Toggle Autozoom', () => toggleAutoZoom());
     const el = window.document.createElement('span');
     el.className = 'mapboxgl-ctrl-autozoom-icon';
@@ -345,17 +349,20 @@
 
     // Events to disable AutoZoom
     map.on('touchstart', function() {
-      console.log("AutoZoom, AutoFollow, HeadUp stopped");
-      autoZoom = false;
-      autoFollow = false;
-      headUp = false;
     });
 
     map.on('mousedown', function() {
-      console.log("AutoZoom, AutoFollow, HeadUp stopped");
-      autoZoom = false;
+    });
+
+    map.on('dragstart', function() {
+      stopAutoZoom();
+      stopHeadUp();
+      console.log("AutoFollow stopped");
       autoFollow = false;
-      headUp = false;
+    });
+
+    map.on('rotateend', function() {
+      console.log("Rotate End");
     });
 
     // Events to update chargers
@@ -372,6 +379,11 @@
 
     // Charger places events (Popup)
     map.on('click', 'chargers', function (e) {
+      stopAutoZoom();
+      stopHeadUp();
+      console.log("AutoFollow stopped");
+      autoFollow = false;
+
       var coordinates = e.features[0].geometry.coordinates.slice();
       var description = chargerDescription(e.features[0].id);
 
@@ -406,14 +418,42 @@
 
       console.log(`${zoomToogle[zoomToggleState].name}: Zoom ${zoomToogle[zoomToggleState].zoom}, AutoZoom ${zoomToogle[zoomToggleState].autoZoom}, AutoFollow ${zoomToogle[zoomToggleState].autoFollow}, HeadUp ${zoomToogle[zoomToggleState].headUp} `);
 
-      nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon;
-
-      if (zoomToogle[zoomToggleState].zoom) {
-        map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
-      }
+      updateZoomIcon();
       autoZoom = zoomToogle[zoomToggleState].autoZoom;
       autoFollow = zoomToogle[zoomToggleState].autoFollow;
       headUp = zoomToogle[zoomToggleState].headUp;
+
+      if (zoomToogle[zoomToggleState].zoom) {
+        map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
+      } else {
+        updateMapFocus();
+      }
+    };
+
+    function stopAutoZoom() {
+      console.log('AutoZoom stopped');
+      autoZoom = false;
+      updateZoomIcon();
+    };
+
+    function stopHeadUp() {
+      console.log("HeadUp stopped");
+      headUp = false;
+    };
+
+    function updateZoomIcon() {
+      nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon;
+    };
+
+    function updateMapFocus() {
+      var jumpTarget = {};
+      if (autoFollow) {jumpTarget.center = [teslaPosition.longitude,teslaPosition.latitude]};
+      if (autoZoom) {jumpTarget.zoom = teslaPosition.zoom};
+      if (headUp) {jumpTarget.bearing = teslaPosition.heading};
+      if (autoFollow || autoZoom || headUp) {
+        map.jumpTo(jumpTarget);
+        // map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
+      };
     };
 
     function zoomToPower(zoom) {
@@ -442,7 +482,7 @@
       httpReq.open('GET', url, false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
       httpReq.send(null);
-      console.log("Result: " + httpReq.responseText);
+      // console.log("Result: " + httpReq.responseText);
       return httpReq.responseText;
     };
 
@@ -507,6 +547,7 @@
       }
       else {
         teslaConnection.status = 'Connected to ' + vehicleData.response.vehicle_state.vehicle_name;
+        console.log('Connected to ' + vehicleData.response.vehicle_state.vehicle_name);
         setTeslaPosition(vehicleData.response.drive_state);
         console.log ('Starting continous update');
         setInterval(updatePosition, updatePositionInterval);
@@ -536,14 +577,8 @@
 
         map.getSource('positionIcon').setData(positionIcon);
 
-        var jumpTarget = {};
-        if (autoFollow) {jumpTarget.center = [teslaPosition.longitude,teslaPosition.latitude]};
-        if (autoZoom) {jumpTarget.zoom = teslaPosition.zoom};
-        if (headUp) {jumpTarget.bearing = teslaPosition.heading};
-        if (autoFollow || autoZoom || headUp) {
-          map.jumpTo(jumpTarget);
-          // map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
-        };
+        updateMapFocus ();
+
       };
     };
 
