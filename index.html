@@ -430,10 +430,12 @@
     };
 
     function stopAutoZoom() {
-      console.log('AutoZoom stopped');
-      infoMessage('Autozoom deaktiviert')
-      autoZoom = false;
-      updateZoomIcon();
+      if (autoZoom) {
+        console.log('AutoZoom stopped');
+        infoMessage('Autozoom deaktiviert');
+        autoZoom = false;
+        updateZoomIcon();
+      };
     };
 
     function stopHeadUp() {
