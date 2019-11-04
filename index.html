@@ -229,7 +229,7 @@
       showZoom: false,
       visualizePitch: true
     });
-    comp._compass.addEventListener('click', () => stopHeadUp());
+    comp._compass.addEventListener('click', () => {infoMessage('Norden oben'); stopHeadUp()});
     map.addControl(comp);
 
     var zoom = new mapboxgl.NavigationControl({
@@ -440,7 +440,6 @@
 
     function stopHeadUp() {
       console.log("HeadUp stopped");
-      infoMessage('Norden oben');
       headUp = false;
     };
 
