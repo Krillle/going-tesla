@@ -113,20 +113,19 @@
 
     .info-container {
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 20px;
+      right: 100px;
       z-index: 1;
     }
 
     .info-container > * {
       background-color: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      font-size: 11px;
-      line-height: 18px;
+      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      color:#e6e6e6;
       display: block;
       margin: 0;
-      padding: 5px 10px;
-      border-radius: 3px;
+      padding: 10px 20px;
+      border-radius:10px 10px 10px 10px;
     }
 
   </style>
@@ -191,6 +190,8 @@
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
 
+    var infoContainer = document.getElementById('info');
+
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
     catch {console.log('Tesla not reachable')};
@@ -215,8 +216,6 @@
       bearing: teslaPosition.heading,
       attributionControl: false
     });
-
-    var infoContainer = document.getElementById('info');
 
     // Add geocoder search field
     map.addControl(new MapboxGeocoder({
@@ -426,12 +425,14 @@
       if (zoomToogle[zoomToggleState].zoom) {
         map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
       } else {
+        infoMessage('Autozoom aktiviert')
         updateMapFocus();
       }
     };
 
     function stopAutoZoom() {
       console.log('AutoZoom stopped');
+      infoMessage('Autozoom deaktiviert')
       autoZoom = false;
       updateZoomIcon();
     };
@@ -510,12 +511,13 @@
 
     };
 
-    function displayInfo(message) {
+    function infoMessage(message) {
+      if (infoContainer.innerHTML) {infoContainer.innerHTML = '';};
       var pre = document.createElement('pre');
-      value.textContent = message;
-      distanceContainer.appendChild(pre);
+      pre.textContent = message;
+      infoContainer.appendChild(pre);
       setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
-    }
+    };
 
     // Tesla connection - - - - - -
 
@@ -526,7 +528,8 @@
 
       if (typeof(teslaConnection.accessToken) == 'undefined') {
         teslaConnection.status = 'Kein Token';
-        console.log('Kein Token');
+        console.log(teslaConnection.status);
+        infoMessage(teslaConnection.status);
         settingsPopup ();
         return;
       };
@@ -535,19 +538,22 @@
       console.log(vehicleData);
       if (vehicleData == null) {
         teslaConnection.status = 'Ungültiges Token';
-        console.log('Ungültiges Token');
+        console.log(teslaConnection.status);
+        infoMessage(teslaConnection.status);
         settingsPopup ();
         return;
 
       } else if (vehicleData.response == null) {
         // Car sleeps
         teslaConnection.status = 'Fahrzeug nicht erreichbar';
-        console.log('Fahrzeug nicht erreichbar');
+        console.log(teslaConnection.status);
+        infoMessage(teslaConnection.status);
         return;
       }
       else {
         teslaConnection.status = 'Connected to ' + vehicleData.response.vehicle_state.vehicle_name;
-        console.log('Connected to ' + vehicleData.response.vehicle_state.vehicle_name);
+        console.log(teslaConnection.status);
+        infoMessage(teslaConnection.status);
         setTeslaPosition(vehicleData.response.drive_state);
         console.log ('Starting continous update');
         setInterval(updatePosition, updatePositionInterval);
