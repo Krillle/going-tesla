@@ -111,6 +111,23 @@
       cursor:pointer;
     } */
 
+    .info-container {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+    }
+
+    .info-container > * {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 11px;
+      line-height: 18px;
+      display: block;
+      margin: 0;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
 
   </style>
 </head>
@@ -123,6 +140,7 @@
   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
   <div id='map'></div>
+  <div id='info' class='info-container'></div>
   <script>
     if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
 
@@ -197,6 +215,8 @@
       bearing: teslaPosition.heading,
       attributionControl: false
     });
+
+    var infoContainer = document.getElementById('info');
 
     // Add geocoder search field
     map.addControl(new MapboxGeocoder({
@@ -449,6 +469,13 @@
       createTeslaToken(email, password);
 
     };
+
+    function displayInfo(message) {
+      var pre = document.createElement('pre');
+      value.textContent = message;
+      distanceContainer.appendChild(pre);
+      setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
+    }
 
     // Tesla connection - - - - - -
 
