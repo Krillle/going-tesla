@@ -111,6 +111,22 @@
       cursor:pointer;
     } */
 
+    .info-container {
+      position: absolute;
+      top: 20px;
+      right: 100px;
+      z-index: 1;
+    }
+
+    .info-container > * {
+      background-color: rgba(0, 0, 0, 0.5);
+      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      color:#e6e6e6;
+      display: block;
+      margin: 0;
+      padding: 10px 20px;
+      border-radius:10px 10px 10px 10px;
+    }
 
   </style>
 </head>
@@ -123,6 +139,7 @@
   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
   <div id='map'></div>
+  <div id='info' class='info-container'></div>
   <script>
     if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
 
@@ -172,6 +189,8 @@
     var headUp = true;
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
+
+    var infoContainer = document.getElementById('info');
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
@@ -406,12 +425,14 @@
       if (zoomToogle[zoomToggleState].zoom) {
         map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
       } else {
+        infoMessage('Autozoom aktiviert')
         updateMapFocus();
       }
     };
 
     function stopAutoZoom() {
       console.log('AutoZoom stopped');
+      infoMessage('Autozoom deaktiviert')
       autoZoom = false;
       updateZoomIcon();
     };
@@ -490,6 +511,14 @@
 
     };
 
+    function infoMessage(message) {
+      if (infoContainer.innerHTML) {infoContainer.innerHTML = '';};
+      var pre = document.createElement('pre');
+      pre.textContent = message;
+      infoContainer.appendChild(pre);
+      setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
+    };
+
     // Tesla connection - - - - - -
 
     function connectTesla () {
@@ -499,7 +528,8 @@
 
       if (typeof(teslaConnection.accessToken) == 'undefined') {
         teslaConnection.status = 'Kein Token';
-        console.log('Kein Token');
+        console.log(teslaConnection.status);
+        infoMessage(teslaConnection.status);
         settingsPopup ();
         return;
       };
@@ -508,19 +538,22 @@
       console.log(vehicleData);
       if (vehicleData == null) {
         teslaConnection.status = 'Ungültiges Token';
-        console.log('Ungültiges Token');
+        console.log(teslaConnection.status);
+        infoMessage(teslaConnection.status);
         settingsPopup ();
         return;
 
       } else if (vehicleData.response == null) {
         // Car sleeps
         teslaConnection.status = 'Fahrzeug nicht erreichbar';
-        console.log('Fahrzeug nicht erreichbar');
+        console.log(teslaConnection.status);
+        infoMessage(teslaConnection.status);
         return;
       }
       else {
-        teslaConnection.status = 'Connected to ' + vehicleData.response.vehicle_state.vehicle_name;
-        console.log('Connected to ' + vehicleData.response.vehicle_state.vehicle_name);
+        teslaConnection.status = 'Verbunden mit ' + vehicleData.response.vehicle_state.vehicle_name;
+        console.log(teslaConnection.status);
+        infoMessage(teslaConnection.status);
         setTeslaPosition(vehicleData.response.drive_state);
         console.log ('Starting continous update');
         setInterval(updatePosition, updatePositionInterval);
