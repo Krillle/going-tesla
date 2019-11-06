@@ -801,8 +801,11 @@
       });
 
       var route = getRoute(teslaPosition,chargeLocation.coordinates);
-      var kmArrival = (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed();
-      console.log(route)
+      var est_battery_range = milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw;
+      var kmArrival =  (est_battery_range - route.distanceRaw).toFixed();
+      console.log(route);
+      console.log(route.distanceRaw);
+      console.log(kmArrival);
 
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
