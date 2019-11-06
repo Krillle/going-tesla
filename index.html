@@ -472,6 +472,10 @@
       if (!autoZoom) {nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon};
     };
 
+    function milesToKm(miles) {
+      return miles * 1,61;
+    };
+
     function secondsToTime(totalSeconds) {
       var hours = Math.floor(totalSeconds / 3600);
       totalSeconds %= 3600;
@@ -587,6 +591,9 @@
         updateMapFocus ();
 
       };
+
+      var X = getTeslaChargeStatus();
+      infoMessage(milesToKm(X.battery_range) + ' ' + milesToKm(X.est_battery_range))
     };
 
     // - - - - - - - - Tesla requests - - - - - - - - -
