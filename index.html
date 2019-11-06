@@ -473,7 +473,11 @@
     };
 
     function milesToKm(miles) {
-        return parseFloat(miles) * 1.61;
+        var km = parseFloat(miles) * 1.61;
+        return {
+          'km': km.toFixed(1).toString().replace(".",",")  + ' km, ',
+          'kmRaw': km
+        }
     };
 
     function secondsToTime(totalSeconds) {
@@ -597,7 +601,7 @@
       console.log(X.response.battery_range)
       console.log(X.response.est_battery_range)
 
-      infoMessage(milesToKm(X.response.battery_range) + ' ' + milesToKm(X.response.est_battery_range))
+      infoMessage(milesToKm(X.response.battery_range).km + ' ' + milesToKm(X.response.est_battery_range).km)
     };
 
     // - - - - - - - - Tesla requests - - - - - - - - -
