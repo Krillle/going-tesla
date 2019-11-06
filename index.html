@@ -593,7 +593,11 @@
       };
 
       var X = getTeslaChargeStatus();
-      infoMessage(milesToKm(X.battery_range) + ' ' + milesToKm(X.est_battery_range))
+      console.log(X);
+      console.log(X.charge_state.battery_range)
+      console.log(X.charge_state.est_battery_range)
+
+      infoMessage(milesToKm(X.charge_state.battery_range) + ' ' + milesToKm(X.charge_state.est_battery_range))
     };
 
     // - - - - - - - - Tesla requests - - - - - - - - -
