@@ -800,7 +800,7 @@
         };
       });
 
-      // var route = getRoute(teslaPosition,chargeLocation.coordinates);
+      var route = getRoute(teslaPosition,chargeLocation.coordinates);
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
       var description = '';
@@ -820,7 +820,7 @@
 
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
-      // description += (route) ? '<strong>' + route.distance +  route.duration + ', Rest ' + `${(milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed()}` + ' km</strong><p>' : '';
+      description += (route) ? '<strong>' + route.distance +  route.duration + ', Rest ' + (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed() + ' km</strong><p>' : '';
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
       description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
