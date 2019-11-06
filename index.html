@@ -722,7 +722,7 @@
         result = JSON.parse(result);
         if (result.code == "Ok") {
           return {
-            'distanceRaw': result.routes[0].distance,
+            'distanceRaw': result.routes[0].distance/1000,
             'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km, ',
             'duration': secondsToTime(result.routes[0].duration),
             'durationRaw': result.routes[0].duration
@@ -804,6 +804,7 @@
       var est_battery_range = milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw;
       var kmArrival =  (est_battery_range - route.distanceRaw).toFixed();
       console.log(route);
+      console.log(est_battery_range);
       console.log(route.distanceRaw);
       console.log(kmArrival);
 
