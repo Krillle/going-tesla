@@ -475,7 +475,7 @@
     function milesToKm(miles) {
         var km = parseFloat(miles) * 1.61;
         return {
-          'km': km.toFixed(1).toString().replace(".",",")  + ' km',
+          'km': km.toFixed().toString().replace(".",",")  + ' km',
           'kmRaw': km
         }
     };
@@ -597,8 +597,6 @@
       };
 
       var X = getTeslaChargeStatus();
-      console.log(X);
-      console.log(X.response.battery_range)
       console.log(X.response.est_battery_range)
 
       infoMessage(milesToKm(X.response.battery_range).km + ' ' + milesToKm(X.response.est_battery_range).km)
@@ -803,6 +801,7 @@
       });
 
       var route = getRoute(teslaPosition,chargeLocation.coordinates);
+      var kmArrival = (milesToKm(getTeslaChargeStatus()response.est_battery_range).kmRaw - route.distanceRaw).toFixed();
       console.log(route)
 
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
@@ -824,7 +823,7 @@
 
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
-      description += (route) ? '<strong>' + route.distance +  route.duration + '</strong><p>' : '';
+      description += (route) ? '<strong>' + route.distance +  route.duration + 'Rest ' + kmArrival + ' km</strong><p>' : '';
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
       description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
