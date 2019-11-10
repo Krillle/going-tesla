@@ -716,7 +716,7 @@
         if (result.code == "Ok") {
           return {
             'distanceRaw': result.routes[0].distance/1000,
-            'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km, ',
+            'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km',
             'duration': secondsToTime(result.routes[0].duration),
             'durationRaw': result.routes[0].duration
           }
@@ -816,7 +816,7 @@
       
 //      description += (route) ? '<strong>' + route.distance +  route.duration : '';
       if (route) {
-        description += '<strong>' + route.distance +  route.duration + '<strong>';
+        description += '<strong>' + route.distance + ', ' + route.duration + '<strong>';
         try {
           description += '<br> Reichweite bei Ankunft ' + (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed() + ' km'; 
       }
