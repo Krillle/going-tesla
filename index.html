@@ -813,7 +813,16 @@
 
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
-      description += (route) ? '<strong>' + route.distance +  route.duration + ', 🔋' + (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed() + ' km</strong><p>' : '';
+      
+//      description += (route) ? '<strong>' + route.distance +  route.duration : '';
+      if (route) {
+        description += '<strong>' + route.distance +  route.duration + '<strong>';
+        try {
+          description += '<br> Reichweite bei Ankunft ' + (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed() + ' km'; 
+      }
+        catch {};
+        description += '<p>'
+      };
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
       description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
