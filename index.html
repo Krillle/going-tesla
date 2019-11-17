@@ -383,17 +383,9 @@
       autoFollow = false;
 
       var coordinates = e.features[0].geometry.coordinates.slice();
-      var description = chargerDescription(e.features[0].id);
-
-      // Ensure that if the map is zoomed out such that multiple
-      // copies of the feature are visible, the popup appears
-      // over the copy being pointed to.
-      // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      // }
-
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
+      var description = chargerDescription(e.features[0].id);
       new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       .setLngLat(coordinates)
       .setHTML(description.text)
@@ -813,12 +805,12 @@
 
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
-      
+
 //      description += (route) ? '<strong>' + route.distance +  route.duration : '';
       if (route) {
         description += '<strong>' + route.distance + ', ' + route.duration + '<strong>';
         try {
-          description += '<br> Reichweite bei Ankunft ' + (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed() + ' km'; 
+          description += '<br> Reichweite bei Ankunft ' + (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed() + ' km';
       }
         catch {};
         description += '<p>'
