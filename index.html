@@ -388,9 +388,9 @@
       var description = chargerDescription(e.features[0].id);
       new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       .setLngLat(coordinates)
+      .addTo(map)
       .setHTML(description.text)
-      .addTo(map);
-      .setHTML(description.text+"<br> sglijsdfg iojdfoigdj o igjsdfoi gbjdsfoig jdosifjg oidsfjg oisdfj")
+      .setHTML(description.text+"<br> sglijsdfg iojdfoigdj o igjsdfoi gbjdsfoig jdosifjg oidsfjg oisdfj");
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
