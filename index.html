@@ -385,12 +385,11 @@
       var coordinates = e.features[0].geometry.coordinates.slice();
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
-      var description = chargerDescription(e.features[0].id);
+      // var description = chargerDescription(e.features[0].id);
       new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       .setLngLat(coordinates)
       .addTo(map)
-      .setHTML(description.text)
-      .setHTML(description.text+"<br> sglijsdfg iojdfoigdj o igjsdfoi gbjdsfoig jdosifjg oidsfjg oisdfj");
+      .setHTML(chargerDescription(e.features[0].id).text)
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
