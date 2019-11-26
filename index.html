@@ -776,11 +776,11 @@
       map.getSource('chargers').setData(newList);
     };
 
-    function getPowerTypeCount (chargepoints) {
+    function getPowerTypeCount (chargePoints) {
       var maxPower = 0;
       var maxType = "";
       var maxCount = 0;
-      chargepoints.forEach(chargePoint => {
+      chargePoints.forEach(chargePoint => {
         if (chargePoint.power > maxPower && compatiblePlugs.includes(chargePoint.type)) {
           maxPower = chargePoint.power;
           maxType = chargePoint.type;
