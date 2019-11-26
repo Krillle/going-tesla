@@ -388,7 +388,7 @@
       // var description = chargerDescription(e.features[0].id);
       new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       .setLngLat(coordinates)
-      .setHTML(chargerShortDescription(e.features[0]).text)
+      .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map)
       // .setHTML(chargerDescription(e.features[0].id).text)
     });
@@ -791,24 +791,24 @@
     };
 
     function chargerShortDescription (chargeLocation) {
-      maxChargePoint = getPowerTypeCount(chargeLocation.properties.chargepoints);
+      maxChargePoint = getPowerTypeCount(chargeLocation.chargepoints);
 
-      var address = `${chargeLocation.properties.address.street}, ${chargeLocation.properties.address.city}, ${chargeLocation.properties.address.country}`;
+      var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
       var description = '';
-      description = `<strong>${chargeLocation.properties.name} ${chargeLocation.properties.address.city}</strong>`;
+      description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
 
-      description += (chargeLocation.properties.network && chargeLocation.properties.network != chargeLocation.properties.name && chargeLocation.properties.network != chargeLocation.properties.name + ' ' + chargeLocation.properties.address.city) ?
-                     (`<br>${chargeLocation.properties.network}<p>`) :
-                     (chargeLocation.properties.operator && chargeLocation.properties.operator != chargeLocation.properties.name && chargeLocation.properties.operator != chargeLocation.properties.name + ' ' + chargeLocation.properties.address.city) ?
-                     `<br>${chargeLocation.properties.operator}<p>` :
+      description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
+                     (`<br>${chargeLocation.network}<p>`) :
+                     (chargeLocation.operator && chargeLocation.operator != chargeLocation.name && chargeLocation.operator != chargeLocation.name + ' ' + chargeLocation.address.city) ?
+                     `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
       description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
       description += '<hr>';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
 
-      description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
+      description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric</a><p>`;
       description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
       return {'text': description, 'address': address};
