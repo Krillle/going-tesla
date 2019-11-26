@@ -388,8 +388,9 @@
       // var description = chargerDescription(e.features[0].id);
       new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       .setLngLat(coordinates)
+      .setHTML(chargerShortDescription(e.features[0]).text)
       .addTo(map)
-      .setHTML(chargerDescription(e.features[0].id).text)
+      // .setHTML(chargerDescription(e.features[0].id).text)
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -757,7 +758,14 @@
             "icon": (chargeLocation.fault_report) ? "faultReport" :
               (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
               (maxPower >= superCharger.minPower) ? "thirdSuperCharger" :
-              "parkCharger"
+              "parkCharger",
+            "coordinates": chargeLocation.coordinates,
+            "chargepoints": chargeLocation.chargepoints,
+            "name": chargeLocation.name,
+            "address": chargeLocation.address,
+            "network": chargeLocation.network,
+            "operator": chargeLocation.operator,
+            "url": chargeLocation.url
           },
           "geometry": {
             "type": "Point",
@@ -766,6 +774,44 @@
         });
       });
       map.getSource('chargers').setData(newList);
+    };
+
+    function getPowerTypeCount (chargepoints) {
+      var maxPower = 0;
+      var maxType = "";
+      var maxCount = 0;
+      chargepoints.forEach(chargePoint => {
+        if (chargePoint.power > maxPower && compatiblePlugs.includes(chargePoint.type)) {
+          maxPower = chargePoint.power;
+          maxType = chargePoint.type;
+          maxCount = chargePoint.count;
+        };
+      });
+      return {'power': maxPower, 'type': maxType, 'count': maxCount};
+    };
+
+    function chargerShortDescription (chargeLocation) {
+      maxChargePoint = getPowerTypeCount(chargeLocation.properties.chargepoints);
+
+      var address = `${chargeLocation.properties.address.street}, ${chargeLocation.properties.address.city}, ${chargeLocation.properties.address.country}`;
+
+      var description = '';
+      description = `<strong>${chargeLocation.properties.name} ${chargeLocation.properties.address.city}</strong>`;
+
+      description += (chargeLocation.properties.network && chargeLocation.properties.network != chargeLocation.properties.name && chargeLocation.properties.network != chargeLocation.properties.name + ' ' + chargeLocation.properties.address.city) ?
+                     (`<br>${chargeLocation.properties.network}<p>`) :
+                     (chargeLocation.properties.operator && chargeLocation.properties.operator != chargeLocation.properties.name && chargeLocation.properties.operator != chargeLocation.properties.name + ' ' + chargeLocation.properties.address.city) ?
+                     `<br>${chargeLocation.properties.operator}<p>` :
+                     '<p>';
+
+      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
+      description += '<hr>';
+      description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
+
+      description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
+      description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
+
+      return {'text': description, 'address': address};
     };
 
     function chargerDescription (id) {
