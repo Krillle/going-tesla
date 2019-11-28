@@ -209,8 +209,8 @@
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
       container: 'map', // container id
-      // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q', // Light Tesla
-      style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f', // Dark Tesla
+      // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
+      style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
       center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
       zoom: teslaPosition.zoom, // starting zoom
       bearing: teslaPosition.heading,
@@ -384,13 +384,14 @@
 
       var coordinates = e.features[0].geometry.coordinates.slice();
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
-
+      
       // var description = chargerDescription(e.features[0].id);
       new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       .setLngLat(coordinates)
       .setHTML(chargerShortDescription(e.features[0].properties).text)
-      .addTo(map)
       // .setHTML(chargerDescription(e.features[0].id).text)
+      .addTo(map);
+
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
