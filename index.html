@@ -759,10 +759,13 @@
               (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
               (maxPower >= superCharger.minPower) ? "thirdSuperCharger" :
               "parkCharger",
+
             "coordinates": chargeLocation.coordinates,
             "chargepoints": chargeLocation.chargepoints,
             "name": chargeLocation.name,
-            "address": chargeLocation.address,
+            "street": chargeLocation.address.street,
+            "city": chargeLocation.address.city,
+            "country": chargeLocation.address.country,
             "network": chargeLocation.network,
             "operator": chargeLocation.operator,
             "url": chargeLocation.url
@@ -776,10 +779,12 @@
       map.getSource('chargers').setData(newList);
     };
 
-    function getPowerTypeCount (chargePoints) {
+    function getMaxChargePoint (chargePoints) {
       var maxPower = 0;
       var maxType = "";
       var maxCount = 0;
+      console.log(chargePoints);
+
       chargePoints.forEach(chargePoint => {
         if (chargePoint.power > maxPower && compatiblePlugs.includes(chargePoint.type)) {
           maxPower = chargePoint.power;
@@ -791,22 +796,22 @@
     };
 
     function chargerShortDescription (chargeLocation) {
-      maxChargePoint = getPowerTypeCount(chargeLocation.chargepoints);
+      maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
 
-      var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
+      var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
       var description = '';
-      description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
+      description = `<strong>${chargeLocation.name} ${chargeLocation.city}</strong>`;
 
-      description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
+      description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.city) ?
                      (`<br>${chargeLocation.network}<p>`) :
-                     (chargeLocation.operator && chargeLocation.operator != chargeLocation.name && chargeLocation.operator != chargeLocation.name + ' ' + chargeLocation.address.city) ?
+                     (chargeLocation.operator && chargeLocation.operator != chargeLocation.name && chargeLocation.operator != chargeLocation.name + ' ' + chargeLocation.city) ?
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
       description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
       description += '<hr>';
-      description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
+      description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
 
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric</a><p>`;
       description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
@@ -819,17 +824,7 @@
       if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
       var chargeLocation = chargerDetails.chargelocations[0];
 
-      var maxPower = 0;
-      var maxType = "";
-      var maxCount = 0;
-      chargeLocation.chargepoints.forEach(chargePoint => {
-        if (chargePoint.power > maxPower && compatiblePlugs.includes(chargePoint.type)) {
-          maxPower = chargePoint.power;
-          maxType = chargePoint.type;
-          maxCount = chargePoint.count;
-        };
-      });
-
+      maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
       var route = getRoute(teslaPosition,chargeLocation.coordinates);
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
@@ -842,7 +837,7 @@
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${maxCount}x ${maxPower} kW ${maxType}`;
+      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
       description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
       description += '<hr>';
