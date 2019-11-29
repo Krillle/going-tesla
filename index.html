@@ -107,6 +107,10 @@
       padding:10px;
     }
 
+    .popupbutton {
+      display: inline-block; border-radius: 10px; background:#9c9c9c; color:#000000!important; padding: 18px; width: 100%; box-sizing: border-box;
+    }
+
     /* .mapboxgl-container .leaflet-marker-icon {
       cursor:pointer;
     } */
@@ -390,19 +394,15 @@
       var coordinates = e.features[0].geometry.coordinates.slice();
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
-      // var description = chargerDescription(e.features[0].id);
-      new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      .on('open', function(e) {
-        console.log('Popup open',e);
-        infoMessage('Popup open');
-        // console.log(chargerDescription(e.features[0].id).text);
-        // .setHTML(chargerDescription(e.features[0].id).text)
-      })
-      .setLngLat(coordinates)
+      chargerID = e.features[0].id
+      var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      map.once('idle', function(e) {
+        console.log('Map idle',chargerID);
+        popup.setHTML(chargerDescription(chargerID).text)
+      });
+      popup.setLngLat(coordinates)
       .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map);
-
-
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -818,7 +818,9 @@
                      (`<br>${chargeLocation.network}<p>`) :
                      (chargeLocation.operator && chargeLocation.operator != chargeLocation.name && chargeLocation.operator != chargeLocation.name + ' ' + chargeLocation.city) ?
                      `<br>${chargeLocation.operator}<p>` :
-                     '<p>';
+                     '<p>'
+                     // <span id='A'></span>;
+                     // document.getElementById('A').innerHTML="oijoij"
 
       description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
       description += '<hr>';
@@ -868,6 +870,8 @@
       };
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
       description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
+
+      // description += `<a class= "popupbutton" href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
       return {'text': description, 'address': address};
     };
