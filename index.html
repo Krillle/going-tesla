@@ -374,6 +374,11 @@
       zoomToPower(map.getZoom());
     });
 
+    // map.on('idle', function() {
+    //   console.log('Map idle');
+    //   infoMessage('Map idle');
+    // });
+
 
     // Charger places events (Popup)
     map.on('click', 'chargers', function (e) {
@@ -384,13 +389,19 @@
 
       var coordinates = e.features[0].geometry.coordinates.slice();
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
-      
+
       // var description = chargerDescription(e.features[0].id);
       new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      .on('open', function(e) {
+        console.log('Popup open',e);
+        infoMessage('Popup open');
+        // console.log(chargerDescription(e.features[0].id).text);
+        // .setHTML(chargerDescription(e.features[0].id).text)
+      })
       .setLngLat(coordinates)
       .setHTML(chargerShortDescription(e.features[0].properties).text)
-      // .setHTML(chargerDescription(e.features[0].id).text)
       .addTo(map);
+
 
     });
 
@@ -784,7 +795,6 @@
       var maxPower = 0;
       var maxType = "";
       var maxCount = 0;
-      console.log(chargePoints);
 
       chargePoints.forEach(chargePoint => {
         if (chargePoint.power > maxPower && compatiblePlugs.includes(chargePoint.type)) {
