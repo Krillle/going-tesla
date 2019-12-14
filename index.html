@@ -399,6 +399,7 @@
       stopHeadUp();
       console.log("AutoFollow stopped");
       autoFollow = false;
+      gtag('event', 'Charger', {'event_category': 'Details', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`,'value': e.features[0].id});
 
       var coordinates = e.features[0].geometry.coordinates.slice();
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
@@ -551,6 +552,7 @@
         teslaConnection.status = 'Kein Token';
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
+        gtag('event', 'Connect', {'event_category': 'No Token'});
         settingsPopup ();
         return;
       };
@@ -561,6 +563,7 @@
         teslaConnection.status = 'Ungültiges Token';
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
+        gtag('event', 'Connect', {'event_category': 'Invalid Token'});
         settingsPopup ();
         return;
 
@@ -569,12 +572,14 @@
         teslaConnection.status = 'Fahrzeug nicht erreichbar';
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
+        gtag('event', 'Connect', {'event_category': 'Not reachable'});
         return;
       }
       else {
         teslaConnection.status = 'Verbunden mit ' + vehicleData.response.vehicle_state.vehicle_name;
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
+        gtag('event', 'Connect', {'event_category': 'Success', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
         setTeslaPosition(vehicleData.response.drive_state);
         console.log ('Starting continous update');
         setInterval(updatePosition, updatePositionInterval);
