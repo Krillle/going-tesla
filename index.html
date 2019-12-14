@@ -864,7 +864,7 @@
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
+      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
       description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
       description += '<hr>';
