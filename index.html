@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154570316-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-154570316-1');
+  </script>
   <meta charset='utf-8' />
   <title>Goingtesla</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
@@ -215,6 +223,7 @@
       container: 'map', // container id
       // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
       style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
+      // style: 'mapbox://styles/mapbox/satellite-v9', // Satellite
       center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
       zoom: teslaPosition.zoom, // starting zoom
       bearing: teslaPosition.heading,
