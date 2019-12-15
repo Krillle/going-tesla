@@ -222,8 +222,8 @@
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     var map = new mapboxgl.Map({
       container: 'map', // container id
-      // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
-      style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
+      style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
+      // style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
       // style: 'mapbox://styles/mapbox/satellite-v9', // Satellite
       center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
       zoom: teslaPosition.zoom, // starting zoom
@@ -865,7 +865,7 @@
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
+      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
       description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
       description += '<hr>';
@@ -876,7 +876,7 @@
 
 //      description += (route) ? '<strong>' + route.distance +  route.duration : '';
       if (route) {
-        description += '<strong>' + route.distance + ', ' + route.duration + '<strong>';
+        description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
         try {
           description += '<br> Reichweite bei Ankunft ' + (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed() + ' km';
       }
