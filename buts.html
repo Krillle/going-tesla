@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<style type="text/css">
+
+a.button {
+	box-sizing: border-box;
+	display: inline-block;
+	text-decoration: none;
+	text-align: center;
+	padding: 8px;
+	border-radius: 10px;
+	width: 100%;
+	height: 32px;
+	background: #c00;
+	color: #000;
+	margin: 8px 0;
+	line-height: 1;
+	break-inside: avoid-column;
+	page-break-inside: avoid;
+}
+
+a.button:active {
+	background: #f00;
+}
+
+.col2 {
+	height: 48px;
+	column-count: 2; column-gap: 8px;
+}
+
+.col3 {
+	height: 48px;
+	column-count: 3; column-gap: 8px;
+}
+			
+		</style>
+	</head>
+	<body>
+		<div>
+			<a class="button" href="#">Klick</a>
+		</div>
+		<div class="col2">
+			<a class="button" href="#">Klick</a>
+			<a class="button" href="#">Klick</a>
+		</div>
+		<div class="col3">
+			<a class="button" href="#">Klick</a>
+			<a class="button" href="#">Klick</a>
+			<a class="button" href="#">Klick</a>
+		</div>
+	</body>
+</html>

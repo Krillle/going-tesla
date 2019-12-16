@@ -230,16 +230,49 @@
     zoomToPower(teslaPosition.zoom);
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
-    var map = new mapboxgl.Map({
-      container: 'map', // container id
-      style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
-      // style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
-      // style: 'mapbox://styles/mapbox/satellite-v9', // Satellite
-      center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
-      zoom: teslaPosition.zoom, // starting zoom
-      bearing: teslaPosition.heading,
-      attributionControl: false
-    });
+    if (!mapboxgl.supported()) {
+      console.log('Browser does not support Mapbox GL. Using raster tiles.');
+      infoMessage('Browser does not support Mapbox GL. Using raster tiles.');
+      var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: {
+          'version': 8,
+          'sources': {
+            'raster-tiles': {
+              'type': 'raster',
+              'tiles': [
+                'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg'
+              ],
+              'tileSize': 256
+            }
+          },
+          'layers': [
+            {
+              'id': 'simple-tiles',
+              'type': 'raster',
+              'source': 'raster-tiles',
+              'minzoom': 0,
+              'maxzoom': 22
+            }
+          ]
+        },
+        center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
+        zoom: teslaPosition.zoom, // starting zoom
+        bearing: teslaPosition.heading,
+        attributionControl: false
+      });
+    } else {
+      var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
+        // style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
+        // style: 'mapbox://styles/mapbox/satellite-v9', // Satellite
+        center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
+        zoom: teslaPosition.zoom, // starting zoom
+        bearing: teslaPosition.heading,
+        attributionControl: false
+      });
+    };
 
     // Add geocoder search field
     map.addControl(new MapboxGeocoder({
@@ -410,7 +443,7 @@
       stopHeadUp();
       console.log("AutoFollow stopped");
       autoFollow = false;
-      gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`,'value': e.features[0].id});
+      gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
 
       var coordinates = e.features[0].geometry.coordinates.slice();
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
