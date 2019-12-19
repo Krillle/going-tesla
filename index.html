@@ -123,6 +123,36 @@
       padding:10px;
     }
 
+    .twocolumns {
+    	height: 80px;
+    	column-count: 2; column-gap: 10px;
+      padding: 0px !important;
+    }
+
+    a.popup-button {
+    	box-sizing: border-box;
+      background-image: url("https://img.icons8.com/small/40/333333/gps-device.png");
+      background-repeat: no-repeat;
+    	display: inline-block;
+    	text-decoration: none;
+    	text-align: center;
+    	padding: 8px;
+    	border-radius: 10px;
+    	width: 100%;
+    	height: 60px;
+    	background: #d6d6d6;
+    	color: #000000;
+    	margin: 0px 0;
+    	line-height: 1;
+    	break-inside: avoid-column;
+    	page-break-inside: avoid;
+    }
+
+    a.popup-button:active {
+    	background: #a2a2a2;
+    }
+
+
     .popupbutton {
       display: inline-block; border-radius: 10px; background:#9c9c9c; color:#000000!important; padding: 18px; width: 100%; box-sizing: border-box;
     }
@@ -860,6 +890,8 @@
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric</a><p>`;
       description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
+      description += `<div class="twocolumns"><a class="popup-button" href="#" onclick="sendDestinationToTesla('${address}');"></a><a class="popup-button" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
+
       return {'text': description, 'address': address};
     };
 
@@ -902,7 +934,7 @@
       description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
       description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
-      // description += `<a class= "popupbutton" href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
+      description += `<div class="twocolumns"><a class="popup-button" href="#" onclick="sendDestinationToTesla('${address}');"></a><a class="popup-button" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
       return {'text': description, 'address': address};
     };
