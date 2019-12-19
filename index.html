@@ -231,36 +231,9 @@
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     if (!mapboxgl.supported()) {
-      console.log('Browser does not support Mapbox GL. Using raster tiles.');
-      infoMessage('Browser does not support Mapbox GL. Using raster tiles.');
-      var map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: {
-          'version': 8,
-          'sources': {
-            'raster-tiles': {
-              'type': 'raster',
-              'tiles': [
-                'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg'
-              ],
-              'tileSize': 256
-            }
-          },
-          'layers': [
-            {
-              'id': 'simple-tiles',
-              'type': 'raster',
-              'source': 'raster-tiles',
-              'minzoom': 0,
-              'maxzoom': 22
-            }
-          ]
-        },
-        center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
-        zoom: teslaPosition.zoom, // starting zoom
-        bearing: teslaPosition.heading,
-        attributionControl: false
-      });
+      console.log('Browser does not support Mapbox GL.');
+      gtag('event', 'No Mapbox GL', {'event_category': 'Connect'});
+      alert('Diese Anwendung läuft leider nicht auf MCU1.');
     } else {
       var map = new mapboxgl.Map({
         container: 'map', // container id
