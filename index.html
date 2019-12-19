@@ -65,9 +65,6 @@
       margin-top:11px !important;
     }
 
-    .mapboxgl-popup {
-      padding-bottom: 25px;
-    }
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
       /* border-top-color: #0d0d0b; */
       border-top-color: #ffffff;
@@ -92,6 +89,7 @@
       font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       /*  font:400 25px/1.15 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       padding:40px;
+      padding-bottom: 25px;
       border-radius:10px 10px 10px 10px;
       width:420px;
       /* background:#191a1a; dark theme */
@@ -125,21 +123,19 @@
 
     .twocolumns {
     	height: 80px;
-    	column-count: 2; column-gap: 10px;
+    	column-count: 2; column-gap: 8px;
       padding: 0px !important;
     }
 
-    a.popup-button {
+    a.popupbutton {
     	box-sizing: border-box;
-      background-image: url("https://img.icons8.com/small/40/333333/gps-device.png");
-      background-repeat: no-repeat;
     	display: inline-block;
     	text-decoration: none;
     	text-align: center;
     	padding: 8px;
     	border-radius: 10px;
     	width: 100%;
-    	height: 60px;
+    	height: 70px;
     	background: #d6d6d6;
     	color: #000000;
     	margin: 0px 0;
@@ -148,18 +144,21 @@
     	page-break-inside: avoid;
     }
 
-    a.popup-button:active {
+    a.popupbutton:active {
     	background: #a2a2a2;
     }
 
-
-    .popupbutton {
-      display: inline-block; border-radius: 10px; background:#9c9c9c; color:#000000!important; padding: 18px; width: 100%; box-sizing: border-box;
+    a.popupbutton-icon-navigate {
+      background-image: url("https://img.icons8.com/ios-glyphs/40/333333/navigation.png");
+      background-repeat: no-repeat;
+      background-position: center;
     }
 
-    /* .mapboxgl-container .leaflet-marker-icon {
-      cursor:pointer;
-    } */
+    a.popupbutton-icon-link {
+      background-image: url("https://img.icons8.com/material-outlined/40/333333/globe--v2.png");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
 
     .info-container {
       position: absolute;
@@ -887,10 +886,10 @@
       description += '<hr>';
       description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
 
-      description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric</a><p>`;
-      description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
+      // description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric</a><p>`;
+      // description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
-      description += `<div class="twocolumns"><a class="popup-button" href="#" onclick="sendDestinationToTesla('${address}');"></a><a class="popup-button" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
+      description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}');"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
       return {'text': description, 'address': address};
     };
@@ -931,10 +930,10 @@
         catch {};
         description += '<p>'
       };
-      description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
-      description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
+      // description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
+      // description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
-      description += `<div class="twocolumns"><a class="popup-button" href="#" onclick="sendDestinationToTesla('${address}');"></a><a class="popup-button" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
+      description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}');"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
       return {'text': description, 'address': address};
     };
