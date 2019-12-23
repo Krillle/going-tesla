@@ -66,20 +66,20 @@
     }
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
-      /* border-top-color: #0d0d0b; */
-      border-top-color: #ffffff;
+      border-top-color: #0d0d0b;
+      /* border-top-color: #ffffff; light theme */
     }
     .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-      /* border-bottom-color: #0d0d0b; */
-      border-bottom-color: #ffffff;
+      border-bottom-color: #0d0d0b;
+      /* border-bottom-color: #ffffff; light theme */
     }
     .mapboxgl-popup-anchor-left > .mapboxgl-popup-tip {
-      /* border-right-color: #0d0d0b; */
-      border-right-color: #ffffff;
+      border-right-color: #0d0d0b;
+      /* border-right-color: #ffffff; light theme */
     }
     .mapboxgl-popup-anchor-right > .mapboxgl-popup-tip {
-      /* border-left-color: #0d0d0b; */
-      border-left-color: #ffffff;
+      border-left-color: #0d0d0b;
+      /* border-left-color: #ffffff; light theme */
     }
     .mapboxgl-popup-close-button {
       display:none;
@@ -92,19 +92,19 @@
       padding-bottom: 25px;
       border-radius:10px 10px 10px 10px;
       width:420px;
-      /* background:#191a1a; dark theme */
-      background:#ffffff;
-      /* color:#9c9c9c; dark theme */
-      color:#8F8F8F;
+      background:#191a1a;
+      /* background:#ffffff; light theme  */
+      color:#9c9c9c;
+      /* color:#8F8F8F; light theme  */
     }
     .mapboxgl-popup-content a {
-      /* color:#9c9c9c; dark theme */
-      color:#8F8F8F;
+      color:#9c9c9c;
+      /* color:#8F8F8F;  */
     }
     .mapboxgl-popup-content strong {
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      /* color:#e6e6e6; dark theme */
-      color:#000000;
+      color:#e6e6e6;
+      /* color:#000000; light theme  */
     }
 
     .mapboxgl-popup-content hr {
@@ -136,8 +136,10 @@
     	border-radius: 10px;
     	width: 100%;
     	height: 60px;
-    	background: #d6d6d6;
-    	color: #000000;
+    	/* background: #d6d6d6; light theme */
+    	background: #4a4848 ; 
+    	/* color: #000000; light theme  */
+    	color: #ffffff;
     	margin: 0px 0;
     	line-height: 1;
     	break-inside: avoid-column;
@@ -149,13 +151,15 @@
     }
 
     a.popupbutton-icon-navigate {
-      background-image: url("https://img.icons8.com/ios-glyphs/40/333333/navigation.png");
+      /* background-image: url("https://img.icons8.com/ios-glyphs/40/333333/navigation.png"); light theme  */
+      background-image: url("https://img.icons8.com/ios-glyphs/40/ffffff/navigation.png");
       background-repeat: no-repeat;
       background-position: center;
     }
 
     a.popupbutton-icon-link {
-      background-image: url("https://img.icons8.com/material-outlined/40/333333/globe--v2.png");
+      /* background-image: url("https://img.icons8.com/material-outlined/40/333333/globe--v2.png"); light theme */
+      background-image: url("https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png");
       background-repeat: no-repeat;
       background-position: center;
     }
@@ -168,11 +172,11 @@
     }
 
     .info-container > * {
-      /* background-color: rgba(0, 0, 0, 0.5); dark theme */
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(0, 0, 0, 0.8);
+      /* background-color: rgba(255, 255, 255, 0.8); light theme  */
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      /* color:#e6e6e6; dark theme */
-      color:#8F8F8F;
+      color:#e6e6e6;
+      /* color:#8F8F8F; light theme  */
       display: block;
       margin: 0;
       padding: 10px 20px;
@@ -206,8 +210,8 @@
     const chargerTeslaColor = "ff514a";
     // const chargerThirdColor = "4b535a"; // dark marker for light map
     const chargerThirdColor = "787878"; // light marker for dark map
-    // const chargerParkColor = "e6e6e6"; // light marker for dark map
-    const chargerParkColor = "5a5a5a"; // dark marker for light map
+    const chargerParkColor = "e6e6e6"; // light marker for dark map
+    // const chargerParkColor = "5a5a5a"; // dark marker for light map
     const chargerFaultColor = "ffb800";
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
@@ -266,8 +270,8 @@
     } else {
       var map = new mapboxgl.Map({
         container: 'map', // container id
-        style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
-        // style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
+        // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
+        style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
         // style: 'mapbox://styles/mapbox/satellite-v9', // Satellite
         center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
         zoom: teslaPosition.zoom, // starting zoom
