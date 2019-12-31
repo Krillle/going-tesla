@@ -19,7 +19,7 @@
     #map { position:absolute; top:0; bottom:0; width:100%; }
 
     #map .mapboxgl-ctrl {
-      opacity: 0.8;
+      opacity: 0.5;
     }
 
     #map .mapboxgl-ctrl-group > button {
@@ -137,7 +137,7 @@
     	width: 100%;
     	height: 60px;
     	/* background: #d6d6d6; light theme */
-    	background: #4a4848 ; 
+    	background: #4a4848 ;
     	/* color: #000000; light theme  */
     	color: #ffffff;
     	margin: 0px 0;
@@ -172,8 +172,8 @@
     }
 
     .info-container > * {
-      background-color: rgba(0, 0, 0, 0.8);
-      /* background-color: rgba(255, 255, 255, 0.8); light theme  */
+      background-color: rgba(0, 0, 0, 0.5);
+      /* background-color: rgba(255, 255, 255, 0.5); light theme  */
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#e6e6e6;
       /* color:#8F8F8F; light theme  */
@@ -204,6 +204,7 @@
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
 
     const chargerBigSize = '44';
+    const chargerHighwaySize = '39';
     const chargerParkSize = '34';
     const chargerFaultSize = '24';
 
@@ -363,6 +364,12 @@
       map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
         if (error) throw error;
         map.addImage('thirdSuperCharger', image);
+      });
+
+      // Create DC Highway Charger Image
+      map.loadImage(`https://img.icons8.com/small/${chargerHighwaySize}/${chargerParkColor}/tesla-supercharger-pin.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('highwayCharger', image);
       });
 
       // Create Park Charger Image
@@ -834,6 +841,7 @@
             "icon": (chargeLocation.fault_report) ? "faultReport" :
               (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
               (maxPower >= superCharger.minPower) ? "thirdSuperCharger" :
+              (maxPower >= highwayCharger.minPower) ? "highwayCharger" :
               "parkCharger",
 
             "coordinates": chargeLocation.coordinates,
