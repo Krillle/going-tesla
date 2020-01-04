@@ -15,7 +15,6 @@ if ($now < $sunrise or $now > $sunset) {
 } else {
   $darkmode = false;
 };
-
 ?>
 
 <!DOCTYPE html>
@@ -86,20 +85,20 @@ if ($now < $sunrise or $now > $sunset) {
     }
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
-      border-top-color: #0d0d0b;
-      /* border-top-color: #ffffff; light theme */
+      border-top-color: #ffffff; /* light theme */
+      <? if ($darkmode) {echo "border-top-color: #0d0d0b; /* dark theme */"} ?>
     }
     .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-      border-bottom-color: #0d0d0b;
-      /* border-bottom-color: #ffffff; light theme */
+      border-bottom-color: #ffffff; /* light theme */
+      <? if ($darkmode) {echo "border-bottom-color: #0d0d0b; /* dark theme */"} ?>
     }
     .mapboxgl-popup-anchor-left > .mapboxgl-popup-tip {
-      border-right-color: #0d0d0b;
-      /* border-right-color: #ffffff; light theme */
+      border-right-color: #ffffff; /* light theme */
+      <? if ($darkmode) {echo "border-right-color: #0d0d0b; /* dark theme */"} ?>
     }
     .mapboxgl-popup-anchor-right > .mapboxgl-popup-tip {
-      border-left-color: #0d0d0b;
-      /* border-left-color: #ffffff; light theme */
+      border-left-color: #ffffff; /* light theme */
+      <? if ($darkmode) {echo "border-left-color: #0d0d0b; /* dark theme */"} ?>
     }
     .mapboxgl-popup-close-button {
       display:none;
@@ -107,24 +106,23 @@ if ($now < $sunrise or $now > $sunset) {
 
     .mapboxgl-popup-content {
       font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      /*  font:400 25px/1.15 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       padding:40px;
       padding-bottom: 25px;
       border-radius:10px 10px 10px 10px;
       width:420px;
-      background:#191a1a;
-      /* background:#ffffff; light theme  */
-      color:#9c9c9c;
-      /* color:#8F8F8F; light theme  */
+      background:#ffffff; /* light theme  */
+      <? if ($darkmode) {echo "background:#191a1a; /* dark theme */"} ?>
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */"} ?>
     }
     .mapboxgl-popup-content a {
-      color:#9c9c9c;
-      /* color:#8F8F8F;  */
+      color:#8F8F8F;  /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */"} ?>
     }
     .mapboxgl-popup-content strong {
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      color:#e6e6e6;
-      /* color:#000000; light theme  */
+      color:#000000; /* light theme  */
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */"} ?>
     }
 
     .mapboxgl-popup-content hr {
@@ -156,10 +154,10 @@ if ($now < $sunrise or $now > $sunset) {
     	border-radius: 10px;
     	width: 100%;
     	height: 60px;
-    	/* background: #d6d6d6; light theme */
-    	background: #4a4848 ;
-    	/* color: #000000; light theme  */
-    	color: #ffffff;
+    	background: #d6d6d6; /* light theme */
+      <? if ($darkmode) {echo "background: #4a4848; /* dark theme */"} ?>
+    	color: #000000; /* light theme  */
+    	<? if ($darkmode) {echo "color: #ffffff; /* dark theme */"} ?>
     	margin: 0px 0;
     	line-height: 1;
     	break-inside: avoid-column;
@@ -171,15 +169,15 @@ if ($now < $sunrise or $now > $sunset) {
     }
 
     a.popupbutton-icon-navigate {
-      /* background-image: url("https://img.icons8.com/ios-glyphs/40/333333/navigation.png"); light theme  */
-      background-image: url("https://img.icons8.com/ios-glyphs/40/ffffff/navigation.png");
+      background-image: url('https://img.icons8.com/ios-glyphs/40/333333/navigation.png'); /* light theme  */
+      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/ios-glyphs/40/ffffff/navigation.png'); /* dark theme */"} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
 
     a.popupbutton-icon-link {
-      /* background-image: url("https://img.icons8.com/material-outlined/40/333333/globe--v2.png"); light theme */
-      background-image: url("https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png");
+      background-image: url('https://img.icons8.com/material-outlined/40/333333/globe--v2.png'); /* light theme */
+      <? if ($darkmode) {echo "background-image: url('background-image: url('https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png'); /* dark theme */"} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
@@ -192,11 +190,11 @@ if ($now < $sunrise or $now > $sunset) {
     }
 
     .info-container > * {
-      background-color: rgba(0, 0, 0, 0.7);
-      /* background-color: rgba(255, 255, 255, 0.7); light theme  */
+      background-color: rgba(255, 255, 255, 0.7); /* light theme  */
+      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */"} ?>
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      color:#e6e6e6;
-      /* color:#8F8F8F; light theme  */
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */"} ?>
       display: block;
       margin: 0;
       padding: 10px 20px;
@@ -219,6 +217,8 @@ if ($now < $sunrise or $now > $sunset) {
     if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
 
     console.log("App started");
+
+    <? if ($darkmode) {echo "const darkmode = true"} else {echo "const darkmode = false"};  ?>
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
