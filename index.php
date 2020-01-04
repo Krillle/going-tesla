@@ -15,6 +15,10 @@ if ($now < $sunrise or $now > $sunset) {
 } else {
   $darkmode = false;
 };
+
+if(isset($_GET["light"])) {$darkmode = false;};
+if (isset($_GET["dark"])) {$darkmode = true;};
+
 ?>
 
 <!DOCTYPE html>
@@ -218,7 +222,7 @@ if ($now < $sunrise or $now > $sunset) {
 
     console.log("App started");
 
-    <? if ($darkmode) {echo "const darkmode = true";} else {echo "const darkmode = false";}  ?>
+    <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
