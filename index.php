@@ -1,44 +1,4 @@
 <?php
-// error handler function
-function myErrorHandler($errno, $errstr, $errfile, $errline)
-{
-    if (!(error_reporting() & $errno)) {
-        // This error code is not included in error_reporting, so let it fall
-        // through to the standard PHP error handler
-        return false;
-    }
-
-    switch ($errno) {
-    case E_USER_ERROR:
-        echo "<b>My ERROR</b> [$errno] $errstr<br />\n";
-        echo "  Fatal error on line $errline in file $errfile";
-        echo ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />\n";
-        echo "Aborting...<br />\n";
-        exit(1);
-        break;
-
-    case E_USER_WARNING:
-        echo "<b>My WARNING</b> [$errno] $errstr<br />\n";
-        break;
-
-    case E_USER_NOTICE:
-        echo "<b>My NOTICE</b> [$errno] $errstr<br />\n";
-        break;
-
-    default:
-        echo "Unknown error type: [$errno] $errstr<br />\n";
-        break;
-    }
-
-    /* Don't execute PHP internal error handler */
-    return true;
-}
-
-// set to the user defined error handler
-$old_error_handler = set_error_handler("myErrorHandler");
-
-?>
-<?php
 // include_once("index.html");
 
 // Sunset for location of Berlin
@@ -126,19 +86,19 @@ if ($now < $sunrise or $now > $sunset) {
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
       border-top-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-top-color: #0d0d0b; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "border-top-color: #0d0d0b; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
       border-bottom-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-bottom-color: #0d0d0b; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "border-bottom-color: #0d0d0b; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-left > .mapboxgl-popup-tip {
       border-right-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-right-color: #0d0d0b; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "border-right-color: #0d0d0b; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-right > .mapboxgl-popup-tip {
       border-left-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-left-color: #0d0d0b; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "border-left-color: #0d0d0b; /* dark theme */";} ?>
     }
     .mapboxgl-popup-close-button {
       display:none;
@@ -151,18 +111,18 @@ if ($now < $sunrise or $now > $sunset) {
       border-radius:10px 10px 10px 10px;
       width:420px;
       background:#ffffff; /* light theme  */
-      <? if ($darkmode) {echo "background:#191a1a; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "background:#191a1a; /* dark theme */";} ?>
       color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
     .mapboxgl-popup-content a {
       color:#8F8F8F;  /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
     .mapboxgl-popup-content strong {
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#000000; /* light theme  */
-      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
 
     .mapboxgl-popup-content hr {
@@ -195,9 +155,9 @@ if ($now < $sunrise or $now > $sunset) {
     	width: 100%;
     	height: 60px;
     	background: #d6d6d6; /* light theme */
-      <? if ($darkmode) {echo "background: #4a4848; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "background: #4a4848; /* dark theme */";} ?>
     	color: #000000; /* light theme  */
-    	<? if ($darkmode) {echo "color: #ffffff; /* dark theme */"} ?>
+    	<? if ($darkmode) {echo "color: #ffffff; /* dark theme */";} ?>
     	margin: 0px 0;
     	line-height: 1;
     	break-inside: avoid-column;
@@ -210,14 +170,14 @@ if ($now < $sunrise or $now > $sunset) {
 
     a.popupbutton-icon-navigate {
       background-image: url('https://img.icons8.com/ios-glyphs/40/333333/navigation.png'); /* light theme  */
-      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/ios-glyphs/40/ffffff/navigation.png'); /* dark theme */"} ?>
+      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/ios-glyphs/40/ffffff/navigation.png'); /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
 
     a.popupbutton-icon-link {
       background-image: url('https://img.icons8.com/material-outlined/40/333333/globe--v2.png'); /* light theme */
-      <? if ($darkmode) {echo "background-image: url('background-image: url('https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png'); /* dark theme */"} ?>
+      <? if ($darkmode) {echo "background-image: url('background-image: url('https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png'); /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
@@ -231,10 +191,10 @@ if ($now < $sunrise or $now > $sunset) {
 
     .info-container > * {
       background-color: rgba(255, 255, 255, 0.7); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */"} ?>
+      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */"} ?>
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
       display: block;
       margin: 0;
       padding: 10px 20px;
