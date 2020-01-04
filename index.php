@@ -246,7 +246,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
     // const mapStyle = 'mapbox://styles/mapbox/satellite-v9'; // Satellite
 
-    console.console.log(mapStyle);
+    console.log(mapStyle);
     console.log(chargerThirdColor);
     console.log(chargerParkColor);
 
