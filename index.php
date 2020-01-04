@@ -247,6 +247,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // const mapStyle = 'mapbox://styles/mapbox/satellite-v9'; // Satellite
     const chargerFaultColor = "ffb800";
 
+    const chargerThirdColor = "787878"; // light marker for dark map
+    
+
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
     const destinationCharger = {'minPower':'11', 'minZoom':14, 'toggle':1}
