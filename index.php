@@ -233,6 +233,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const chargerFaultSize = '24';
 
     var mapStyle = 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true'; // Light Tesla
+    const mapStyleSatellite = 'mapbox://styles/mapbox/satellite-v9'; // Satellite
     const chargerTeslaColor = "ff514a";
     var chargerThirdColor = "4b535a"; // dark marker for light map
     var chargerParkColor = "5a5a5a"; // dark marker for light map
@@ -244,11 +245,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       chargerThirdColor = "787878"; // light marker for dark map
       chargerParkColor = "e6e6e6"; // light marker for dark map
     };
-    // const mapStyle = 'mapbox://styles/mapbox/satellite-v9'; // Satellite
-
-    console.log(mapStyle);
-    console.log(chargerThirdColor);
-    console.log(chargerParkColor);
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
@@ -516,6 +512,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     });
 
     function toggleAutoZoom() {
+
+      map.setStyle(mapStyleSatellite);
+
       zoomToggleState = zoomToggleState < 2 ? ++zoomToggleState : 0;
 
       console.log(`${zoomToogle[zoomToggleState].name}: Zoom ${zoomToogle[zoomToggleState].zoom}, AutoZoom ${zoomToogle[zoomToggleState].autoZoom}, AutoFollow ${zoomToogle[zoomToggleState].autoFollow}, HeadUp ${zoomToogle[zoomToggleState].headUp} `);
