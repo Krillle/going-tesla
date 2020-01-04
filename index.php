@@ -181,7 +181,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     a.popupbutton-icon-link {
       background-image: url('https://img.icons8.com/material-outlined/40/333333/globe--v2.png'); /* light theme */
-      <? if ($darkmode) {echo "background-image: url('background-image: url('https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png'); /* dark theme */";} ?>
+      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png'); /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
@@ -239,7 +239,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const chargerFaultColor = "ffb800";
 
     if (darkmode) {
-      console.log('Seleting Dark Mode');
+      console.log('Switching to Dark Mode');
       mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
       chargerThirdColor = "787878"; // light marker for dark map
       chargerParkColor = "e6e6e6"; // light marker for dark map
@@ -306,7 +306,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     } else {
       var map = new mapboxgl.Map({
         container: 'map', // container id
-        style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true',
+        style: mapStyle,
         center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
         zoom: teslaPosition.zoom, // starting zoom
         bearing: teslaPosition.heading,
