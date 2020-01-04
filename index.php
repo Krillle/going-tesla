@@ -232,20 +232,19 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const chargerParkSize = '34';
     const chargerFaultSize = '24';
 
+    var mapStyle = 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true'; // Light Tesla
     const chargerTeslaColor = "ff514a";
-    if (!darkmode) {
-      console.log('Seleting Light Mode');
-      const mapStyle = 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true'; // Light Tesla
-      const chargerThirdColor = "4b535a"; // dark marker for light map
-      const chargerParkColor = "5a5a5a"; // dark marker for light map
-    } else {
+    var chargerThirdColor = "4b535a"; // dark marker for light map
+    var chargerParkColor = "5a5a5a"; // dark marker for light map
+    const chargerFaultColor = "ffb800";
+
+    if (darkmode) {
       console.log('Seleting Dark Mode');
-      const mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
-      const chargerThirdColor = "787878"; // light marker for dark map
-      const chargerParkColor = "e6e6e6"; // light marker for dark map
+      mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
+      chargerThirdColor = "787878"; // light marker for dark map
+      chargerParkColor = "e6e6e6"; // light marker for dark map
     };
     // const mapStyle = 'mapbox://styles/mapbox/satellite-v9'; // Satellite
-    const chargerFaultColor = "ffb800";
 
     console.console.log(mapStyle);
     console.log(chargerThirdColor);
