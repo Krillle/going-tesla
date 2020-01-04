@@ -512,9 +512,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     });
 
     function toggleAutoZoom() {
-
-      map.setStyle(mapStyleSatellite);
-
       zoomToggleState = zoomToggleState < 2 ? ++zoomToggleState : 0;
 
       console.log(`${zoomToogle[zoomToggleState].name}: Zoom ${zoomToogle[zoomToggleState].zoom}, AutoZoom ${zoomToogle[zoomToggleState].autoZoom}, AutoFollow ${zoomToogle[zoomToggleState].autoFollow}, HeadUp ${zoomToogle[zoomToggleState].headUp} `);
