@@ -301,7 +301,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     } else {
       var map = new mapboxgl.Map({
         container: 'map', // container id
-        style: mapStyle,
+        style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true',
         center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
         zoom: teslaPosition.zoom, // starting zoom
         bearing: teslaPosition.heading,
