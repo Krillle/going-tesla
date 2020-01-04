@@ -233,10 +233,16 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const chargerFaultSize = '24';
 
     const chargerTeslaColor = "ff514a";
-    // const chargerThirdColor = "4b535a"; // dark marker for light map
-    const chargerThirdColor = "787878"; // light marker for dark map
-    const chargerParkColor = "e6e6e6"; // light marker for dark map
-    // const chargerParkColor = "5a5a5a"; // dark marker for light map
+    if (!darkmode) {
+      const mapStyle = 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true'; // Light Tesla
+      const chargerThirdColor = "4b535a"; // dark marker for light map
+      const chargerParkColor = "5a5a5a"; // dark marker for light map
+    } else {
+      const mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
+      const chargerThirdColor = "787878"; // light marker for dark map
+      const chargerParkColor = "e6e6e6"; // light marker for dark map
+    };
+    // const mapStyle = 'mapbox://styles/mapbox/satellite-v9'; // Satellite
     const chargerFaultColor = "ffb800";
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
@@ -295,9 +301,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     } else {
       var map = new mapboxgl.Map({
         container: 'map', // container id
-        // style: 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true', // Light Tesla
-        style: 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true', // Dark Tesla
-        // style: 'mapbox://styles/mapbox/satellite-v9', // Satellite
+        style: mapStyle,
         center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
         zoom: teslaPosition.zoom, // starting zoom
         bearing: teslaPosition.heading,
