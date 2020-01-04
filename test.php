@@ -10,7 +10,9 @@ offset: +1 GMT
 echo date("D M d Y"). ', current time : ' .time();
 echo '<br>';
 echo date("D M d Y"). ', sunset time : ' .date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, 52.52, 13.41, 90, 1);
+echo '<br>';
 
 echo getOffset(new DateTimeZone("Europe/Berlin"));
+echo '<br>---';
 
 ?>
