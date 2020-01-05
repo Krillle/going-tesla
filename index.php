@@ -129,8 +129,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
 
-    .mapboxgl-popup-content warning {
-      color:#ff514a; 
+    .mapboxgl-popup-content-warning {
+      color:#ff514a;
     }
 
     .mapboxgl-popup-content hr {
@@ -971,7 +971,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
         try {
           var rangeAtArrival = (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed()
-          description += `<br>${rangeAtArrival<10?'<div class="warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</div">':''}`;
+          description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
       }
         catch {};
         description += '<p>'
