@@ -826,15 +826,15 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       while (index < len(polyline_str)) {
           // Gather lat/lon changes, store them in a dictionary to apply them later
           for (unit in ['latitude', 'longitude']) {
-              var shift = 0, result = 0;
+              var shift = 0, result = 0, byte;
 
               while (true) {
-                  var byte = ord(polyline_str[index]) - 63;
-                  index+=1
-                  var result |= (byte & 0x1f) << shift
-                  var shift += 5
+                  byte = ord(polyline_str[index]) - 63;
+                  index+=1;
+                  result = result | ((byte & 0x1f) << shift);
+                  shift += 5;
                   if (!(byte >= 0x20)) {
-                      break
+                      break;
                   };
               };
               if (result & 1) {
