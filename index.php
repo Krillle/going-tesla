@@ -812,6 +812,45 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     // mapBox requests
+
+    function decodePolyline(polyline_str) {
+      var index = 0;
+      var lat = 0;
+      var lng  = 0;
+      var coordinates = [];
+      var changes = {'latitude': 0, 'longitude': 0};
+
+      // Coordinates have variable length when encoded, so just keep
+      // track of whether we've hit the end of the string. In each
+      // while loop iteration, a single coordinate is decoded.
+      while (index < len(polyline_str)) {
+          // Gather lat/lon changes, store them in a dictionary to apply them later
+          for (unit in ['latitude', 'longitude']) {
+              var shift = 0, result = 0;
+
+              while (true) {
+                  var byte = ord(polyline_str[index]) - 63;
+                  index+=1
+                  var result |= (byte & 0x1f) << shift
+                  var shift += 5
+                  if (!(byte >= 0x20)) {
+                      break
+                  };
+              };
+              if (result & 1) {
+                  changes[unit] = ~(result >> 1);
+              } else {
+                  changes[unit] = (result >> 1);
+              };
+          };
+          lat += changes['latitude'];
+          lng += changes['longitude'];
+
+          coordinates.append((lat / 100000.0, lng / 100000.0));
+      }
+      return coordinates;
+    };
+
     function getRoute(start,destination){
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
@@ -826,7 +865,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             'distanceRaw': result.routes[0].distance/1000,
             'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km',
             'duration': secondsToTime(result.routes[0].duration),
-            'durationRaw': result.routes[0].duration
+            'durationRaw': result.routes[0].duration,
+            'geometry': result.routes[0].geometry
           }
         } else {
           return null
