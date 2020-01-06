@@ -865,7 +865,16 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             'properties': {},
             'geometry': {
               'type': 'LineString',
-              'coordinates': coordinates
+              'coordinates': [
+          [
+            10.20904541015625,
+            51.008570464608944
+          ],
+          [
+            11.5631103515625,
+            50.90822881118012
+          ]
+        ]
             }
           }
         },
