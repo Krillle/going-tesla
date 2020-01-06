@@ -503,10 +503,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       popup.setLngLat(coordinates)
       .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map);
-
-      var C = chargerDescription(chargerID).route;
-      console.log(C);
-      showRoute(C);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -815,7 +811,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     };
 
-    // mapBox requests
+    // - - - - - mapBox requests - - - - - -
     function decodePolyline(polyline_str) {
       var index = 0;
       var lat = 0;
@@ -881,11 +877,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       });
     };
 
-    function getRoute(start,destination){
+    function getRoute(start,destination,route){  // set route = true if we need route coordinates
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.lng + ',' + destination.lat
-          + '?access_token=' + mapboxgl.accessToken + '&geometries=polyline&overview=simplified'
+          + '?access_token=' + mapboxgl.accessToken + route ? '&geometries=polyline&overview=simplified' : '&overview=false'
       result = httpGet(routeUrl)
       console.log("Result" + result);
       if (result) {
@@ -896,7 +892,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km',
             'duration': secondsToTime(result.routes[0].duration),
             'durationRaw': result.routes[0].duration,
-            'coordinates': decodePolyline(result.routes[0].geometry)
+            'coordinates': route ? decodePolyline(result.routes[0].geometry) : false
           }
         } else {
           return null
@@ -1052,7 +1048,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}');"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
-      return {'text': description, 'address': address, 'route': route.coordinates};
+      return {'text': description, 'address': address};
     };
 
     // function settingsContent(){
