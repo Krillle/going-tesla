@@ -825,7 +825,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // while loop iteration, a single coordinate is decoded.
       while (index < polyline_str.length) {
           // Gather lat/lon changes, store them in a dictionary to apply them later
-          for (unit in ['latitude', 'longitude']) {
+          for (unit in {'latitude', 'longitude'}) {
               var shift = 0, result = 0, byte;
 
               while (true) {
