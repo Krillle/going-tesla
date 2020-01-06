@@ -891,7 +891,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km',
             'duration': secondsToTime(result.routes[0].duration),
             'durationRaw': result.routes[0].duration,
-            'geometry': decodePolyline(result.routes[0].geometry)
+            'coordinates': decodePolyline(result.routes[0].geometry)
           }
         } else {
           return null
@@ -1035,7 +1035,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (route) {
         description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
 
-        showRoute(coordinates);
+        showRoute(route.coordinates);
 
         try {
           var rangeAtArrival = (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed()
