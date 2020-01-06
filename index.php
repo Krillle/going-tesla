@@ -829,9 +829,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
               var shift = 0, result = 0, byte;
 
               while (true) {
-                  byte = polyline_str[index].charCodeAt() - 63;
+                  byte = polyline_str.charCodeAt(index) - 63;
                   index+=1;
                   result = result | ((byte & 0x1f) << shift);
+                  console.log(index, polyline_str.charCodeAt(index),result);
                   shift += 5;
                   if (!(byte >= 0x20)) {
                       break;
