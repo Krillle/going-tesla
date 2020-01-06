@@ -848,6 +848,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
           coordinates.append((lat / 100000.0, lng / 100000.0));
       }
+      console.log(coordinates)
       return coordinates;
     };
 
@@ -866,7 +867,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km',
             'duration': secondsToTime(result.routes[0].duration),
             'durationRaw': result.routes[0].duration,
-            'geometry': result.routes[0].geometry
+            'geometry': decodePolyline(result.routes[0].geometry)
           }
         } else {
           return null
