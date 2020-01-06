@@ -829,7 +829,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
               var shift = 0, result = 0, byte;
 
               while (true) {
-                  byte = ord(polyline_str[index]) - 63;
+                  byte = polyline_str[index].charCodeAt() - 63;
                   index+=1;
                   result = result | ((byte & 0x1f) << shift);
                   shift += 5;
