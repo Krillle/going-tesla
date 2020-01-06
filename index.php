@@ -812,7 +812,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     // mapBox requests
-
     function decodePolyline(polyline_str) {
       var index = 0;
       var lat = 0;
@@ -849,6 +848,32 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           coordinates.push([lat / 100000.0,  lng / 100000.0]);
       }
       return coordinates;
+    };
+
+    function showRoute(coordinates) {
+      map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': {
+          'type': 'geojson',
+          'data': {
+            'type': 'Feature',
+            'properties': {},
+            'geometry': {
+              'type': 'LineString',
+              'coordinates': coordinates
+            }
+          }
+        },
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#888',
+          'line-width': 8
+        }
+      });
     };
 
     function getRoute(start,destination){
@@ -1009,6 +1034,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 //      description += (route) ? '<strong>' + route.distance +  route.duration : '';
       if (route) {
         description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+
+        showRoute(coordinates);
+
         try {
           var rangeAtArrival = (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed()
           description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
