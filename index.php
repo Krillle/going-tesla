@@ -881,7 +881,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.lng + ',' + destination.lat
-          + '?access_token=' + mapboxgl.accessToken + route ? '&geometries=polyline&overview=simplified' : '&overview=false'
+          + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview=simplified' : '&overview=false')
       result = httpGet(routeUrl)
       console.log("Result" + result);
       if (result) {
