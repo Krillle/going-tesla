@@ -823,7 +823,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // Coordinates have variable length when encoded, so just keep
       // track of whether we've hit the end of the string. In each
       // while loop iteration, a single coordinate is decoded.
-      while (index < len(polyline_str)) {
+      while (index < polyline_str.length) {
           // Gather lat/lon changes, store them in a dictionary to apply them later
           for (unit in ['latitude', 'longitude']) {
               var shift = 0, result = 0, byte;
