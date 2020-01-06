@@ -849,12 +849,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           lat += changes['latitude'];
           lng += changes['longitude'];
 
-          coordinates.push([lng / 100000.0], lat / 100000.0);
+          coordinates.push([lng / 100000.0, lat / 100000.0]);
       }
       return coordinates;
     };
 
     function showRoute(coordinates) {
+      console.log('printing line', coordinates);
       map.addLayer({
         'id': 'route',
         'type': 'line',
@@ -865,16 +866,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             'properties': {},
             'geometry': {
               'type': 'LineString',
-              'coordinates': [
-          [
-            10.20904541015625,
-            51.008570464608944
-          ],
-          [
-            11.5631103515625,
-            50.90822881118012
-          ]
-        ]
+              'coordinates': coordinates
             }
           }
         },
