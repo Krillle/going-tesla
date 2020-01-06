@@ -503,6 +503,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       popup.setLngLat(coordinates)
       .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map);
+
+      showRoute(chargerDescription(chargerID).coordinates);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -1035,8 +1037,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (route) {
         description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
 
-        showRoute(route.coordinates);
-
         try {
           var rangeAtArrival = (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed()
           description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
@@ -1049,7 +1049,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}');"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
-      return {'text': description, 'address': address};
+      return {'text': description, 'address': address, 'route': route.coordinates};
     };
 
     // function settingsContent(){
