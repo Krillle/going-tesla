@@ -849,7 +849,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           lat += changes['latitude'];
           lng += changes['longitude'];
 
-          coordinates.push([lat / 100000.0,  lng / 100000.0]);
+          coordinates.push([lng / 100000.0], lat / 100000.0);
       }
       return coordinates;
     };
