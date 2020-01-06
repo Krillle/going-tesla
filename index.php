@@ -846,7 +846,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           lat += changes['latitude'];
           lng += changes['longitude'];
 
-          console.console.log(lat,lng);
+          console.log(lat,lng);
 
           coordinates.push(lat / 100000.0, lng / 100000.0);
       }
