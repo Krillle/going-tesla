@@ -832,7 +832,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                   byte = polyline_str.charCodeAt(index) - 63;
                   index+=1;
                   result = result | ((byte & 0x1f) << shift);
-                  console.log(index, polyline_str.charCodeAt(index),result);
                   shift += 5;
                   if (!(byte >= 0x20)) {
                       break;
@@ -846,6 +845,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           };
           lat += changes['latitude'];
           lng += changes['longitude'];
+
+          console.console.log(lat,lng);
 
           coordinates.push(lat / 100000.0, lng / 100000.0);
       }
