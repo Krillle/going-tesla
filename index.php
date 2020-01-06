@@ -504,7 +504,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map);
 
-      var C = chargerDescription(chargerID).coordinates;
+      var C = chargerDescription(chargerID).route;
       console.log(C);
       showRoute(C);
     });
