@@ -504,7 +504,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map);
 
-      showRoute(chargerDescription(chargerID).coordinates);
+      var C = chargerDescription(chargerID).coordinates;
+      console.log(C);
+      showRoute(C);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
