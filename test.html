@@ -1,0 +1,62 @@
+<html>
+<head>
+  <meta charset='utf-8' />
+</head>
+<body>
+  <script>
+    function getBearingPoint(startPoint, bearing, distance) {
+      // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
+      var λ1 = startPoint[0] * (Math.PI/180);
+      var φ1 = startPoint[1] * (Math.PI/180);
+      var brng = bearing * (Math.PI/180);
+      var d = distance;
+      const R = 6371e3;
+
+      var φ2 =Math.asin( Math.sin(φ1)*Math.cos(d/R) + Math.cos(φ1)*Math.sin(d/R)*Math.cos(brng) );
+      var λ2 = λ1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(φ1), Math.cos(d/R)-Math.sin(φ1)*Math.sin(φ2));
+
+      return [λ2 * 180 / Math.PI, φ2 * 180 / Math.PI];
+    };
+
+    function getBearing(line) {
+      // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
+      var λ1 = line[0][0] * (Math.PI/180);
+      var φ1 = line[0][1] * (Math.PI/180);
+      var λ2 = line[1][0] * (Math.PI/180);
+      var φ2 = line[1][1] * (Math.PI/180);
+
+      var y = Math.sin(λ2-λ1) * Math.cos(φ2);
+      var x = Math.cos(φ1)*Math.sin(φ2) - Math.sin(φ1)*Math.cos(φ2)*Math.cos(λ2-λ1);
+      return Math.atan2(y, x) * 180 / Math.PI;
+    };
+
+    function distantBoundingBox(line, distance) {
+      var bearing = getBearing(line);
+      var corners = [[+135,-135],[-45,+45]];
+      var box = [];
+
+      console.log("Ausgangsrichtung", bearing)
+
+      corners.forEach( (vectors, i) => {
+        vectors.forEach( (vector, j) => {
+          console.log("Step", i, j, line[i], bearing + vector, distance);
+          box.push(getBearingPoint(line[i], bearing + vector, distance));
+          console.log(box);
+        });
+      });
+      return box;
+
+      // var backRight = getBearingPoint(startPoint, bearing + 135, distance);
+      // var backLeft = getBearingPoint(startPoint, bearing - 135, distance);
+      // var forwardLeft = getBearingPoint(endPoint, bearing - 45, distance);
+      // var forwardRight = getBearingPoint(endPoint, bearing + 45, distance);
+
+    };
+
+console.log(getBearingPoint([13,52],45,10000));
+console.log( getBearing( [[13,52],getBearingPoint([13,52],45,10000)] ) );
+console.log(distantBoundingBox([[13,52],getBearingPoint([13,52],45,10000)],3));
+
+  </script>
+</body>
+</html>

@@ -495,14 +495,23 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
       chargerID = e.features[0].id
-      var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      map.once('idle', function(e) {
-        console.log('Map idle',chargerID);
-        popup.setHTML(chargerDescription(chargerID).text)
-      });
-      popup.setLngLat(coordinates)
-      .setHTML(chargerShortDescription(e.features[0].properties).text)
-      .addTo(map);
+
+      // ---- 8< -----v
+      var chargerDetails = getChargerDetails(chargerID);
+      if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
+      var chargeLocation = chargerDetails.chargelocations[0];
+      var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
+      showRoute(route.coordinates)
+      // ---- 8< -----^
+
+      // var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      // map.once('idle', function(e) {
+      //   console.log('Map idle',chargerID);
+      //   popup.setHTML(chargerDescription(chargerID).text)
+      // });
+      // popup.setLngLat(coordinates)
+      // .setHTML(chargerShortDescription(e.features[0].properties).text)
+      // .addTo(map);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -811,7 +820,50 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     };
 
-    // - - - - - mapBox requests - - - - - -
+    // - - - - - GEO operations - - - - - -
+    function getBearingPoint(startPoint, bearing, distance) {
+      // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
+      var λ1 = startPoint[0] * (Math.PI/180);
+      var φ1 = startPoint[1] * (Math.PI/180);
+      var brng = bearing * (Math.PI/180);
+      var d = distance;
+      const R = 6371e3;
+
+      var φ2 =Math.asin( Math.sin(φ1)*Math.cos(d/R) + Math.cos(φ1)*Math.sin(d/R)*Math.cos(brng) );
+      var λ2 = λ1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(φ1), Math.cos(d/R)-Math.sin(φ1)*Math.sin(φ2));
+
+      return [λ2 * 180 / Math.PI, φ2 * 180 / Math.PI];
+    };
+
+    function getBearing(line) {
+      // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
+      var λ1 = line[0][0] * (Math.PI/180);
+      var φ1 = line[0][1] * (Math.PI/180);
+      var λ2 = line[1][0] * (Math.PI/180);
+      var φ2 = line[1][1] * (Math.PI/180);
+
+      var y = Math.sin(λ2-λ1) * Math.cos(φ2);
+      var x = Math.cos(φ1)*Math.sin(φ2) - Math.sin(φ1)*Math.cos(φ2)*Math.cos(λ2-λ1);
+      return Math.atan2(y, x) * 180 / Math.PI;
+    };
+
+    function distantLineBox(line, distance) {
+      var bearing = getBearing(line);
+      var corners = [[+135,-135],[-45,+45]];
+      var box = [];
+
+      console.log("Ausgangsrichtung", bearing)
+
+      corners.forEach( (vectors, i) => {
+        vectors.forEach( (vector, j) => {
+          console.log("Step", i, j, line[i], bearing + vector, distance);
+          box.push(getBearingPoint(line[i], bearing + vector, distance));
+          console.log(box);
+        });
+      });
+      return box;
+    };
+
     function decodePolyline(polyline_str) {
       var index = 0;
       var lat = 0;
@@ -871,12 +923,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           'line-cap': 'round'
         },
         'paint': {
-          'line-color': '#888',
-          'line-width': 8
+          'line-color': chargerTeslaColor,
+          'line-width': 4
         }
       });
     };
 
+    // - - - - - mapBox requests - - - - - -
     function getRoute(start,destination,route){  // set route = true if we need route coordinates
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
