@@ -501,6 +501,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
       var chargeLocation = chargerDetails.chargelocations[0];
       var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
+      console.log(route.coordinates);
       showRoute(route.coordinates)
       // ---- 8< -----^
 
@@ -923,7 +924,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           'line-cap': 'round'
         },
         'paint': {
-          'line-color': chargerTeslaColor,
+          'line-color': '#'+chargerTeslaColor,
           'line-width': 4
         }
       });
