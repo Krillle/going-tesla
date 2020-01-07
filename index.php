@@ -906,6 +906,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function showRoute(coordinates) {
       console.log('printing line', coordinates);
       map.removeLayer('route');
+      mapo.removeSource('route');
       map.addLayer({
         'id': 'route',
         'type': 'line',
