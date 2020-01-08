@@ -452,6 +452,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     map.addSource('route', {
       'type': 'geojson',
       'data': {
+        "type": "FeatureCollection",
+        "features": []
       }
     });
     map.addLayer({
