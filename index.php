@@ -539,24 +539,25 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       chargerID = e.features[0].id
 
-      // // ---- 8< -----v
-      // var chargerDetails = getChargerDetails(chargerID);
-      // if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
-      // var chargeLocation = chargerDetails.chargelocations[0];
-      // var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
-      // // console.log(route.coordinates);
-      // showRoute(route.coordinates);
-      // showBoxes(route.coordinates);
-      // // ---- 8< -----^
+      // ---- 8< -----v
+      var chargerDetails = getChargerDetails(chargerID);
+      if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
+      var chargeLocation = chargerDetails.chargelocations[0];
+      var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
+      // console.log(route.coordinates);
+      showRoute(route.coordinates);
+      showBoxes(route.coordinates);
+      getRouteChargers(route.coordinates);
+      // ---- 8< -----^
 
-      var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      map.once('idle', function(e) {
-        console.log('Map idle',chargerID);
-        popup.setHTML(chargerDescription(chargerID).text)
-      });
-      popup.setLngLat(coordinates)
-      .setHTML(chargerShortDescription(e.features[0].properties).text)
-      .addTo(map);
+      // var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      // map.once('idle', function(e) {
+      //   console.log('Map idle',chargerID);
+      //   popup.setHTML(chargerDescription(chargerID).text)
+      // });
+      // popup.setLngLat(coordinates)
+      // .setHTML(chargerShortDescription(e.features[0].properties).text)
+      // .addTo(map);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -1090,32 +1091,26 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function getRouteChargers(coordinates) {
+      var checkList = [];
       var newList = {
           "type": "FeatureCollection",
           "features": []
       };
-      var lineBox;
+      var lineBox, chargerList;
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
             box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
 
-            console.log(getChargersInBoundingBox(box,superCharger.minPower))
+            chargerList = getChargersInBoundingBox(box,superCharger.minPower))
+            if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+            if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
-            lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
-            // console.log(lineBox);
-
-            // console.log('Boundingbox',linebox);
-            // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
-            // lineBox.push(lineBox[0]); // close Polygon
-
-            newList.features.push({
-              "id": i.toString(),
-              "type": "Feature",
-              "properties": {},
-              "geometry": {
-                "type": "Polygon",
-                "coordinates": [lineBox]
+            chargerList.chargelocations.forEach(chargeLocation => {
+              console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+              if (!checkList.includes(chargeLocation.ge_id) {
+                checkList.push(chargeLocation.ge_id)
+                newList.features.push(chargeLocationDetails(chargeLocation));
               }
             });
           };
