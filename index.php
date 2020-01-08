@@ -469,7 +469,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       });
 
       // Prepare empty Distant Box Layer
-      map.addSource('distandBox', {
+      map.addSource('distantBox', {
         'type': 'geojson',
         'data': {
           "type": "FeatureCollection",
@@ -477,16 +477,16 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         }
       });
       map.addLayer({
-        'id': 'distandBox',
-        'type': 'line',
-        'source': 'distandBox',
+        'id': 'distantBox',
+        'type': 'fill',
+        'source': 'distantBox',
         'layout': {
           'line-join': 'round',
           'line-cap': 'round'
         },
         'paint': {
           'line-color': '#'+chargerTeslaColor,
-          'line-width': 2
+          'line-width': 4
         }
       });
 
@@ -986,7 +986,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           };
       });
       console.log('Polygon', newList);
-      map.getSource('distandBox').setData(newList);
+      map.getSource('distantBox').setData(newList);
     };
 
     // - - - - - mapBox requests - - - - - -
