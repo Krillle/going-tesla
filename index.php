@@ -489,7 +489,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           'line-width': 2
         }
       });
-bear
+      
     });
 
     // Events to disable AutoZoom
