@@ -545,7 +545,7 @@ bear
       if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
       var chargeLocation = chargerDetails.chargelocations[0];
       var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
-      console.log(route.coordinates);
+      // console.log(route.coordinates);
       showRoute(route.coordinates);
       showBoxes(route.coordinates);
       // ---- 8< -----^
@@ -970,7 +970,7 @@ bear
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            lineBox = distantLineBox(coordinates[i-1],coordinates[i]);
+            lineBox = distantLineBox(coordinates[i],coordinates[i+1]);
             lineBox.push(lineBox[0]); // close Polygon
 
             newList.features.push({
