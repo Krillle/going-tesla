@@ -902,7 +902,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         vectors.forEach( (vector, j) => {
           // console.log("Step", i, j, line[i], bearing + vector, distance);
           box.push(bearingPoint(line[i], bearing + vector, distance));
-          console.log(box);
         });
       });
       return box;
@@ -917,8 +916,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         if (corner[0] > NE[0]) {NE[0] = corner[0]};
         if (corner[1] > NE[1]) {NE[1] = corner[1]};
       });
-      console.log(lineBox);
-      console.log([SW,NE]);
+      console.log("Linebox", lineBox);
+      console.log("Box", [SW,NE]);
       return([SW,NE]);
     };
 
@@ -983,7 +982,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
             box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
-            linebox = [box[0],[box[0][1]],box[1],[box[1][0]],box[0]]
+            linebox = [box[0], [box[0][1],box[1][0]], box[1], [box[1][0],box[0][1]] ,box[0]]
+            console.log('Boundingbox',linebox);
             // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
             // lineBox.push(lineBox[0]); // close Polygon
             newList.features.push({
