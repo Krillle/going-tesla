@@ -30,7 +30,7 @@
       return Math.atan2(y, x) * 180 / Math.PI;
     };
 
-    function distantBoundingBox(line, distance) {
+    function distantLineBox(line, distance) {
       var bearing = getBearing(line);
       var corners = [[+135,-135],[-45,+45]];
       var box = [];
@@ -45,17 +45,11 @@
         });
       });
       return box;
-
-      // var backRight = getBearingPoint(startPoint, bearing + 135, distance);
-      // var backLeft = getBearingPoint(startPoint, bearing - 135, distance);
-      // var forwardLeft = getBearingPoint(endPoint, bearing - 45, distance);
-      // var forwardRight = getBearingPoint(endPoint, bearing + 45, distance);
-
     };
 
 console.log(getBearingPoint([13,52],45,10000));
 console.log( getBearing( [[13,52],getBearingPoint([13,52],45,10000)] ) );
-console.log(distantBoundingBox([[13,52],getBearingPoint([13,52],45,10000)],3));
+console.log(distantLineBox([[13,52],getBearingPoint([13,52],45,10000)],3));
 
   </script>
 </body>
