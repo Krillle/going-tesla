@@ -970,6 +970,7 @@ bear
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
+            console.log(coordinates[i],coordinates[i+1]);
             lineBox = distantLineBox(coordinates[i],coordinates[i+1]);
             lineBox.push(lineBox[0]); // close Polygon
 
