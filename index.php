@@ -448,28 +448,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     });
 
-    // Prepare empty Route Layer
-    map.addSource('route', {
-      'type': 'geojson',
-      'data': {
-        "type": "FeatureCollection",
-        "features": []
-      }
-    });
-    map.addLayer({
-      'id': 'route',
-      'type': 'line',
-      'source': 'route',
-      'layout': {
-        'line-join': 'round',
-        'line-cap': 'round'
-      },
-      'paint': {
-        'line-color': '#'+chargerTeslaColor,
-        'line-width': 4
-      }
-    });
-
     // Events to disable AutoZoom
     map.on('touchstart', function() {
     });
@@ -519,6 +497,28 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       chargerID = e.features[0].id
 
       // ---- 8< -----v
+      // Prepare empty Route Layer
+      map.addSource('route', {
+        'type': 'geojson',
+        'data': {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#'+chargerTeslaColor,
+          'line-width': 4
+        }
+      });
+
       var chargerDetails = getChargerDetails(chargerID);
       if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
       var chargeLocation = chargerDetails.chargelocations[0];
