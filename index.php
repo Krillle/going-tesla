@@ -448,6 +448,26 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     });
 
+    // Prepare empty Route Layer
+    map.addSource('route', {
+      'type': 'geojson',
+      'data': {}
+      }
+    });
+    map.addLayer({
+      'id': 'route',
+      'type': 'line',
+      'source': 'route',
+      'layout': {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      'paint': {
+        'line-color': '#'+chargerTeslaColor,
+        'line-width': 4
+      }
+    });
+
     // Events to disable AutoZoom
     map.on('touchstart', function() {
     });
