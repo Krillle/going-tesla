@@ -1136,6 +1136,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
             console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
               lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates)
+            );
 
             chargerList.chargelocations.forEach(chargeLocation => {
               if (!checkList.includes(chargeLocation.ge_id)) {
