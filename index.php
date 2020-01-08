@@ -271,7 +271,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var zoomToggleState = 0;
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
-    var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
+    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
+    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9};
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -982,6 +983,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
             box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
+
+            console.log(getChargersInBounds(box))
+
             lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
             // console.log(lineBox);
 
@@ -1030,7 +1034,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
     };
 
-    // GoingElectric requests
+    // - - - - - - - - GoingElectric requests - - - - - - - -
     function getChargerDetails(id) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
