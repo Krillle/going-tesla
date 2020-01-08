@@ -261,7 +261,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const slowSpeedZoom = '16';
     const highSpeedZoom = '9';
 
-    const maxChargerDistance = 5000; // max senkrechter abstand Charger von Route 
+    const maxChargerDistance = 5000; // max senkrechter abstand Charger von Route
 
     const updatePositionInterval = 20000;
 
@@ -1019,7 +1019,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
             lineBox.push(lineBox[0]); // close Polygon
 
-            console.log(lineBox);
+            // console.log(lineBox);
             newList.features.push({
               "id": i.toString(),
               "type": "Feature",
@@ -1031,7 +1031,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      // console.log(newList.features[0].geometry.coordinates);
+      console.log(newList.features[0].geometry.coordinates);
       map.getSource('distantBox').setData(newList);
     };
 
