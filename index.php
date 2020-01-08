@@ -1134,11 +1134,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
-            console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
-              lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates)
-            );
-
             chargerList.chargelocations.forEach(chargeLocation => {
+              console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
+                lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates)
+              );
               if (!checkList.includes(chargeLocation.ge_id)) {
                 if (lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates) <= maxChargerDistance) {
                   console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
