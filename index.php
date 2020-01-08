@@ -1135,14 +1135,15 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
             chargerList.chargelocations.forEach(chargeLocation => {
-              console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
-                lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat])
-              );
-              console.log('Linie:',[coordinates[i],coordinates[i+1]],'Punkt',[chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]);
+              // console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
+              //   lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat])
+              // );
+              // console.log('Linie:',[coordinates[i],coordinates[i+1]],'Punkt',[chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]);
               if (!checkList.includes(chargeLocation.ge_id)) {
                 if (lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]) <= maxChargerDistance) {
                   console.log('OK',chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
-                    lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat])
+                    lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]),
+                    'Linie:',[coordinates[i],coordinates[i+1]],'Punkt',[chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
                   );
                   checkList.push(chargeLocation.ge_id);
                   newList.features.push(chargeLocationDetails(chargeLocation));
@@ -1152,7 +1153,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           };
       });
     };
-
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
