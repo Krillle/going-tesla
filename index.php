@@ -982,7 +982,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
               "properties": {},
               "geometry": {
                 "type": "Polygon",
-                "coordinates": lineBox
+                "coordinates": [lineBox]
               }
             });
           };
