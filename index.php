@@ -261,6 +261,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const slowSpeedZoom = '16';
     const highSpeedZoom = '9';
 
+    const maxChargerDistance = 5000; // max senkrechter abstand Charger von Route 
+
     const updatePositionInterval = 20000;
 
     var zoomToogle = [
@@ -893,6 +895,34 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return Math.atan2(y, x) * 180 / Math.PI;
     };
 
+    function lineDistance(line) {
+      var R = 6371e3;
+      var φ1 = line[0][1] * (Math.PI/180);
+      var φ2 = line[1][1] * (Math.PI/180);
+      var Δφ = (line[1][1]-line[0][1]) * (Math.PI/180);
+      var Δλ = (line[1][0]-line[0][0]) * (Math.PI/180);
+
+      var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+      Math.cos(φ1) * Math.cos(φ2) *
+      Math.sin(Δλ/2) * Math.sin(Δλ/2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+      return R * c;
+    };
+
+    function pointDistance(line, point) {
+      // δ13 is (angular) distance from start point to third point
+      // θ13 is (initial) bearing from start point to third point
+      // θ12 is (initial) bearing from start point to end point
+      // R is the earth’s radius
+      var δ13 = lineDistance([line[0],point]);
+      var θ12 = lineBearing(line) * (Math.PI/180);;
+      var θ13 = lineBearing([line[0],point]) * (Math.PI/180);;
+      const R = 6371e3;
+
+      return Math.asin(Math.sin(d13/R)*Math.sin(θ13-θ12)) * R;
+    };
+
     function distantLineBox(line, distance) {
       var distance = Math.sqrt(2*distance*distance);
       var bearing = lineBearing(line);
@@ -983,10 +1013,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
+            // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
             // lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
 
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
+            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
             lineBox.push(lineBox[0]); // close Polygon
 
             console.log(lineBox);
@@ -1098,7 +1128,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
+            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
 
             chargerList = getChargersInBoundingBox(box,superCharger.minPower);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
@@ -1106,10 +1136,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
             chargerList.chargelocations.forEach(chargeLocation => {
               if (!checkList.includes(chargeLocation.ge_id)) {
-                console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
-
-                checkList.push(chargeLocation.ge_id);
-                newList.features.push(chargeLocationDetails(chargeLocation));
+                console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
+                  lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates)
+                );
+                if (lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates) <= maxChargerDistance) {
+                  checkList.push(chargeLocation.ge_id);
+                  newList.features.push(chargeLocationDetails(chargeLocation));
+                }
               }
             });
           };
