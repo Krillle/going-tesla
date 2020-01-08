@@ -973,7 +973,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
             console.log("Koordinaten",coordinates[i],coordinates[i+1]);
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3);
+            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
             lineBox.push(lineBox[0]); // close Polygon
             console.log("Linebox",lineBox);
             newList.features.push({
