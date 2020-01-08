@@ -489,7 +489,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           'line-width': 2
         }
       });
-
+bear
     });
 
     // Events to disable AutoZoom
@@ -881,7 +881,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return [λ2 * 180 / Math.PI, φ2 * 180 / Math.PI];
     };
 
-    function bearing(line) {
+    function lineBearing(line) {
       // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
       var λ1 = line[0][0] * (Math.PI/180);
       var φ1 = line[0][1] * (Math.PI/180);
@@ -894,7 +894,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function distantLineBox(line, distance) {
-      var bearing = bearing(line);
+      var bearing = lineBearing(line);
       var corners = [[+135,-135],[-45,+45]];
       var box = [];
 
