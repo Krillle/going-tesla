@@ -1136,13 +1136,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
             chargerList.chargelocations.forEach(chargeLocation => {
               console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
-                lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lon,chargeLocation.coordinates.lat])
+                lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat])
               );
-              console.log('Linie:',[coordinates[i],coordinates[i+1]],'Punkt',[chargeLocation.coordinates.lon,chargeLocation.coordinates.lat]);
+              console.log('Linie:',[coordinates[i],coordinates[i+1]],'Punkt',[chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]);
               if (!checkList.includes(chargeLocation.ge_id)) {
-                if (lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lon,chargeLocation.coordinates.lat]) <= maxChargerDistance) {
+                if (lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]) <= maxChargerDistance) {
                   console.log('OK',chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
-                    lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lon,chargeLocation.coordinates.lat])
+                    lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat])
                   );
                   checkList.push(chargeLocation.ge_id);
                   newList.features.push(chargeLocationDetails(chargeLocation));
