@@ -984,7 +984,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           if (i < coordinates.length-1) {
             box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
 
-            // console.log(getChargersInBounds(box))
+            console.log(getChargersInBoundingBox(box))
 
             lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
             // console.log(lineBox);
@@ -1039,6 +1039,15 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
         `ge_id=${id}`;
+      return JSON.parse(httpGet(geUrl));
+    };
+
+    function getChargersInBoundingBox(boundingBox) {
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
+        `key=${goingelectricToken}&`+
+        `plugs=${compatiblePlugs}&min_power=${minPower}&`+
+        `sw_lat=${boundingBox[0][1]}&sw_lng=${boundingBox[0][0]}&`+
+        `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
       return JSON.parse(httpGet(geUrl));
     };
 
