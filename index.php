@@ -984,7 +984,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           if (i < coordinates.length-1) {
             box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
 
-            console.log(getChargersInBounds(box))
+            // console.log(getChargersInBounds(box))
 
             lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
             // console.log(lineBox);
