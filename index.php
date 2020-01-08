@@ -1107,8 +1107,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
             chargerList.chargelocations.forEach(chargeLocation => {
-              console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
               if (!checkList.includes(chargeLocation.ge_id)) {
+                console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
                 checkList.push(chargeLocation.ge_id)
                 newList.features.push(chargeLocationDetails(chargeLocation));
               }
