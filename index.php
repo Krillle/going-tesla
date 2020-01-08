@@ -983,14 +983,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
-            lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
-            // console.log(lineBox);
+            // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
+            // lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
 
-            // console.log('Boundingbox',linebox);
-            // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
-            // lineBox.push(lineBox[0]); // close Polygon
+            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
+            lineBox.push(lineBox[0]); // close Polygon
 
+            console.log(lineBox);
             newList.features.push({
               "id": i.toString(),
               "type": "Feature",
@@ -1048,7 +1047,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
       return JSON.parse(httpGet(geUrl));
     };
-
 
     function getChargersInBounds(searchField) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
@@ -1109,7 +1107,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             chargerList.chargelocations.forEach(chargeLocation => {
               if (!checkList.includes(chargeLocation.ge_id)) {
                 console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
-                checkList.push(chargeLocation.ge_id)
+
+                checkList.push(chargeLocation.ge_id);
                 newList.features.push(chargeLocationDetails(chargeLocation));
               }
             });
