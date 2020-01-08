@@ -451,7 +451,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // Prepare empty Route Layer
     map.addSource('route', {
       'type': 'geojson',
-      'data': {}
+      'data': ''
       }
     });
     map.addLayer({
