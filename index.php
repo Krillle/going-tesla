@@ -461,7 +461,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       }
     });
     map.addLayer({
-      "id": "chargers",
+      "id": "route",
       'type': 'line',
       "source": "route",
       'layout': {
