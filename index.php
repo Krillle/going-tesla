@@ -549,7 +549,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // console.log(route.coordinates);
       showRoute(route.coordinates);
       showBoxes(route.coordinates);
-      // getRouteChargers(route.coordinates);
+      getRouteChargers(route.coordinates);
       // ---- 8< -----^
 
       // var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
@@ -1151,8 +1151,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      // console.log(newList.features[0].geometry.coordinates);
-      map.getSource('distantBox').setData(newList);
     };
 
 
