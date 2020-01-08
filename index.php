@@ -539,24 +539,24 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       chargerID = e.features[0].id
 
-      // ---- 8< -----v
-      var chargerDetails = getChargerDetails(chargerID);
-      if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
-      var chargeLocation = chargerDetails.chargelocations[0];
-      var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
-      // console.log(route.coordinates);
-      showRoute(route.coordinates);
-      showBoxes(route.coordinates);
-      // ---- 8< -----^
+      // // ---- 8< -----v
+      // var chargerDetails = getChargerDetails(chargerID);
+      // if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
+      // var chargeLocation = chargerDetails.chargelocations[0];
+      // var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
+      // // console.log(route.coordinates);
+      // showRoute(route.coordinates);
+      // showBoxes(route.coordinates);
+      // // ---- 8< -----^
 
-      // var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      // map.once('idle', function(e) {
-      //   console.log('Map idle',chargerID);
-      //   popup.setHTML(chargerDescription(chargerID).text)
-      // });
-      // popup.setLngLat(coordinates)
-      // .setHTML(chargerShortDescription(e.features[0].properties).text)
-      // .addTo(map);
+      var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      map.once('idle', function(e) {
+        console.log('Map idle',chargerID);
+        popup.setHTML(chargerDescription(chargerID).text)
+      });
+      popup.setLngLat(coordinates)
+      .setHTML(chargerShortDescription(e.features[0].properties).text)
+      .addTo(map);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -983,9 +983,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
             box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
-
-            console.log(getChargersInBoundingBox(box))
-
             lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
             // console.log(lineBox);
 
@@ -1042,7 +1039,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return JSON.parse(httpGet(geUrl));
     };
 
-    function getChargersInBoundingBox(boundingBox) {
+    function getChargersInBoundingBox(boundingBox, minPower) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
@@ -1050,6 +1047,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
       return JSON.parse(httpGet(geUrl));
     };
+
 
     function getChargersInBounds(searchField) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
@@ -1059,6 +1057,73 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
       return JSON.parse(httpGet(geUrl));
     };
+
+    function chargeLocationDetails(chargeLocation) {
+      var maxPower = 0;
+      chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
+
+      return {
+        "id": chargeLocation.ge_id.toString(),
+        "type": "Feature",
+        "properties": {
+          "icon": (chargeLocation.fault_report) ? "faultReport" :
+            (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
+            (maxPower >= superCharger.minPower) ? "thirdSuperCharger" :
+            (maxPower >= highwayCharger.minPower) ? "highwayCharger" :
+            "parkCharger",
+
+          "coordinates": chargeLocation.coordinates,
+          "chargepoints": chargeLocation.chargepoints,
+          "name": chargeLocation.name,
+          "street": chargeLocation.address.street,
+          "city": chargeLocation.address.city,
+          "country": chargeLocation.address.country,
+          "network": chargeLocation.network,
+          "operator": chargeLocation.operator,
+          "url": chargeLocation.url
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
+        }
+      };
+    };
+
+    function getRouteChargers(coordinates) {
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      var lineBox;
+
+      coordinates.forEach( (point, i) => {
+          if (i < coordinates.length-1) {
+            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
+
+            console.log(getChargersInBoundingBox(box,superCharger.minPower))
+
+            lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
+            // console.log(lineBox);
+
+            // console.log('Boundingbox',linebox);
+            // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
+            // lineBox.push(lineBox[0]); // close Polygon
+
+            newList.features.push({
+              "id": i.toString(),
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": [lineBox]
+              }
+            });
+          };
+      });
+      // console.log(newList.features[0].geometry.coordinates);
+      map.getSource('distantBox').setData(newList);
+    };
+
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
@@ -1071,34 +1136,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "features": []
       };
       chargerList.chargelocations.forEach(chargeLocation => {
-        var maxPower = 0;
-        chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
-
-        newList.features.push({
-          "id": chargeLocation.ge_id.toString(),
-          "type": "Feature",
-          "properties": {
-            "icon": (chargeLocation.fault_report) ? "faultReport" :
-              (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
-              (maxPower >= superCharger.minPower) ? "thirdSuperCharger" :
-              (maxPower >= highwayCharger.minPower) ? "highwayCharger" :
-              "parkCharger",
-
-            "coordinates": chargeLocation.coordinates,
-            "chargepoints": chargeLocation.chargepoints,
-            "name": chargeLocation.name,
-            "street": chargeLocation.address.street,
-            "city": chargeLocation.address.city,
-            "country": chargeLocation.address.country,
-            "network": chargeLocation.network,
-            "operator": chargeLocation.operator,
-            "url": chargeLocation.url
-          },
-          "geometry": {
-            "type": "Point",
-            "coordinates": [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
-          }
-        });
+        newList.features.push(chargeLocationDetails(chargeLocation));
       });
       map.getSource('chargers').setData(newList);
     };
