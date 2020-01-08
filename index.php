@@ -970,10 +970,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            console.log(coordinates[i],coordinates[i+1]);
+            console.log("Koordinaten",coordinates[i],coordinates[i+1]);
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3);
             lineBox.push(lineBox[0]); // close Polygon
-
+            console.log("Linebox",lineBox);
             newList.features.push({
               "id": i.toString(),
               "type": "Feature",
@@ -985,6 +985,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
+      console.log('Polygon', newList);
       map.getSource('distandBox').setData(newList);
     };
 
