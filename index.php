@@ -261,7 +261,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const slowSpeedZoom = '16';
     const highSpeedZoom = '9';
 
-    const maxChargerDistance = 5000; // max senkrechter abstand Charger von Route
+    const maxChargerDistance = 3000; // max senkrechter abstand Charger von Route
 
     const updatePositionInterval = 20000;
 
@@ -487,7 +487,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         },
         'paint': {
           'fill-color': '#088',
-          'fill-opacity': 0.8
+          'fill-opacity': 0.2
         }
       });
 
@@ -1013,11 +1013,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
-            // lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
+            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
+            lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
 
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
-            lineBox.push(lineBox[0]); // close Polygon
+            // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+            // lineBox.push(lineBox[0]); // close Polygon
 
             // console.log(lineBox);
             newList.features.push({
@@ -1136,10 +1136,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
             chargerList.chargelocations.forEach(chargeLocation => {
               if (!checkList.includes(chargeLocation.ge_id)) {
-                console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
-                  lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates)
-                );
                 if (lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates) <= maxChargerDistance) {
+                  console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
+                    lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates)
+                  );
                   checkList.push(chargeLocation.ge_id);
                   newList.features.push(chargeLocationDetails(chargeLocation));
                 }
