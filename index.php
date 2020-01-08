@@ -981,13 +981,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
-            // linebox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
-            // console.log(linebox);
+            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
+            lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
+            // console.log(lineBox);
 
             // console.log('Boundingbox',linebox);
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
-            lineBox.push(lineBox[0]); // close Polygon
+            // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
+            // lineBox.push(lineBox[0]); // close Polygon
+
             newList.features.push({
               "id": i.toString(),
               "type": "Feature",
@@ -999,7 +1000,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      console.log(newList.features[0].geometry.coordinates);
+      // console.log(newList.features[0].geometry.coordinates);
       map.getSource('distantBox').setData(newList);
     };
 
