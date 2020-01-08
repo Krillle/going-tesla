@@ -468,6 +468,28 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         }
       });
 
+      // Prepare empty Distant Box Layer
+      map.addSource('distandBox', {
+        'type': 'geojson',
+        'data': {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        'id': 'distandBox',
+        'type': 'line',
+        'source': 'distandBox',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#'+chargerTeslaColor,
+          'line-width': 2
+        }
+      });
+
     });
 
     // Events to disable AutoZoom
@@ -524,7 +546,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var chargeLocation = chargerDetails.chargelocations[0];
       var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
       console.log(route.coordinates);
-      showRoute(route.coordinates)
+      showRoute(route.coordinates);
+      showBoxes(route.coordinates);
       // ---- 8< -----^
 
       // var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
@@ -844,7 +867,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     // - - - - - GEO operations - - - - - -
-    function getBearingPoint(startPoint, bearing, distance) {
+    function bearingPoint(startPoint, bearing, distance) {
       // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
       var λ1 = startPoint[0] * (Math.PI/180);
       var φ1 = startPoint[1] * (Math.PI/180);
@@ -858,7 +881,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return [λ2 * 180 / Math.PI, φ2 * 180 / Math.PI];
     };
 
-    function getBearing(line) {
+    function bearing(line) {
       // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
       var λ1 = line[0][0] * (Math.PI/180);
       var φ1 = line[0][1] * (Math.PI/180);
@@ -871,7 +894,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function distantLineBox(line, distance) {
-      var bearing = getBearing(line);
+      var bearing = bearing(line);
       var corners = [[+135,-135],[-45,+45]];
       var box = [];
 
@@ -880,7 +903,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       corners.forEach( (vectors, i) => {
         vectors.forEach( (vector, j) => {
           console.log("Step", i, j, line[i], bearing + vector, distance);
-          box.push(getBearingPoint(line[i], bearing + vector, distance));
+          box.push(bearingPoint(line[i], bearing + vector, distance));
           console.log(box);
         });
       });
@@ -936,6 +959,32 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           }
         }
       );
+    };
+
+    function showBoxes(coordinates) {
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      var lineBox;
+
+      coordinates.forEach( (point, i) => {
+          if (i < coordinates.length-1) {
+            lineBox = distantLineBox(coordinates[i-1],coordinates[i]);
+            lineBox.push(lineBox[0]); // close Polygon
+
+            newList.features.push({
+              "id": i.toString(),
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": lineBox
+              }
+            });
+          };
+      });
+      map.getSource('distandBox').setData(newList);
     };
 
     // - - - - - mapBox requests - - - - - -
