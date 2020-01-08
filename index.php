@@ -481,12 +481,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         'type': 'fill',
         'source': 'distantBox',
         'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
+          // 'line-join': 'round',
+          // 'line-cap': 'round'
         },
         'paint': {
-          'line-color': '#'+chargerTeslaColor,
-          'line-width': 4
+          'fill-color': '#088',
+          'fill-opacity': 0.8
+          // 'line-color': '#'+chargerTeslaColor,
+          // 'line-width': 4
         }
       });
 
