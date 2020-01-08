@@ -920,7 +920,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var θ13 = lineBearing([line[0],point]) * (Math.PI/180);;
       const R = 6371e3;
 
-      return Math.asin(Math.sin(d13/R)*Math.sin(θ13-θ12)) * R;
+      return Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R;
     };
 
     function distantLineBox(line, distance) {
