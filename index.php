@@ -481,14 +481,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         'type': 'fill',
         'source': 'distantBox',
         'layout': {
-          // 'line-join': 'round',
-          // 'line-cap': 'round'
         },
         'paint': {
           'fill-color': '#088',
           'fill-opacity': 0.8
-          // 'line-color': '#'+chargerTeslaColor,
-          // 'line-width': 4
         }
       });
 
@@ -901,16 +897,29 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var corners = [[+135,-135],[-45,+45]];
       var box = [];
 
-      console.log("Ausgangsrichtung", bearing)
-
+      // console.log("Ausgangsrichtung", bearing)
       corners.forEach( (vectors, i) => {
         vectors.forEach( (vector, j) => {
-          console.log("Step", i, j, line[i], bearing + vector, distance);
+          // console.log("Step", i, j, line[i], bearing + vector, distance);
           box.push(bearingPoint(line[i], bearing + vector, distance));
           console.log(box);
         });
       });
       return box;
+    };
+
+    function boundingBox(lineBox){
+      var SW = [0,0]; // Does not work west of Paris (0° Meridian) and south of Äquator
+      var NE = [0,0];
+      lineBox.forEach( corner => {
+        if (corner[0] < SW[0]) {SW[0] = corner[0]};
+        if (corner[1] < SW[1]) {SW[1] = corner[1]};
+        if (corner[0] > NE[0]) {NE[0] = corner[0]};
+        if (corner[1] > NE[1]) {NE[1] = corner[1]};
+      });
+      console.log(lineBox);
+      console.log([SW,NE]);
+      return([SW,NE]);
     };
 
     function decodePolyline(polyline_str) {
@@ -973,10 +982,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            console.log("Koordinaten",coordinates[i],coordinates[i+1]);
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
-            lineBox.push(lineBox[0]); // close Polygon
-            console.log("Linebox",lineBox);
+            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
+            linebox = [box[0],[box[0][1]],box[1],[box[1][0]],box[0]]
+            // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
+            // lineBox.push(lineBox[0]); // close Polygon
             newList.features.push({
               "id": i.toString(),
               "type": "Feature",
@@ -988,7 +997,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      console.log('Polygon', newList);
       map.getSource('distantBox').setData(newList);
     };
 
