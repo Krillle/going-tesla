@@ -461,9 +461,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       }
     });
     map.addLayer({
-      "id": "route",
+      'id': 'route',
       'type': 'line',
-      "source": "route",
+      'source': 'route',
       'layout': {
         'line-join': 'round',
         'line-cap': 'round'
