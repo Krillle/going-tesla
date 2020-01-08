@@ -261,7 +261,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const slowSpeedZoom = '16';
     const highSpeedZoom = '9';
 
-    const maxChargerDistance = 3000; // max senkrechter abstand Charger von Route
+    const maxChargerDistance = 3000; // max senkrechter Abstand Charger von Route
 
     const updatePositionInterval = 20000;
 
@@ -1042,7 +1042,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           + destination.lng + ',' + destination.lat
           + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview=simplified' : '&overview=false')
       result = httpGet(routeUrl)
-      console.log("Result" + result);
+      // console.log("Result" + result);
       if (result) {
         result = JSON.parse(result);
         if (result.code == "Ok") {
@@ -1133,6 +1133,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             chargerList = getChargersInBoundingBox(box,superCharger.minPower);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+
+            console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
+              lineDistance([coordinates[i],coordinates[i+1]], chargeLocation.coordinates)
 
             chargerList.chargelocations.forEach(chargeLocation => {
               if (!checkList.includes(chargeLocation.ge_id)) {
