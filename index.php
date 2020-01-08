@@ -448,6 +448,32 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     });
 
+    // Prepare empty Route Layer
+    map.addSource('route', {
+      'type': 'geojson',
+      'data': {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+          'type': 'LineString',
+          'coordinates': []
+        }
+      }
+    });
+    map.addLayer({
+      "id": "chargers",
+      'type': 'line',
+      "source": "route",
+      'layout': {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      'paint': {
+        'line-color': '#'+chargerTeslaColor,
+        'line-width': 4
+      }
+    });
+
     // Events to disable AutoZoom
     map.on('touchstart', function() {
     });
@@ -904,29 +930,16 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function showRoute(coordinates) {
-      map.addLayer({
-        'id': 'route',
-        'type': 'line',
-        'source': {
-          'type': 'geojson',
-          'data': {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-              'type': 'LineString',
-              'coordinates': coordinates
-            }
+      map.getSource('route').setData(
+        {
+          'type': 'Feature',
+          'properties': {},
+          'geometry': {
+            'type': 'LineString',
+            'coordinates': coordinates
           }
-        },
-        'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        'paint': {
-          'line-color': '#'+chargerTeslaColor,
-          'line-width': 4
         }
-      });
+      );
     };
 
     // - - - - - mapBox requests - - - - - -
