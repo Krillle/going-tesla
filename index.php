@@ -997,7 +997,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      console.log(newList);
+      console.log(newList.features[0].geometry.coordinates);
       map.getSource('distantBox').setData(newList);
     };
 
