@@ -907,8 +907,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return box;
     };
 
-    function boundingBox(lineBox){
-      var SW = [90,180]; // Does not work west of Paris (0° Meridian) and south of Äquator
+    function boundingBox(lineBox){ // Does not work west of Paris (0° Meridian) and south of Äquator
+      var SW = [90,180];
       var NE = [0,0];
       lineBox.forEach( corner => {
         if (corner[0] < SW[0]) {SW[0] = corner[0]};
@@ -982,7 +982,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
             box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],3000));
-            linebox = [box[0], [box[0][1],box[1][1]], box[1], [box[1][0],box[0][0]] ,box[0]]
+            linebox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
             console.log('Boundingbox',linebox);
             // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],3000);
             // lineBox.push(lineBox[0]); // close Polygon
