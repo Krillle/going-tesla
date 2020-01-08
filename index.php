@@ -896,6 +896,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function distantLineBox(line, distance) {
+      var distance = Math.sqrt(2*distance*distance);
       var bearing = lineBearing(line);
       var corners = [[+135,-135],[-45,+45]];
       var box = [];
