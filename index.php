@@ -529,9 +529,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // });
 
     map.on('click', function (e) {
-      map.removeControl(zoom);
-      map.removeControl(nav);
-      map.removeControl(geolocate);
+      var features = map.queryRenderedFeatures(e.point, {});
+      console.log(features);
+      // map.removeControl(zoom);
+      // map.removeControl(nav);
+      // map.removeControl(geolocate);
 
     });
 
