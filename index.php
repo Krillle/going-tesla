@@ -908,8 +908,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       Math.sin(Δλ/2) * Math.sin(Δλ/2);
       var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-      console.log('Line Dinstance',line,'=',R * c);
-
       return R * c;
     };
 
@@ -944,25 +942,25 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function boundingBox(lineBox){
-      var bounds = geolib.getBounds([
-          { latitude: lineBox[0][1], longitude: lineBox[0][0] },
-          { latitude: lineBox[1][1], longitude: lineBox[1][0] },
-          { latitude: lineBox[2][1], longitude: lineBox[2][0] },
-          { latitude: lineBox[3][1], longitude: lineBox[3][0] }
-      ]);
-      return([[bounds.minLng,bounds.minLat],[bounds.maxLng,bounds.minLat]]);
+      // var bounds = geolib.getBounds([
+      //     { latitude: lineBox[0][1], longitude: lineBox[0][0] },
+      //     { latitude: lineBox[1][1], longitude: lineBox[1][0] },
+      //     { latitude: lineBox[2][1], longitude: lineBox[2][0] },
+      //     { latitude: lineBox[3][1], longitude: lineBox[3][0] }
+      // ]);
+      // return([[bounds.minLng,bounds.minLat],[bounds.maxLng,bounds.minLat]]);
 
-      // var SW = [90,180];
-      // var NE = [0,0];
-      // lineBox.forEach( corner => {
-      //   if (corner[0] < SW[0]) {SW[0] = corner[0]};
-      //   if (corner[1] < SW[1]) {SW[1] = corner[1]};
-      //   if (corner[0] > NE[0]) {NE[0] = corner[0]};
-      //   if (corner[1] > NE[1]) {NE[1] = corner[1]};
-      // });
-      // console.log("Linebox", lineBox);
-      // console.log("Box", [SW,NE]);
-      // return([SW,NE]);
+      var SW = [90,180];
+      var NE = [0,0];
+      lineBox.forEach( corner => {
+        if (corner[0] < SW[0]) {SW[0] = corner[0]};
+        if (corner[1] < SW[1]) {SW[1] = corner[1]};
+        if (corner[0] > NE[0]) {NE[0] = corner[0]};
+        if (corner[1] > NE[1]) {NE[1] = corner[1]};
+      });
+      console.log("Linebox", lineBox);
+      console.log("Box", [SW,NE]);
+      return([SW,NE]);
     };
 
     function pointIsInLineBox(point, lineBox) {
@@ -1052,7 +1050,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      console.log(newList.features[0].geometry.coordinates);
+      console.log('distantBox:',newList.features[0].geometry.coordinates);
       map.getSource('distantBox').setData(newList);
     };
 
