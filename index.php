@@ -965,10 +965,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     function pointIsInLineBox(point, lineBox) {
       return geolib.isPointInPolygon({ latitude: point[1], longitude: point[0] }, [
-        { latitude: linebox[0][1], longitude: linebox[0][0] },
-        { latitude: linebox[1][1], longitude: linebox[1][0] },
-        { latitude: linebox[2][1], longitude: linebox[2][0] },
-        { latitude: linebox[3][1], longitude: linebox[3][0] }
+        { latitude: lineBox[0][1], longitude: lineBox[0][0] },
+        { latitude: lineBox[1][1], longitude: lineBox[1][0] },
+        { latitude: lineBox[2][1], longitude: lineBox[2][0] },
+        { latitude: lineBox[3][1], longitude: lineBox[3][0] }
       ]);
     };
 
