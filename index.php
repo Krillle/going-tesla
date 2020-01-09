@@ -918,8 +918,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // θ12 is (initial) bearing from start point to end point
       // R is the earth’s radius
       var δ13 = lineDistance([line[0],point]);
-      var θ12 = lineBearing(line);
-      var θ13 = lineBearing([line[0],point]);
+      var θ12 = lineBearing(line) * (Math.PI/180);
+      var θ13 = lineBearing([line[0],point]) * (Math.PI/180);
       const R = 6371e3;
 
       console.log('Point Distance',line,point,'=',Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R);
