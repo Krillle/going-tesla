@@ -907,6 +907,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       Math.sin(Δλ/2) * Math.sin(Δλ/2);
       var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
+      console.log('Line Dinstance',line,'=',R * c);
+
       return R * c;
     };
 
@@ -919,6 +921,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var θ12 = lineBearing(line) * (Math.PI/180);;
       var θ13 = lineBearing([line[0],point]) * (Math.PI/180);;
       const R = 6371e3;
+
+      console.log('Point Distance',line,point,'=',Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R;);
 
       return Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R;
     };
@@ -1141,10 +1145,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
               // console.log('Linie:',[coordinates[i],coordinates[i+1]],'Punkt',[chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]);
               if (!checkList.includes(chargeLocation.ge_id)) {
                 if (lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]) <= maxChargerDistance) {
-                  console.log('OK',chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
-                    lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]),
-                    'Linie:',[coordinates[i],coordinates[i+1]],'Punkt',[chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
-                  );
+                  // console.log('OK',chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
+                  //   lineDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]),
+                  //   'Linie:',[coordinates[i],coordinates[i+1]],'Punkt',[chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
+                  // );
                   checkList.push(chargeLocation.ge_id);
                   newList.features.push(chargeLocationDetails(chargeLocation));
                 }
