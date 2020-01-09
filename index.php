@@ -1032,7 +1032,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
+            // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
+            // box = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
             lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
 
             // lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
