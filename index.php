@@ -37,6 +37,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="lib/geolib.js"></script>
   <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -912,20 +913,20 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return R * c;
     };
 
-    function pointDistance(line, point) {
-      // δ13 is (angular) distance from start point to third point
-      // θ13 is (initial) bearing from start point to third point
-      // θ12 is (initial) bearing from start point to end point
-      // R is the earth’s radius
-      var δ13 = lineDistance([line[0],point]);
-      var θ12 = lineBearing(line) * (Math.PI/180);
-      var θ13 = lineBearing([line[0],point]) * (Math.PI/180);
-      const R = 6371e3;
-
-      console.log('Point Distance',line,point,'=',Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R);
-
-      return Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R;
-    };
+    // function pointDistance(line, point) {
+    //   // δ13 is (angular) distance from start point to third point
+    //   // θ13 is (initial) bearing from start point to third point
+    //   // θ12 is (initial) bearing from start point to end point
+    //   // R is the earth’s radius
+    //   var δ13 = lineDistance([line[0],point]);
+    //   var θ12 = lineBearing(line) * (Math.PI/180);
+    //   var θ13 = lineBearing([line[0],point]) * (Math.PI/180);
+    //   const R = 6371e3;
+    //
+    //   console.log('Point Distance',line,point,'=',Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R);
+    //
+    //   return Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R;
+    // };
 
     function distantLineBox(line, distance) {
       var distance = Math.sqrt(2*distance*distance);
@@ -936,25 +937,41 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // console.log("Ausgangsrichtung", bearing)
       corners.forEach( (vectors, i) => {
         vectors.forEach( (vector, j) => {
-          // console.log("Step", i, j, line[i], bearing + vector, distance);
           box.push(bearingPoint(line[i], bearing + vector, distance));
         });
       });
       return box;
     };
 
-    function boundingBox(lineBox){ // Does not work west of Paris (0° Meridian) and south of Äquator
-      var SW = [90,180];
-      var NE = [0,0];
-      lineBox.forEach( corner => {
-        if (corner[0] < SW[0]) {SW[0] = corner[0]};
-        if (corner[1] < SW[1]) {SW[1] = corner[1]};
-        if (corner[0] > NE[0]) {NE[0] = corner[0]};
-        if (corner[1] > NE[1]) {NE[1] = corner[1]};
-      });
+    function boundingBox(lineBox){
+      var bounds = geolib.getBounds([
+          { latitude: lineBox[0][1], longitude: lineBox[0][0] },
+          { latitude: lineBox[1][1], longitude: lineBox[1][0] },
+          { latitude: lineBox[2][1], longitude: lineBox[2][0] },
+          { latitude: lineBox[3][1], longitude: lineBox[3][0] }
+      ]);
+      return([[bounds.minLng,bounds.minLat],[bounds.maxLng,bounds.maLat]]);
+
+      // var SW = [90,180];
+      // var NE = [0,0];
+      // lineBox.forEach( corner => {
+      //   if (corner[0] < SW[0]) {SW[0] = corner[0]};
+      //   if (corner[1] < SW[1]) {SW[1] = corner[1]};
+      //   if (corner[0] > NE[0]) {NE[0] = corner[0]};
+      //   if (corner[1] > NE[1]) {NE[1] = corner[1]};
+      // });
       // console.log("Linebox", lineBox);
       // console.log("Box", [SW,NE]);
-      return([SW,NE]);
+      // return([SW,NE]);
+    };
+
+    function pointIsInLineBox(point, lineBox) {
+      return geolib.isPointInPolygon({ latitude: point[1], longitude: point[0] }, [
+        { latitude: linebox[0][1], longitude: linebox[0][0] },
+        { latitude: linebox[1][1], longitude: linebox[1][0] },
+        { latitude: linebox[2][1], longitude: linebox[2][0] },
+        { latitude: linebox[3][1], longitude: linebox[3][0] }
+      ]);
     };
 
     function decodePolyline(polyline_str) {
@@ -1132,19 +1149,18 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
+            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
-            chargerList = getChargersInBoundingBox(box,superCharger.minPower);
+            chargerList = getChargersInBoundingBox(boundingBox(lineBox),superCharger.minPower);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
             chargerList.chargelocations.forEach(chargeLocation => {
-              console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city,
-                pointDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat])
-              );
+              console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
               if (!checkList.includes(chargeLocation.ge_id)) {
-                if (pointDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]) <= maxChargerDistance) {
-                  console.log('OK',chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+                // if (pointDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]) <= maxChargerDistance) {
+                if (pointIsInLineBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
+                  console.log('Ok --',chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
                   checkList.push(chargeLocation.ge_id);
                   newList.features.push(chargeLocationDetails(chargeLocation));
                 }
