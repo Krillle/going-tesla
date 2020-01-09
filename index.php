@@ -963,7 +963,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return([SW,NE]);
     };
 
-    function pointIsInLineBox(point, lineBox) {
+    function pointIsInBox(point, lineBox) {
       return geolib.isPointInPolygon({ latitude: point[1], longitude: point[0] }, [
         { latitude: lineBox[0][1], longitude: lineBox[0][0] },
         { latitude: lineBox[1][1], longitude: lineBox[1][0] },
@@ -1156,11 +1156,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
             chargerList.chargelocations.forEach(chargeLocation => {
-              console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
               if (!checkList.includes(chargeLocation.ge_id)) {
-                // if (pointDistance([coordinates[i],coordinates[i+1]], [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]) <= maxChargerDistance) {
-                if (pointIsInLineBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
-                  console.log('Ok --',chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+                if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
+                  console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
                   checkList.push(chargeLocation.ge_id);
                   newList.features.push(chargeLocationDetails(chargeLocation));
                 }
