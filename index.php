@@ -528,6 +528,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     //   infoMessage('Map idle');
     // });
 
+    map.on('click', function (e) {
+      map.removeControl(zoom);
+      map.removeControl(nav);
+      map.removeControl(geolocate);
+
+    });
+
 
     // Charger places events (Popup)
     map.on('click', 'chargers', function (e) {
