@@ -950,7 +950,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           { latitude: lineBox[2][1], longitude: lineBox[2][0] },
           { latitude: lineBox[3][1], longitude: lineBox[3][0] }
       ]);
-      return([[bounds.minLng,bounds.minLat],[bounds.maxLng,bounds.maLat]]);
+      return([[bounds.minLng,bounds.minLat],[bounds.maxLng,bounds.minLat]]);
 
       // var SW = [90,180];
       // var NE = [0,0];
