@@ -958,8 +958,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         if (corner[0] > NE[0]) {NE[0] = corner[0]};
         if (corner[1] > NE[1]) {NE[1] = corner[1]};
       });
-      console.log("Linebox", lineBox);
-      console.log("Box", [SW,NE]);
+      // console.log("Linebox", lineBox);
+      // console.log("Box", [SW,NE]);
       return([SW,NE]);
     };
 
