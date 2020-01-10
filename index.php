@@ -331,9 +331,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     })
     map.addControl(geocoderControl,'top-left');
     geocoderControl.on('result', function(res) {
-      infoMessage('result');
-      var feature = res.results.features[0];
-      console.log("Found feature",feature.geometry.coordinates);
+      infoMessage('Hello Result');
+      console.log("Found feature",res);
     });
 
     // Add zoom and rotation controls to the map.
