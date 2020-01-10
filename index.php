@@ -729,7 +729,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (routeContainer.innerHTML) {routeContainer.innerHTML = '';};
       // var pre = document.createElement('pre');
       routeContainer.innerHTML = message;
-      routeContainer.appendChild(pre);
+      // routeContainer.appendChild(pre);
       // setTimeout(function(){ routeContainer.innerHTML = ''; }, 3000);
     };
 
@@ -1102,7 +1102,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     // - - - - - mapBox requests - - - - - -
     function getRoute(start,destination,route){  // set route = true if we need route coordinates
-      console.log('&geometries=polyline&overview=' + route);
+      console.log(route ? '&geometries=polyline&overview='+route : '&overview=false');
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.longitude + ',' + destination.latitude
@@ -1304,7 +1304,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
 
-//      description += (route) ? '<strong>' + route.distance +  route.duration : '';
       if (route) {
         description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
 
