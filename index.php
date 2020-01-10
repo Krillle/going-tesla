@@ -1295,7 +1295,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
+      var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
+      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}`;
+      // description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
       description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
       description += '<hr>';
