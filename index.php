@@ -319,10 +319,16 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     // Add geocoder search field
-    map.addControl(new MapboxGeocoder({
+    var geocoderControl = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
-    }),'top-left');
+    })
+    map.addControl(geocoderControl,'top-left');
+    geocoderControl.on('found', function(res) {
+      infoMessage('Found');
+    // var feature = res.results.features[0];
+    // L.marker(feature.geometry.coordinates).addTo(map);
+});
 
     // Add zoom and rotation controls to the map.
     var comp = new mapboxgl.NavigationControl({
@@ -1061,7 +1067,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      console.log('distantBox:',newList.features[0].geometry.coordinates);
+      // console.log('distantBox:',newList.features[0].geometry.coordinates);
       map.getSource('distantBox').setData(newList);
     };
 
