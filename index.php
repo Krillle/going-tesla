@@ -1230,7 +1230,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       chargerList.chargelocations.forEach(chargeLocation => {
         newList.features.push(chargeLocationDetails(chargeLocation));
         console.log('IN:',chargeLocation);
-        console.log('OUT;',chargeLocationDetails(chargeLocation;
+        console.log('OUT;',chargeLocationDetails(chargeLocation));
       });
       map.getSource('chargers').setData(newList);
     };
