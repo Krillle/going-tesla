@@ -198,7 +198,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       z-index: 1;
     }
 
-    .info-container > * {
+    .route-container {
+      position: absolute;
+      top: 100px;
+      left: 25px;
+      z-index: 1;
+    }
+
+    .info-container .route-container > * {
       background-color: rgba(255, 255, 255, 0.7); /* light theme  */
       <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
@@ -222,6 +229,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
   <div id='map'></div>
   <div id='info' class='info-container'></div>
+  <div id='route' class='route-container'></div>
   <script>
     if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
 
@@ -289,6 +297,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const b = slowSpeedZoom - m * slowSpeed;
 
     var infoContainer = document.getElementById('info');
+    var routeContainer = document.getElementById('route');
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
@@ -336,7 +345,15 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // console.log(route.coordinates);
       showBoxes(route.coordinates);
       showRoute(route.coordinates);
-      getRouteChargers(route.coordinates);
+      var routeChargers = getRouteChargers(route.coordinates);
+      var routeChargerList = '';
+      routeChargers.features.forEach( chargeLocation => {
+        var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
+
+        routeChargerList += '<strong>${chargeLocation.name} ${chargeLocation.city}</strong><br';
+        routeChargerList += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
+      });
+      routeList(routeChargerList);
       // ---- 8< -----^
 
     });
@@ -693,6 +710,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       pre.textContent = message;
       infoContainer.appendChild(pre);
       setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
+    };
+
+    function routeList(message) {
+      if (routeContainer.innerHTML) {routeContainer.innerHTML = '';};
+      var pre = document.createElement('pre');
+      pre.textContent = message;
+      routeContainer.appendChild(pre);
+      // setTimeout(function(){ routeContainer.innerHTML = ''; }, 3000);
     };
 
     // Tesla connection - - - - - -
@@ -1172,6 +1197,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
+      return newList;
     };
 
     function updateChargers() {
@@ -1206,7 +1232,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function chargerShortDescription (chargeLocation) {
-      maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
+      var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
 
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
