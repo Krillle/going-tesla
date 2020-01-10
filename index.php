@@ -361,8 +361,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
         // routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
-        routeChargerList += `<p>${chargeLocation.properties.name}><br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
+        routeChargerList += `<a onlick=''><p><strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.city) ? '' : chargeLocation.city}</strong><br>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
       });
       routeList(routeChargerList);
 
@@ -1250,12 +1250,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function chargerShortDescription (chargeLocation) {
-      console.log('SHORTDESCRIPTION:',chargeLocation);
-
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
       var description = '';
-      description = `<strong>${chargeLocation.name} ${chargeLocation.city}</strong>`;
+      description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.city) ? '' : chargeLocation.city}</strong>`;
 
       description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.city) ?
                      (`<br>${chargeLocation.network}<p>`) :
@@ -1286,7 +1284,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
       var description = '';
-      description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
+      description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.city) ? '' : chargeLocation.city}</strong>`;
 
       description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
                      (`<br>${chargeLocation.network}<p>`) :
