@@ -726,7 +726,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function routeList(message) {
       if (routeContainer.innerHTML) {routeContainer.innerHTML = '';};
       var pre = document.createElement('pre');
-      pre.textContent = message;
+      pre.htmlContent = message;
       routeContainer.appendChild(pre);
       // setTimeout(function(){ routeContainer.innerHTML = ''; }, 3000);
     };
