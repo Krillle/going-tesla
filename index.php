@@ -1157,10 +1157,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // var maxPower = 0;
       // chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
       // var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
-      console.log("Chargelocation:",chargeLocation);
-      console.log("Chargepoints:",chargeLocation.chargepoints);
       var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
-      console.log("maxChargePoint:",maxChargePoint);
 
       return {
         "id": chargeLocation.ge_id.toString(),
@@ -1232,6 +1229,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
       chargerList.chargelocations.forEach(chargeLocation => {
         newList.features.push(chargeLocationDetails(chargeLocation));
+        console.log('IN:',chargeLocation);
+        console.log('OUT;',chargeLocationDetails(chargeLocation;
       });
       map.getSource('chargers').setData(newList);
     };
