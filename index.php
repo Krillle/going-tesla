@@ -348,7 +348,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
-        console.log(chargeLocation);
+        console.log("Chargelocation:", chargeLocation);
 
         routeChargerList += '<strong>${chargeLocation.name} ${chargeLocation.city}</strong><br';
         routeChargerList += `${chargeLocation.maxChargePoint.count}x ${chargeLocation.maxChargePoint.power} kW ${chargeLocation.maxChargePoint.type}<p>`;
@@ -1142,7 +1142,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // var maxPower = 0;
       // chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
       // var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
-      console.log(chargeLocation.chargepoints);
+      console.log("Chargepoints:",chargeLocation.chargepoints);
       var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
 
       return {
