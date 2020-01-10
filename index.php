@@ -325,12 +325,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       trackProximity: true
     })
     geocoderControl.on('result', function(destination) {
-      infoMessage('Hello', destination.result.text);
+      console.log('Destination:', destination.result.text);
       console.log("Found feature:",destination,destination.result.center);
       // ---- 8< -----v
       // gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
 
-      var route = getRoute(teslaPosition,destination.result.center,true);
+      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[1], 'latitude' : destination.result.center[0]},true);
       // console.log(route.coordinates);
       showRoute(route.coordinates);
       showBoxes(route.coordinates);
@@ -1064,7 +1064,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function getRoute(start,destination,route){  // set route = true if we need route coordinates
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
-          + destination.lng + ',' + destination.lat
+          + destination.longitude + ',' + destination.latitude
           + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview=simplified' : '&overview=false')
       result = httpGet(routeUrl)
       // console.log("Result" + result);
@@ -1237,7 +1237,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var chargeLocation = chargerDetails.chargelocations[0];
 
       maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
-      var route = getRoute(teslaPosition,chargeLocation.coordinates);
+      var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
       var description = '';
