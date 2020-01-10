@@ -1141,7 +1141,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function chargeLocationDetails(chargeLocation) {
       // var maxPower = 0;
       // chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
-      var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
+      // var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
+      console.log(chargeLocation.chargepoints);
+      var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
 
       return {
         "id": chargeLocation.ge_id.toString(),
