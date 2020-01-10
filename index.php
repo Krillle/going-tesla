@@ -330,7 +330,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // ---- 8< -----v
       // gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
 
-      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[1], 'latitude' : destination.result.center[0]},true);
+      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},true);
       // console.log(route.coordinates);
       showRoute(route.coordinates);
       showBoxes(route.coordinates);
