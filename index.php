@@ -230,7 +230,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       margin: 0;
       padding: 10px 20px;
       border-radius:10px 10px 10px 10px;
-
     }
 
   </style>
@@ -361,7 +360,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
-        routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
+        // routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
+        routeChargerList += `<p>${chargeLocation.properties.name}><br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
       });
       routeList(routeChargerList);
@@ -1102,13 +1102,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     // - - - - - mapBox requests - - - - - -
     function getRoute(start,destination,route){  // set route = true if we need route coordinates
-      console.log(route ? '&geometries=polyline&overview='+route : '&overview=false');
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.longitude + ',' + destination.latitude
           + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview='+route : '&overview=false');
       result = httpGet(routeUrl)
-      console.log("Result" + result);
+      // console.log("Result" + result);
       if (result) {
         result = JSON.parse(result);
         if (result.code == "Ok") {
