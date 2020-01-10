@@ -348,6 +348,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
+        console.log(chargeLocation);
         var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
 
         routeChargerList += '<strong>${chargeLocation.name} ${chargeLocation.city}</strong><br';
@@ -355,7 +356,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       });
       routeList(routeChargerList);
       // ---- 8< -----^
-
     });
     map.addControl(geocoderControl,'top-left');
 
