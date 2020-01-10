@@ -348,7 +348,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
-        console.log("Chargelocation:", chargeLocation);
+        console.log("Chargelocation Listelement:", chargeLocation);
 
         routeChargerList += '<strong>${chargeLocation.name} ${chargeLocation.city}</strong><br';
         routeChargerList += `${chargeLocation.maxChargePoint.count}x ${chargeLocation.maxChargePoint.power} kW ${chargeLocation.maxChargePoint.type}<p>`;
@@ -1138,12 +1138,29 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return JSON.parse(httpGet(geUrl));
     };
 
+    function getMaxChargePoint (chargePoints) {
+      var maxPower = 0;
+      var maxType = "";
+      var maxCount = 0;
+
+      chargePoints.forEach(chargePoint => {
+        if (chargePoint.power > maxPower && compatiblePlugs.includes(chargePoint.type)) {
+          maxPower = chargePoint.power;
+          maxType = chargePoint.type;
+          maxCount = chargePoint.count;
+        };
+      });
+      return {'power': maxPower, 'type': maxType, 'count': maxCount};
+    };
+
     function chargeLocationDetails(chargeLocation) {
       // var maxPower = 0;
       // chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
       // var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
+      console.log("Chargelocation:",chargeLocation.chargepoints);
       console.log("Chargepoints:",chargeLocation.chargepoints);
       var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
+      console.log("maxChargePoint:",maxChargePoint);
 
       return {
         "id": chargeLocation.ge_id.toString(),
@@ -1217,21 +1234,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         newList.features.push(chargeLocationDetails(chargeLocation));
       });
       map.getSource('chargers').setData(newList);
-    };
-
-    function getMaxChargePoint (chargePoints) {
-      var maxPower = 0;
-      var maxType = "";
-      var maxCount = 0;
-
-      chargePoints.forEach(chargePoint => {
-        if (chargePoint.power > maxPower && compatiblePlugs.includes(chargePoint.type)) {
-          maxPower = chargePoint.power;
-          maxType = chargePoint.type;
-          maxCount = chargePoint.count;
-        };
-      });
-      return {'power': maxPower, 'type': maxType, 'count': maxCount};
     };
 
     function chargerShortDescription (chargeLocation) {
