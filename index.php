@@ -347,11 +347,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       showRoute(route.coordinates);
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
-      routeChargers.features.forEach( chargeLocation.properties => {
+      routeChargers.features.forEach( chargeLocation => {
         console.log("Chargelocation Listelement:", chargeLocation);
 
-        routeChargerList += '<strong>${chargeLocation.name} ${chargeLocation.city}</strong><br';
-        routeChargerList += `${chargeLocation.maxChargePoint.count}x ${chargeLocation.maxChargePoint.power} kW ${chargeLocation.maxChargePoint.type}<p>`;
+        routeChargerList += '<strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br';
+        routeChargerList += `${chargeLocation.properties.maxChargePoint.count}x ${chargeLocation.properties.maxChargePoint.power} kW ${chargeLocation.properties.maxChargePoint.type}<p>`;
       });
       routeList(routeChargerList);
       // ---- 8< -----^
@@ -1234,8 +1234,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function chargerShortDescription (chargeLocation) {
-      console.log('IN:',chargeLocation);
-      
+      console.log('SHORTDESCRIPTIN:',chargeLocation);
+
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
       var description = '';
