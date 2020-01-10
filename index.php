@@ -362,8 +362,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       routeChargers.features.forEach( chargeLocation => {
         console.log("LISTELEMENT:", chargeLocation);
 
-        routeChargerList += `<strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}<p>`;
+        routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
       });
       routeList(routeChargerList);
       // ---- 8< -----^
