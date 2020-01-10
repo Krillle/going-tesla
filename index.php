@@ -357,7 +357,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
       var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'simplified');
-      showBoxes(route.coordinates);
+      // showBoxes(route.coordinates);
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
@@ -1106,7 +1106,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.longitude + ',' + destination.latitude
-          + '?access_token=' + mapboxgl.accessToken + '&geometries=polyline&overview=' + route;
+          + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview='+route : '&overview=false');
       result = httpGet(routeUrl)
       console.log("Result" + result);
       if (result) {
