@@ -319,21 +319,29 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     // Add geocoder search field
-    var marker = new mapboxgl.Marker()
-      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-      .setHTML('<h3>Hello</h3><p>baby</p>'))
-
     var geocoderControl = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      trackProximity: true,
-      marker: marker
+      trackProximity: true
     })
-    map.addControl(geocoderControl,'top-left');
-    geocoderControl.on('result', function(res) {
-      infoMessage('Hello Result');
-      console.log("Found feature",res);
+    geocoderControl.on('result', function(result) {
+      infoMessage('Hello', restult.text);
+      console.log("Found feature",result,result.center);
+      // ---- 8< -----v
+      // gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
+
+      var chargerDetails = getChargerDetails(chargerID);
+      if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
+      var chargeLocation = chargerDetails.chargelocations[0];
+      var route = getRoute(teslaPosition,result.center,true);
+      // console.log(route.coordinates);
+      showRoute(route.coordinates);
+      showBoxes(route.coordinates);
+      getRouteChargers(route.coordinates);
+      // ---- 8< -----^
+
     });
+    map.addControl(geocoderControl,'top-left');
 
     // Add zoom and rotation controls to the map.
     var comp = new mapboxgl.NavigationControl({
@@ -552,25 +560,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       chargerID = e.features[0].id
 
-      // ---- 8< -----v
-      var chargerDetails = getChargerDetails(chargerID);
-      if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
-      var chargeLocation = chargerDetails.chargelocations[0];
-      var route = getRoute(teslaPosition,chargeLocation.coordinates,true);
-      // console.log(route.coordinates);
-      showRoute(route.coordinates);
-      showBoxes(route.coordinates);
-      getRouteChargers(route.coordinates);
-      // ---- 8< -----^
-
-      // var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      // map.once('idle', function(e) {
-      //   console.log('Map idle',chargerID);
-      //   popup.setHTML(chargerDescription(chargerID).text)
-      // });
-      // popup.setLngLat(coordinates)
-      // .setHTML(chargerShortDescription(e.features[0].properties).text)
-      // .addTo(map);
+      var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      map.once('idle', function(e) {
+        console.log('Map idle',chargerID);
+        popup.setHTML(chargerDescription(chargerID).text)
+      });
+      popup.setLngLat(coordinates)
+      .setHTML(chargerShortDescription(e.features[0].properties).text)
+      .addTo(map);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
