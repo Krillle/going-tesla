@@ -347,7 +347,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       showRoute(route.coordinates);
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
-      routeChargers.features.forEach( chargeLocation => {
+      routeChargers.features.forEach( chargeLocation.properties => {
         console.log("Chargelocation Listelement:", chargeLocation);
 
         routeChargerList += '<strong>${chargeLocation.name} ${chargeLocation.city}</strong><br';
@@ -1229,13 +1229,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
       chargerList.chargelocations.forEach(chargeLocation => {
         newList.features.push(chargeLocationDetails(chargeLocation));
-        console.log('IN:',chargeLocation);
-        console.log('OUT;',chargeLocationDetails(chargeLocation));
       });
       map.getSource('chargers').setData(newList);
     };
 
     function chargerShortDescription (chargeLocation) {
+      console.log('IN:',chargeLocation);
+      
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
       var description = '';
