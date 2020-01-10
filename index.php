@@ -324,16 +324,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       mapboxgl: mapboxgl,
       trackProximity: true
     })
-    geocoderControl.on('result', function(result) {
-      infoMessage('Hello', result.text);
-      console.log("Found feature",result,result.center);
+    geocoderControl.on('result', function(destination) {
+      infoMessage('Hello', destination.result.text);
+      console.log("Found feature:",destination,destination.result.center);
       // ---- 8< -----v
       // gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
 
-      var chargerDetails = getChargerDetails(chargerID);
-      if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
-      var chargeLocation = chargerDetails.chargelocations[0];
-      var route = getRoute(teslaPosition,result.center,true);
+      var route = getRoute(teslaPosition,destination.result.center,true);
       // console.log(route.coordinates);
       showRoute(route.coordinates);
       showBoxes(route.coordinates);
