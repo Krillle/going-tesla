@@ -198,6 +198,18 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       z-index: 1;
     }
 
+    .info-container > * {
+      background-color: rgba(255, 255, 255, 0.7); /* light theme  */
+      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
+      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
+      display: block;
+      margin: 0;
+      padding: 10px 20px;
+      border-radius:10px 10px 10px 10px;
+    }
+
     .route-container {
       position: absolute;
       top: 100px;
@@ -205,7 +217,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       z-index: 1;
     }
 
-    .info-container .route-container > * {
+    .route-container > * {
       background-color: rgba(255, 255, 255, 0.7); /* light theme  */
       <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
@@ -350,7 +362,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       routeChargers.features.forEach( chargeLocation => {
         console.log("LISTELEMENT:", chargeLocation);
 
-        routeChargerList += `<strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br`;
+        routeChargerList += `<strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}<p>`;
       });
       routeList(routeChargerList);
@@ -1280,7 +1292,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${chargeLocation.maxChargePoint.count}x ${chargeLocation.maxChargePoint.power} kW ${chargeLocation.maxChargePoint.type}`;
+      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
       description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
       description += '<hr>';
