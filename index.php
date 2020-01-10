@@ -1140,8 +1140,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function chargeLocationDetails(chargeLocation) {
-      var maxPower = 0;
-      chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
+      // var maxPower = 0;
+      // chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
+      var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
 
       return {
         "id": chargeLocation.ge_id.toString(),
@@ -1149,8 +1150,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         "properties": {
           "icon": (chargeLocation.fault_report) ? "faultReport" :
             (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
-            (maxPower >= superCharger.minPower) ? "thirdSuperCharger" :
-            (maxPower >= highwayCharger.minPower) ? "highwayCharger" :
+            (maxChargePoint.power >= superCharger.minPower) ? "thirdSuperCharger" :
+            (maxChargePoint.power >= highwayCharger.minPower) ? "highwayCharger" :
             "parkCharger",
 
           "coordinates": chargeLocation.coordinates,
@@ -1161,6 +1162,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "country": chargeLocation.address.country,
           "network": chargeLocation.network,
           "operator": chargeLocation.operator,
+          "maxChargePoint" : maxChargePoint,
           "url": chargeLocation.url
         },
         "geometry": {
@@ -1232,8 +1234,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function chargerShortDescription (chargeLocation) {
-      var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
-
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
       var description = '';
@@ -1247,7 +1247,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                      // <span id='A'></span>;
                      // document.getElementById('A').innerHTML="oijoij"
 
-      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
+      description += `${chargeLocation.maxChargePoint.count}x ${chargeLocation.maxChargePoint.power} kW ${chargeLocation.maxChargePoint.type}<p>`;
       description += '<hr>';
       description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
 
@@ -1264,7 +1264,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
       var chargeLocation = chargerDetails.chargelocations[0];
 
-      maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
       var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
@@ -1277,7 +1276,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}`;
+      description += `${chargeLocation.maxChargePoint.count}x ${chargeLocation.maxChargePoint.power} kW ${chargeLocation.maxChargePoint.type}`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
       description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
       description += '<hr>';
