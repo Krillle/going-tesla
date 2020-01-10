@@ -216,7 +216,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       left: 25px;
       z-index: 1;
 
-      max-height: 90%;
+      max-height: 100px;
       overflow-y: auto;
 
       background-color: rgba(255, 255, 255, 0.7); /* light theme  */
