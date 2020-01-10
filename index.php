@@ -244,6 +244,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var chargerParkColor = "5a5a5a"; // dark marker for light map
     const chargerFaultColor = "ffb800";
 
+    var routeColor = "4d69ea";
+
     if (darkmode) {
       console.log('Switching to Dark Mode');
       mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
@@ -332,8 +334,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},true);
       // console.log(route.coordinates);
-      showRoute(route.coordinates);
       showBoxes(route.coordinates);
+      showRoute(route.coordinates);
       getRouteChargers(route.coordinates);
       // ---- 8< -----^
 
@@ -483,7 +485,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           'line-cap': 'round'
         },
         'paint': {
-          'line-color': '#'+chargerTeslaColor,
+          'line-color': '#'+routeColor,
           'line-width': 4
         }
       });
