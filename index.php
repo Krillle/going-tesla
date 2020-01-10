@@ -349,10 +349,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
         console.log(chargeLocation);
-        var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
 
         routeChargerList += '<strong>${chargeLocation.name} ${chargeLocation.city}</strong><br';
-        routeChargerList += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
+        routeChargerList += `${chargeLocation.maxChargePoint.count}x ${chargeLocation.maxChargePoint.power} kW ${chargeLocation.maxChargePoint.type}<p>`;
       });
       routeList(routeChargerList);
       // ---- 8< -----^
