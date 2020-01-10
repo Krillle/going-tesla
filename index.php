@@ -361,7 +361,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
         // routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
-        routeChargerList += `<a onlick=''><p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}</strong><br>`;
+        routeChargerList += `<a onlick='"flyToCharger('${chargeLocation}');"'><p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}</strong><br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
       });
       routeList(routeChargerList);
@@ -654,6 +654,17 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.jumpTo(jumpTarget);
         // map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
       };
+    };
+
+    function flyToCharger(chargeLocation){
+        stopAutoZoom();
+        stopHeadUp();
+        console.log("AutoFollow stopped");
+        autoFollow = false;
+        gtag('event', 'Click in List', {'event_category': 'Charger', 'event_label': `${chargeLocation.properties.name} ${chargeLocation.properties.city}`});
+
+        var coordinates = chargeLocation.geometry.coordinates.slice();
+        map.flyTo({ 'center': chargeLocation.geometry.coordinates});
     };
 
     function zoomToPower(zoom) {
