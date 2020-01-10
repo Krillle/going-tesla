@@ -516,7 +516,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         },
         'paint': {
           'line-color': '#'+routeColor,
-          'line-width': 4
+          'line-width': 6
         }
       });
 
