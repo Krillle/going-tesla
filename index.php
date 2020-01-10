@@ -212,13 +212,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .route-container {
       position: absolute;
-      top: 100px;
+      top: 75px;
       left: 10px;
       z-index: 1;
 
       width: 400px;
-      box-sizing: border-box;
       max-height: 800px;
+      box-sizing: border-box;
       overflow-y: auto;
 
       background-color: rgba(255, 255, 255, 0.7); /* light theme  */
@@ -353,23 +353,21 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     })
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
-      // console.log("Found feature:",destination,destination.result.center);
       // ---- 8< -----v
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
-      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},true);
-      // console.log(route.coordinates);
+      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'simplified');
       showBoxes(route.coordinates);
-      showRoute(route.coordinates);
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
-        console.log("LISTELEMENT:", chargeLocation);
-
         routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
       });
       routeList(routeChargerList);
+
+      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'full');
+      showRoute(route.coordinates);
       // ---- 8< -----^
     });
     map.addControl(geocoderControl,'top-left');
@@ -1107,9 +1105,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.longitude + ',' + destination.latitude
-          + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview=simplified' : '&overview=false')
       result = httpGet(routeUrl)
-      // console.log("Result" + result);
+      console.log("Result" + result);
       if (result) {
         result = JSON.parse(result);
         if (result.code == "Ok") {
