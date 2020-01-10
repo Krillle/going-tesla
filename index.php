@@ -213,9 +213,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .route-container {
       position: absolute;
       top: 100px;
-      left: 25px;
+      left: 10px;
       z-index: 1;
 
+      width: 400px;
       max-height: 100px;
       overflow-y: auto;
 
