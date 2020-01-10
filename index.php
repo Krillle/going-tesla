@@ -319,16 +319,22 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     // Add geocoder search field
+    testMarker = new mapboxgl.Marker(el)
+      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+      .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+
     var geocoderControl = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl
+      mapboxgl: mapboxgl,
+      trackProximity: true,
+      marker: testMarker
     })
     map.addControl(geocoderControl,'top-left');
-    geocoderControl.on('found', function(res) {
-      infoMessage('Found');
-    var feature = res.results.features[0];
-    console.log("Found feature",feature.geometry.coordinates);
-});
+    geocoderControl.on('result', function(res) {
+      infoMessage('result');
+      var feature = res.results.features[0];
+      console.log("Found feature",feature.geometry.coordinates);
+    });
 
     // Add zoom and rotation controls to the map.
     var comp = new mapboxgl.NavigationControl({
@@ -533,16 +539,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     //   console.log('Map idle');
     //   infoMessage('Map idle');
     // });
-
-    map.on('click', function (e) {
-      var features = map.queryRenderedFeatures(e.point, {});
-      console.log(features);
-      // map.removeControl(zoom);
-      // map.removeControl(nav);
-      // map.removeControl(geolocate);
-
-    });
-
 
     // Charger places events (Popup)
     map.on('click', 'chargers', function (e) {
