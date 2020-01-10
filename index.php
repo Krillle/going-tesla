@@ -328,9 +328,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     })
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
-      console.log("Found feature:",destination,destination.result.center);
+      // console.log("Found feature:",destination,destination.result.center);
       // ---- 8< -----v
-      // gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
+      gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
       var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},true);
       // console.log(route.coordinates);
