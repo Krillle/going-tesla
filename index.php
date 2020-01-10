@@ -325,7 +325,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       trackProximity: true
     })
     geocoderControl.on('result', function(result) {
-      infoMessage('Hello', restult.text);
+      infoMessage('Hello', result.text);
       console.log("Found feature",result,result.center);
       // ---- 8< -----v
       // gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
