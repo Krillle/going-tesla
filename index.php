@@ -1102,9 +1102,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     // - - - - - mapBox requests - - - - - -
     function getRoute(start,destination,route){  // set route = true if we need route coordinates
+      console.log('&geometries=polyline&overview=' + route));
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.longitude + ',' + destination.latitude
+          + '?access_token=' + mapboxgl.accessToken + '&geometries=polyline&overview=' + route);
       result = httpGet(routeUrl)
       console.log("Result" + result);
       if (result) {
