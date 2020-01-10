@@ -348,10 +348,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
-        console.log("Chargelocation Listelement:", chargeLocation);
+        console.log("LISTELEMENT:", chargeLocation);
 
-        routeChargerList += '<strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br';
-        routeChargerList += `${chargeLocation.properties.maxChargePoint.count}x ${chargeLocation.properties.maxChargePoint.power} kW ${chargeLocation.properties.maxChargePoint.type}<p>`;
+        routeChargerList += `<strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}<p>`;
       });
       routeList(routeChargerList);
       // ---- 8< -----^
@@ -1177,7 +1177,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "country": chargeLocation.address.country,
           "network": chargeLocation.network,
           "operator": chargeLocation.operator,
-          "maxChargePoint" : maxChargePoint,
+          "count" : maxChargePoint.count,
+          "power" : maxChargePoint.power,
+          "type" : maxChargePoint.type,
           "url": chargeLocation.url
         },
         "geometry": {
@@ -1234,7 +1236,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function chargerShortDescription (chargeLocation) {
-      console.log('SHORTDESCRIPTIN:',chargeLocation);
+      console.log('SHORTDESCRIPTION:',chargeLocation);
 
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
@@ -1249,7 +1251,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                      // <span id='A'></span>;
                      // document.getElementById('A').innerHTML="oijoij"
 
-      description += `${chargeLocation.maxChargePoint.count}x ${chargeLocation.maxChargePoint.power} kW ${chargeLocation.maxChargePoint.type}<p>`;
+      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}<p>`;
       description += '<hr>';
       description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
 
