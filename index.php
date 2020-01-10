@@ -319,15 +319,15 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     // Add geocoder search field
-    testMarker = new mapboxgl.Marker(el)
+    var marker = new mapboxgl.Marker()
       .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-      .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+      .setHTML('<h3>Hello</h3><p>baby</p>'))
 
     var geocoderControl = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
       trackProximity: true,
-      marker: testMarker
+      marker: marker
     })
     map.addControl(geocoderControl,'top-left');
     geocoderControl.on('result', function(res) {
