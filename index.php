@@ -37,6 +37,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="lib/geolib.js"></script>
   <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -147,6 +148,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       padding:10px;
     }
 
+    .onecolumn {
+    	height: 70px;
+    	column-count: 1;
+      padding: 0px !important;
+    }
     .twocolumns {
     	height: 70px;
     	column-count: 2; column-gap: 8px;
@@ -209,6 +215,29 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       border-radius:10px 10px 10px 10px;
     }
 
+    .route-container {
+      position: absolute;
+      top: 75px;
+      left: 10px;
+      z-index: 1;
+
+      width: 400px;
+      max-height: 800px;
+      box-sizing: border-box;
+      overflow-y: auto;
+
+      background-color: rgba(255, 255, 255, 0.7); /* light theme  */
+      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
+      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
+      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
+      display: block;
+      margin: 0;
+      padding: 10px 20px;
+      border-radius:10px 10px 10px 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -221,6 +250,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
   <div id='map'></div>
   <div id='info' class='info-container'></div>
+  <div id='route' class='route-container'></div>
   <script>
     if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
 
@@ -243,6 +273,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var chargerParkColor = "5a5a5a"; // dark marker for light map
     const chargerFaultColor = "ffb800";
 
+    var routeColor = "4d69ea";
+
     if (darkmode) {
       console.log('Switching to Dark Mode');
       mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
@@ -261,6 +293,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const slowSpeedZoom = '16';
     const highSpeedZoom = '9';
 
+    const maxChargerDistance = 3000; // max senkrechter Abstand Charger von Route
+
     const updatePositionInterval = 20000;
 
     var zoomToogle = [
@@ -271,7 +305,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var zoomToggleState = 0;
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
-    var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
+    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
+    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 100};
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -283,6 +318,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const b = slowSpeedZoom - m * slowSpeed;
 
     var infoContainer = document.getElementById('info');
+    var routeContainer = document.getElementById('route');
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
@@ -315,10 +351,34 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     // Add geocoder search field
-    map.addControl(new MapboxGeocoder({
+    var geocoderControl = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl
-    }),'top-left');
+      mapboxgl: mapboxgl,
+      trackProximity: true
+    })
+    geocoderControl.on('result', function(destination) {
+      console.log('Destination:', destination.result.text);
+      // ---- 8< -----v
+      gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
+
+      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'simplified');
+      // showBoxes(route.coordinates);
+      var routeChargers = getRouteChargers(route.coordinates);
+      var routeChargerList = '';
+      routeChargers.features.forEach( chargeLocation => {
+        // routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
+        routeChargerList += `<a onlick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}');"><p><strong>${chargeLocation.properties.distance} ${chargeLocation.properties.duration} ${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</strong><br>`;
+        routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
+      });
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="hideRouteList();hideRoute();">Abbrechen</a></div>`;
+      routeList(routeChargerList);
+
+      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'full');
+      showRoute(route.coordinates);
+      // ---- 8< -----^
+    });
+    map.addControl(geocoderControl,'top-left');
 
     // Add zoom and rotation controls to the map.
     var comp = new mapboxgl.NavigationControl({
@@ -364,6 +424,48 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
 
     map.on('load', function() {
+      // Prepare empty Route Layer
+      map.addSource('route', {
+        'type': 'geojson',
+        'data': {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#'+routeColor,
+          'line-width': 6
+        }
+      });
+
+      // Prepare empty Distant Box Layer
+      map.addSource('distantBox', {
+        'type': 'geojson',
+        'data': {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        'id': 'distantBox',
+        'type': 'fill',
+        'source': 'distantBox',
+        'layout': {
+        },
+        'paint': {
+          'fill-color': '#088',
+          'fill-opacity': 0.2
+        }
+      });
+
       // Create Position Image
       map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
 
@@ -375,7 +477,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.addLayer({
           id: "position",
           type: "symbol",
-          /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
           source: 'positionIcon',
           layout: {
             "icon-image": "position",
@@ -482,7 +583,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     //   infoMessage('Map idle');
     // });
 
-
     // Charger places events (Popup)
     map.on('click', 'chargers', function (e) {
       stopAutoZoom();
@@ -495,6 +595,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
       chargerID = e.features[0].id
+
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       map.once('idle', function(e) {
         console.log('Map idle',chargerID);
@@ -560,6 +661,16 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.jumpTo(jumpTarget);
         // map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
       };
+    };
+
+    function flyToCharger(lon,lat,name,city){
+        stopAutoZoom();
+        stopHeadUp();
+        console.log("AutoFollow stopped");
+        autoFollow = false;
+        gtag('event', 'Click in List', {'event_category': 'Charger', 'event_label': `${name} ${city}`});
+
+        map.flyTo({ 'center': [lon,lat]});
     };
 
     function zoomToPower(zoom) {
@@ -629,6 +740,17 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       pre.textContent = message;
       infoContainer.appendChild(pre);
       setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
+    };
+
+    function routeList(message) {
+      if (routeContainer.innerHTML) {routeContainer.innerHTML = '';};
+      // var pre = document.createElement('pre');
+      routeContainer.innerHTML = message;
+      // routeContainer.appendChild(pre);
+    };
+
+    function hideRouteList() {
+      routeContainer.innerHTML = '';
     };
 
     // Tesla connection - - - - - -
@@ -811,22 +933,219 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     };
 
-    // mapBox requests
-    function getRoute(start,destination){
+    // - - - - - GEO operations - - - - - -
+    function bearingPoint(startPoint, bearing, distance) {
+      // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
+      var λ1 = startPoint[0] * (Math.PI/180);
+      var φ1 = startPoint[1] * (Math.PI/180);
+      var brng = bearing * (Math.PI/180);
+      var d = distance;
+      const R = 6371e3;
+
+      var φ2 =Math.asin( Math.sin(φ1)*Math.cos(d/R) + Math.cos(φ1)*Math.sin(d/R)*Math.cos(brng) );
+      var λ2 = λ1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(φ1), Math.cos(d/R)-Math.sin(φ1)*Math.sin(φ2));
+
+      return [λ2 * 180 / Math.PI, φ2 * 180 / Math.PI];
+    };
+
+    function lineBearing(line) {
+      // 	φ is latitude, λ is longitude, brng is bearing (clockwise from north), d being the distance travelled, R the earth’s radius
+      var λ1 = line[0][0] * (Math.PI/180);
+      var φ1 = line[0][1] * (Math.PI/180);
+      var λ2 = line[1][0] * (Math.PI/180);
+      var φ2 = line[1][1] * (Math.PI/180);
+
+      var y = Math.sin(λ2-λ1) * Math.cos(φ2);
+      var x = Math.cos(φ1)*Math.sin(φ2) - Math.sin(φ1)*Math.cos(φ2)*Math.cos(λ2-λ1);
+      return Math.atan2(y, x) * 180 / Math.PI;
+    };
+
+    function lineDistance(line) {
+      var R = 6371e3;
+      var φ1 = line[0][1] * (Math.PI/180);
+      var φ2 = line[1][1] * (Math.PI/180);
+      var Δφ = (line[1][1]-line[0][1]) * (Math.PI/180);
+      var Δλ = (line[1][0]-line[0][0]) * (Math.PI/180);
+
+      var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+      Math.cos(φ1) * Math.cos(φ2) *
+      Math.sin(Δλ/2) * Math.sin(Δλ/2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+      return R * c;
+    };
+
+    // function pointDistance(line, point) {
+    //   // δ13 is (angular) distance from start point to third point
+    //   // θ13 is (initial) bearing from start point to third point
+    //   // θ12 is (initial) bearing from start point to end point
+    //   // R is the earth’s radius
+    //   var δ13 = lineDistance([line[0],point]);
+    //   var θ12 = lineBearing(line) * (Math.PI/180);
+    //   var θ13 = lineBearing([line[0],point]) * (Math.PI/180);
+    //   const R = 6371e3;
+    //
+    //   console.log('Point Distance',line,point,'=',Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R);
+    //
+    //   return Math.asin(Math.sin(δ13/R)*Math.sin(θ13-θ12)) * R;
+    // };
+
+    function distantLineBox(line, distance) {
+      var distance = Math.sqrt(2*distance*distance);
+      var bearing = lineBearing(line);
+      var corners = [[+135,-135],[-45,+45]];
+      var box = [];
+
+      // console.log("Ausgangsrichtung", bearing)
+      corners.forEach( (vectors, i) => {
+        vectors.forEach( (vector, j) => {
+          box.push(bearingPoint(line[i], bearing + vector, distance));
+        });
+      });
+      return box;
+    };
+
+    function boundingBox(lineBox){
+      // var bounds = geolib.getBounds([
+      //     { latitude: lineBox[0][1], longitude: lineBox[0][0] },
+      //     { latitude: lineBox[1][1], longitude: lineBox[1][0] },
+      //     { latitude: lineBox[2][1], longitude: lineBox[2][0] },
+      //     { latitude: lineBox[3][1], longitude: lineBox[3][0] }
+      // ]);
+      // return([[bounds.minLng,bounds.minLat],[bounds.maxLng,bounds.minLat]]);
+
+      var SW = [90,180];
+      var NE = [0,0];
+      lineBox.forEach( corner => {
+        if (corner[0] < SW[0]) {SW[0] = corner[0]};
+        if (corner[1] < SW[1]) {SW[1] = corner[1]};
+        if (corner[0] > NE[0]) {NE[0] = corner[0]};
+        if (corner[1] > NE[1]) {NE[1] = corner[1]};
+      });
+      // console.log("Linebox", lineBox);
+      // console.log("Box", [SW,NE]);
+      return([SW,NE]);
+    };
+
+    function pointIsInBox(point, lineBox) {
+      return geolib.isPointInPolygon({ latitude: point[1], longitude: point[0] }, [
+        { latitude: lineBox[0][1], longitude: lineBox[0][0] },
+        { latitude: lineBox[1][1], longitude: lineBox[1][0] },
+        { latitude: lineBox[2][1], longitude: lineBox[2][0] },
+        { latitude: lineBox[3][1], longitude: lineBox[3][0] }
+      ]);
+    };
+
+    function decodePolyline(polyline_str) {
+      var index = 0;
+      var lat = 0;
+      var lng  = 0;
+      var coordinates = [];
+      var changes = {'latitude': 0, 'longitude': 0};
+
+      // Coordinates have variable length when encoded, so just keep
+      // track of whether we've hit the end of the string. In each
+      // while loop iteration, a single coordinate is decoded.
+      while (index < polyline_str.length) {
+          // Gather lat/lon changes, store them in a dictionary to apply them later
+          ['latitude', 'longitude'].forEach( unit => {
+              var shift = 0, result = 0, byte;
+
+              while (true) {
+                  byte = polyline_str.charCodeAt(index) - 63;
+                  index+=1;
+                  result = result | ((byte & 0x1f) << shift);
+                  shift += 5;
+                  if (!(byte >= 0x20)) {
+                      break;
+                  };
+              };
+              if (result & 1) {
+                  changes[unit] = ~(result >> 1);
+              } else {
+                  changes[unit] = (result >> 1);
+              };
+          });
+          lat += changes['latitude'];
+          lng += changes['longitude'];
+
+          coordinates.push([lng / 100000.0, lat / 100000.0]);
+      }
+      return coordinates;
+    };
+
+    function showRoute(coordinates) {
+      map.getSource('route').setData(
+        {
+          'type': 'Feature',
+          'properties': {},
+          'geometry': {
+            'type': 'LineString',
+            'coordinates': coordinates
+          }
+        }
+      );
+    };
+
+    function hideRoute() {
+      map.getSource('route').setData(
+        {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      )
+    };
+
+    function showBoxes(coordinates) {
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      var lineBox;
+
+      coordinates.forEach( (point, i) => {
+          if (i < coordinates.length-1) {
+            // Bounding Boxes
+            // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
+            // lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
+
+            // Boxes aloung Route
+            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+            lineBox.push(lineBox[0]); // close Polygon
+
+            // console.log(lineBox);
+            newList.features.push({
+              "id": i.toString(),
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": [lineBox]
+              }
+            });
+          };
+      });
+      // console.log('distantBox:',newList.features[0].geometry.coordinates);
+      map.getSource('distantBox').setData(newList);
+    };
+
+    // - - - - - mapBox requests - - - - - -
+    function getRoute(start,destination,route){  // set route = true if we need route coordinates
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
-          + destination.lng + ',' + destination.lat
-          + '?access_token=' + mapboxgl.accessToken + '&geometries=geojson&overview=false'
+          + destination.longitude + ',' + destination.latitude
+          + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview='+route : '&overview=false');
       result = httpGet(routeUrl)
-      console.log("Result" + result);
+      // console.log("Result" + result);
       if (result) {
         result = JSON.parse(result);
         if (result.code == "Ok") {
           return {
             'distanceRaw': result.routes[0].distance/1000,
-            'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km',
+            'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
             'duration': secondsToTime(result.routes[0].duration),
-            'durationRaw': result.routes[0].duration
+            'durationRaw': result.routes[0].duration,
+            'coordinates': route ? decodePolyline(result.routes[0].geometry) : false
           }
         } else {
           return null
@@ -836,11 +1155,20 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
     };
 
-    // GoingElectric requests
+    // - - - - - - - - GoingElectric requests - - - - - - - -
     function getChargerDetails(id) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
         `ge_id=${id}`;
+      return JSON.parse(httpGet(geUrl));
+    };
+
+    function getChargersInBoundingBox(boundingBox, minPower) {
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
+        `key=${goingelectricToken}&`+
+        `plugs=${compatiblePlugs}&min_power=${minPower}&`+
+        `sw_lat=${boundingBox[0][1]}&sw_lng=${boundingBox[0][0]}&`+
+        `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
       return JSON.parse(httpGet(geUrl));
     };
 
@@ -851,49 +1179,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
       return JSON.parse(httpGet(geUrl));
-    };
-
-    function updateChargers() {
-      var chargerList = getChargersInBounds(map.getBounds())
-      console.log("GE Reply: ", chargerList);
-      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-
-      var newList = {
-          "type": "FeatureCollection",
-          "features": []
-      };
-      chargerList.chargelocations.forEach(chargeLocation => {
-        var maxPower = 0;
-        chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
-
-        newList.features.push({
-          "id": chargeLocation.ge_id.toString(),
-          "type": "Feature",
-          "properties": {
-            "icon": (chargeLocation.fault_report) ? "faultReport" :
-              (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
-              (maxPower >= superCharger.minPower) ? "thirdSuperCharger" :
-              (maxPower >= highwayCharger.minPower) ? "highwayCharger" :
-              "parkCharger",
-
-            "coordinates": chargeLocation.coordinates,
-            "chargepoints": chargeLocation.chargepoints,
-            "name": chargeLocation.name,
-            "street": chargeLocation.address.street,
-            "city": chargeLocation.address.city,
-            "country": chargeLocation.address.country,
-            "network": chargeLocation.network,
-            "operator": chargeLocation.operator,
-            "url": chargeLocation.url
-          },
-          "geometry": {
-            "type": "Point",
-            "coordinates": [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
-          }
-        });
-      });
-      map.getSource('chargers').setData(newList);
     };
 
     function getMaxChargePoint (chargePoints) {
@@ -911,13 +1196,100 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return {'power': maxPower, 'type': maxType, 'count': maxCount};
     };
 
-    function chargerShortDescription (chargeLocation) {
-      maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
+    function chargeLocationDetails(chargeLocation,includeDistance) {
+      // var maxPower = 0;
+      // chargeLocation.chargepoints.forEach(chargePoint => { maxPower = (chargePoint.power > maxPower) ? chargePoint.power : maxPower; });
+      // var maxChargePoint = getMaxChargePoint(JSON.parse(chargeLocation.chargepoints));
+      var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
 
+      if (includeDistance) {
+        var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
+      };
+
+      return {
+        "id": chargeLocation.ge_id.toString(),
+        "type": "Feature",
+        "properties": {
+          "icon": (chargeLocation.fault_report) ? "faultReport" :
+            (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
+            (maxChargePoint.power >= superCharger.minPower) ? "thirdSuperCharger" :
+            (maxChargePoint.power >= highwayCharger.minPower) ? "highwayCharger" :
+            "parkCharger",
+
+          "coordinates": chargeLocation.coordinates,
+          "chargepoints": chargeLocation.chargepoints,
+          "name": chargeLocation.name,
+          "street": chargeLocation.address.street,
+          "city": chargeLocation.address.city,
+          "country": chargeLocation.address.country,
+          "network": chargeLocation.network,
+          "operator": chargeLocation.operator,
+          "count" : maxChargePoint.count,
+          "power" : maxChargePoint.power,
+          "type" : maxChargePoint.type,
+          "url": chargeLocation.url,
+          "distance" : includeDistance ? route.distance : false,
+          "duration" : includeDistance ? route.duration : false,
+          "range" : (includeDistance & teslaPosition.range) ? teslaPosition.range - route.distanceRaw : false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [chargeLocation.coordinates.lng, chargeLocation.coordinates.lat]
+        }
+      };
+    };
+
+    function getRouteChargers(coordinates) {
+      var checkList = [];
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      var lineBox, chargerList;
+
+      coordinates.forEach( (point, i) => {
+          if (i < coordinates.length-1) {
+            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+
+            chargerList = getChargersInBoundingBox(boundingBox(lineBox),superCharger.minPower);
+            if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+            if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+
+            chargerList.chargelocations.forEach(chargeLocation => {
+              if (!checkList.includes(chargeLocation.ge_id)) {
+                if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
+                  console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+                  checkList.push(chargeLocation.ge_id);
+                  newList.features.push(chargeLocationDetails(chargeLocation,true));
+                }
+              }
+            });
+          };
+      });
+      return newList;
+    };
+
+    function updateChargers() {
+      var chargerList = getChargersInBounds(map.getBounds())
+      console.log("GE Reply: ", chargerList);
+      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      chargerList.chargelocations.forEach(chargeLocation => {
+        newList.features.push(chargeLocationDetails(chargeLocation));
+      });
+      map.getSource('chargers').setData(newList);
+    };
+
+    function chargerShortDescription (chargeLocation) {
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
       var description = '';
-      description = `<strong>${chargeLocation.name} ${chargeLocation.city}</strong>`;
+      description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.city) ? '' : chargeLocation.city}</strong>`;
 
       description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.city) ?
                      (`<br>${chargeLocation.network}<p>`) :
@@ -927,7 +1299,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                      // <span id='A'></span>;
                      // document.getElementById('A').innerHTML="oijoij"
 
-      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}<p>`;
+      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}<p>`;
       description += '<hr>';
       description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
 
@@ -944,12 +1316,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
       var chargeLocation = chargerDetails.chargelocations[0];
 
-      maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
-      var route = getRoute(teslaPosition,chargeLocation.coordinates);
+      var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
       var description = '';
-      description = `<strong>${chargeLocation.name} ${chargeLocation.address.city}</strong>`;
+      description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.address.city) ? '' : chargeLocation.address.city}</strong>`;
 
       description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
                      (`<br>${chargeLocation.network}<p>`) :
@@ -957,7 +1328,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
+      var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
       description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}`;
+      // description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
       description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
       description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
       description += '<hr>';
@@ -966,9 +1339,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
       description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
 
-//      description += (route) ? '<strong>' + route.distance +  route.duration : '';
       if (route) {
         description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+
         try {
           var rangeAtArrival = (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed()
           description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
