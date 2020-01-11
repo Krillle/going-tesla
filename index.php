@@ -370,6 +370,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `<a onlick="flyToCharger('');"><strong>${chargeLocation.properties.distance} ${chargeLocation.properties.duration} ${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</strong><br>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
+        routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="">Abbrechen</a></div>`;
       });
       routeList(routeChargerList);
 
@@ -423,6 +424,48 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
 
     map.on('load', function() {
+      // Prepare empty Route Layer
+      map.addSource('route', {
+        'type': 'geojson',
+        'data': {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#'+routeColor,
+          'line-width': 6
+        }
+      });
+
+      // Prepare empty Distant Box Layer
+      map.addSource('distantBox', {
+        'type': 'geojson',
+        'data': {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        'id': 'distantBox',
+        'type': 'fill',
+        'source': 'distantBox',
+        'layout': {
+        },
+        'paint': {
+          'fill-color': '#088',
+          'fill-opacity': 0.2
+        }
+      });
+
       // Create Position Image
       map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
 
@@ -434,7 +477,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.addLayer({
           id: "position",
           type: "symbol",
-          /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
           source: 'positionIcon',
           layout: {
             "icon-image": "position",
@@ -504,48 +546,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       console.log("Initalize Chargers");
       updateChargers();
-
-      // Prepare empty Route Layer
-      map.addSource('route', {
-        'type': 'geojson',
-        'data': {
-          "type": "FeatureCollection",
-          "features": []
-        }
-      });
-      map.addLayer({
-        'id': 'route',
-        'type': 'line',
-        'source': 'route',
-        'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        'paint': {
-          'line-color': '#'+routeColor,
-          'line-width': 6
-        }
-      });
-
-      // Prepare empty Distant Box Layer
-      map.addSource('distantBox', {
-        'type': 'geojson',
-        'data': {
-          "type": "FeatureCollection",
-          "features": []
-        }
-      });
-      map.addLayer({
-        'id': 'distantBox',
-        'type': 'fill',
-        'source': 'distantBox',
-        'layout': {
-        },
-        'paint': {
-          'fill-color': '#088',
-          'fill-opacity': 0.2
-        }
-      });
 
     });
 
@@ -1309,7 +1309,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
 
       var description = '';
-      description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.city) ? '' : chargeLocation.city}</strong>`;
+      description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.address.city) ? '' : chargeLocation.address.city}</strong>`;
 
       description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
                      (`<br>${chargeLocation.network}<p>`) :
