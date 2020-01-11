@@ -367,8 +367,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
         // routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
-        routeChargerList += `<a onlick="flyToCharger('');">${chargeLocation.properties.distance} ${chargeLocation.properties.duration} ${chargeLocation.properties.range ? chargeLocation.properties.range : ""}<br>`;
-        routeChargerList += `<strong>${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}</strong><br>`;
+        routeChargerList += `<a onlick="flyToCharger('');"><strong>${chargeLocation.properties.distance} ${chargeLocation.properties.duration} ${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</strong><br>`;
+        routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
       });
       routeList(routeChargerList);
@@ -1249,7 +1249,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                 if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
                   console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
                   checkList.push(chargeLocation.ge_id);
-                  newList.features.push(chargeLocationDetails(chargeLocation));
+                  newList.features.push(chargeLocationDetails(chargeLocation,true));
                 }
               }
             });
