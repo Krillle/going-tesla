@@ -305,8 +305,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var zoomToggleState = 0;
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
-    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9};
-    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range' : 100};
+    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
+    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 100};
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -1131,7 +1131,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         if (result.code == "Ok") {
           return {
             'distanceRaw': result.routes[0].distance/1000,
-            'distance': (result.routes[0].distance/1000).toFixed(1).toString().replace(".",",")  + ' km',
+            'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
             'duration': secondsToTime(result.routes[0].duration),
             'durationRaw': result.routes[0].duration,
             'coordinates': route ? decodePolyline(result.routes[0].geometry) : false
