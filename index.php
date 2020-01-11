@@ -148,6 +148,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       padding:10px;
     }
 
+    .onecolumn {
+    	height: 70px;
+    	column-count: 1;
+      padding: 0px !important;
+    }
     .twocolumns {
     	height: 70px;
     	column-count: 2; column-gap: 8px;
@@ -223,7 +228,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       background-color: rgba(255, 255, 255, 0.7); /* light theme  */
       <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
-      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
+      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
       display: block;
@@ -364,6 +370,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `<a onlick='"flyToCharger('${chargeLocation}');"'><p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}</strong><br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
       });
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="">Abbrechen</a></div>`;
       routeList(routeChargerList);
 
       var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'full');
