@@ -238,6 +238,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       border-radius:10px 10px 10px 10px;
     }
 
+    .route-container a {
+      color:#8F8F8F;  /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
+    }
+
   </style>
 </head>
 <body>
