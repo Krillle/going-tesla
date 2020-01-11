@@ -367,7 +367,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
         // routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
-        routeChargerList += `<a onlick="flyToCharger('');"><strong>${chargeLocation.properties.distance} ${chargeLocation.properties.duration} ${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</strong><br>`;
+        routeChargerList += `<a onlick="flyToCharger(${chargeLocation.properties.chargeLocation.coordinates.lng},${chargeLocation.properties.chargeLocation.coordinates.lat},${chargeLocation.properties.name},${chargeLocation.properties.city});"><strong>${chargeLocation.properties.distance} ${chargeLocation.properties.duration} ${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</strong><br>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
       });
@@ -663,15 +663,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
     };
 
-    function flyToCharger(chargeLocation){
+    function flyToCharger(lon,lat,name,city){
         stopAutoZoom();
         stopHeadUp();
         console.log("AutoFollow stopped");
         autoFollow = false;
-        gtag('event', 'Click in List', {'event_category': 'Charger', 'event_label': `${chargeLocation.properties.name} ${chargeLocation.properties.city}`});
+        gtag('event', 'Click in List', {'event_category': 'Charger', 'event_label': `${name} ${city}`});
 
-        var coordinates = chargeLocation.geometry.coordinates.slice();
-        map.flyTo({ 'center': chargeLocation.geometry.coordinates});
+        map.flyTo({ 'center': [lon,lat]});
     };
 
     function zoomToPower(zoom) {
