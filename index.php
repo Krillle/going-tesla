@@ -240,6 +240,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .route-container a {
       color:#8F8F8F;  /* light theme  */
+      text-decoration: none;
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
