@@ -370,8 +370,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `<a onlick="flyToCharger('');"><strong>${chargeLocation.properties.distance} ${chargeLocation.properties.duration} ${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</strong><br>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
-        routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="">Abbrechen</a></div>`;
       });
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="hideRouteList();hideRoute();">Abbrechen</a></div>`;
       routeList(routeChargerList);
 
       var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'full');
@@ -748,7 +748,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // var pre = document.createElement('pre');
       routeContainer.innerHTML = message;
       // routeContainer.appendChild(pre);
-      // setTimeout(function(){ routeContainer.innerHTML = ''; }, 3000);
+    };
+
+    function hideRouteList() {
+      routeContainer.innerHTML = '';
     };
 
     // Tesla connection - - - - - -
@@ -1083,6 +1086,15 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           }
         }
       );
+    };
+
+    function hideRoute() {
+      map.getSource('route').setData(
+        {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      )
     };
 
     function showBoxes(coordinates) {
