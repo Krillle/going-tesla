@@ -756,12 +756,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // var pre = document.createElement('pre');
       routeContainer.innerHTML = message;
       // routeContainer.appendChild(pre);
-      map.setLayoutProperty('route', 'visibility', 'visible');
+      routeContainer.style.visibility = 'visible';
     };
 
     function hideRouteList() {
       routeContainer.innerHTML = '';
-      map.setLayoutProperty('route', 'visibility', 'none');
+      routeContainer.style.visibility = 'hidden';
     };
 
     // Tesla connection - - - - - -
