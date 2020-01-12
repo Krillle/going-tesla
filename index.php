@@ -168,7 +168,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       font-weight: 500;
       font-size: 18px;
     	padding: 8px;
-      padding-top: 20px;
+      padding-top: 21px;
     	border-radius: 10px;
     	width: 100%;
     	height: 60px;
@@ -231,7 +231,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       overflow-y: auto;
 
       background-color: rgba(255, 255, 255, 0.8); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
+      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.8); /* dark theme */";} ?>
       /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
