@@ -328,8 +328,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     var infoContainer = document.getElementById('info');
     var routeContainer = document.getElementById('route');
-    document.getElementById(
-      'route').style.visibility = 'hidden';
+    hideRouteList();
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
@@ -758,12 +757,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // var pre = document.createElement('pre');
       routeContainer.innerHTML = message;
       // routeContainer.appendChild(pre);
-      document.getElementById('route').style.visibility = 'visible';
+      routeContainer.style.visibility = 'visible';
     };
 
     function hideRouteList() {
       routeContainer.innerHTML = '';
-      document.getElementById('route').style.visibility = 'hidden';
+      routeContainer.style.visibility = 'hidden';
     };
 
     // Tesla connection - - - - - -
