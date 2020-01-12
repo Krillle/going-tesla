@@ -328,6 +328,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     var infoContainer = document.getElementById('info');
     var routeContainer = document.getElementById('route');
+    document.getElementById(
+      'route').style.visibility = 'hidden';
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
