@@ -1215,8 +1215,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       if (includeDistance) {
         var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
+        console.log('Range:', teslaPosition.range, route.distanceRaw,  teslaPosition.range - route.distanceRaw);
       };
-      console.log('Range:', teslaPosition.range, route.distanceRaw,  teslaPosition.range - route.distanceRaw);
       return {
         "id": chargeLocation.ge_id.toString(),
         "type": "Feature",
