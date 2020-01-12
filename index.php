@@ -316,7 +316,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
-    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 100};
+    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -810,27 +810,28 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
         gtag('event', 'Connected', {'event_category': 'Connect', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
-        setTeslaPosition(vehicleData.response.drive_state);
+        setTeslaPosition(vehicleData.response);
         console.log ('Starting continous update');
         setInterval(updatePosition, updatePositionInterval);
       };
     };
 
-    function setTeslaPosition(driveStatus) {
-      var zoom = ((driveStatus.speed) ? driveStatus.speed : 0) * m + b;
+    function setTeslaPosition(vehicleData) {
+      var zoom = ((vehicleData.drive_state.speed) ? vehicleData.drive_state.speed : 0) * m + b;
       zoom = (zoom > slowSpeedZoom) ? slowSpeedZoom : (zoom < highSpeedZoom) ? highSpeedZoom : zoom;
 
       teslaPosition = {
-        'longitude': driveStatus.longitude,
-        'latitude': driveStatus.latitude,
-        'heading': driveStatus.heading,
-        'speed': (driveStatus.speed) ? driveStatus.speed : 0,
-        'zoom': zoom
+        'longitude': vehicleData.drive_state.longitude,
+        'latitude': vehicleData.drive_state.latitude,
+        'heading': vehicleData.drive_state.heading,
+        'speed': (vehicleData.drive_state.speed) ? vehicleData.drive_state.speed : 0,
+        'zoom': zoom,
+        'range': milesToKm(vehicleData.charge_state.est_battery_range).kmRaw
       };
     };
 
     function updatePosition() {
-      setTeslaPosition(getTeslaDriveStatus().response);
+      setTeslaPosition(getTeslaCarData().response);
 
       if (positionIcon.geometry.coordinates != [teslaPosition.longitude,teslaPosition.latitude]
           && positionIcon.properties.bearing != teslaPosition.heading) {
@@ -1362,16 +1363,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       if (route) {
         description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
-
-        try {
-          var rangeAtArrival = (milesToKm(getTeslaChargeStatus().response.est_battery_range).kmRaw - route.distanceRaw).toFixed()
-          description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
-      }
-        catch {};
+        rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
+        description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
         description += '<p>'
       };
-      // description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric ${id}</a><p>`;
-      // description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
 
       description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
