@@ -1277,7 +1277,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      newList.features.sort((a,b) => {a.properties.distance - b.properties.distance});
+      newList.features.sort((a,b) => {return a.properties.distance - b.properties.distance});
       return newList;
     };
 
