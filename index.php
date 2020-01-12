@@ -378,8 +378,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       routeChargers.features.forEach( chargeLocation => {
         // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tr><td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}</strong></td><td align="center" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</strong></td></tr></table>`;
+        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tr>`;
+        routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
+        // routeChargerList += `<td align="center" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.duration}</strong></td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
+        routeChargerList += `</tr></table>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
       });
