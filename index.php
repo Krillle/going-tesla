@@ -1154,8 +1154,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           return {
             'distanceRaw': result.routes[0].distance/1000,
             'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
-            'duration': secondsToTime(result.routes[0].duration),
             'durationRaw': result.routes[0].duration,
+            'duration': secondsToTime(result.routes[0].duration),
+            'rangeRaw' : teslaPosition.range - result.routes[0].distance/1000,
+            'range' : (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km',
             'coordinates': route ? decodePolyline(result.routes[0].geometry) : false
           }
         } else {
@@ -1239,10 +1241,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "power" : maxChargePoint.power,
           "type" : maxChargePoint.type,
           "url": chargeLocation.url,
+          "distanceRaw" : includeDistance ? route.distanceRaw : false,
           "distance" : includeDistance ? route.distance : false,
           "duration" : includeDistance ? route.duration : false,
-          // "range" : (includeDistance & teslaPosition.range) ? teslaPosition.range - route.distanceRaw : false
-          "range" : includeDistance ? teslaPosition.range - route.distanceRaw : false
+          "range" : includeDistance ? route.range : false
         },
         "geometry": {
           "type": "Point",
@@ -1279,8 +1281,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           };
       });
       newList.features.sort((a,b) => {
-        console.log('A:' + a.properties.name, a.properties.distance + ', B:'  + b.properties.name, b.properties.distance);
-        return a.properties.distance - b.properties.distance
+        console.log('A:' + a.properties.name, a.properties.distanceRaw + ', B:'  + b.properties.name, b.properties.distanceRaw);
+        return a.properties.distanceRaw - b.properties.distanceRaw
       });
       return newList;
     };
