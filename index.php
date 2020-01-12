@@ -229,7 +229,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       box-sizing: border-box;
       overflow-y: auto;
 
-      background-color: rgba(255, 255, 255, 0.7); /* light theme  */
+      background-color: rgba(255, 255, 255, 0.8); /* light theme  */
       <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
       /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
@@ -328,6 +328,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     var infoContainer = document.getElementById('info');
     var routeContainer = document.getElementById('route');
+    hideRouteList();
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
@@ -375,8 +376,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       routeChargers.features.forEach( chargeLocation => {
-        // routeChargerList += `<p><strong>${chargeLocation.properties.name} ${chargeLocation.properties.city}</strong><br>`;
-        routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;"><p><strong>${chargeLocation.properties.distance} ${chargeLocation.properties.duration} ${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</strong><br>`;
+        // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
+        routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
+        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tr>`;
+        routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
+        // routeChargerList += `<td align="center" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.duration}</strong></td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
+        routeChargerList += `</tr></table>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
       });
@@ -756,10 +762,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // var pre = document.createElement('pre');
       routeContainer.innerHTML = message;
       // routeContainer.appendChild(pre);
+      routeContainer.style.visibility = 'visible';
     };
 
     function hideRouteList() {
       routeContainer.innerHTML = '';
+      routeContainer.style.visibility = 'hidden';
     };
 
     // Tesla connection - - - - - -
@@ -1152,8 +1160,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           return {
             'distanceRaw': result.routes[0].distance/1000,
             'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
-            'duration': secondsToTime(result.routes[0].duration),
             'durationRaw': result.routes[0].duration,
+            'duration': secondsToTime(result.routes[0].duration),
+            'rangeRaw' : teslaPosition.range - result.routes[0].distance/1000,
+            'range' : (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km',
             'coordinates': route ? decodePolyline(result.routes[0].geometry) : false
           }
         } else {
@@ -1214,7 +1224,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (includeDistance) {
         var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
       };
-
       return {
         "id": chargeLocation.ge_id.toString(),
         "type": "Feature",
@@ -1237,9 +1246,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "power" : maxChargePoint.power,
           "type" : maxChargePoint.type,
           "url": chargeLocation.url,
+          "distanceRaw" : includeDistance ? route.distanceRaw : false,
           "distance" : includeDistance ? route.distance : false,
           "duration" : includeDistance ? route.duration : false,
-          "range" : (includeDistance & teslaPosition.range) ? teslaPosition.range - route.distanceRaw : false
+          "range" : includeDistance ? route.range : false
         },
         "geometry": {
           "type": "Point",
@@ -1275,6 +1285,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
+      newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
       return newList;
     };
 
