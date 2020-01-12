@@ -1216,7 +1216,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (includeDistance) {
         var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
       };
-
+      console.log('Range:', teslaPosition.range, route.distanceRaw,  teslaPosition.range - route.distanceRaw);
       return {
         "id": chargeLocation.ge_id.toString(),
         "type": "Feature",
@@ -1241,7 +1241,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "url": chargeLocation.url,
           "distance" : includeDistance ? route.distance : false,
           "duration" : includeDistance ? route.duration : false,
-          "range" : (includeDistance & teslaPosition.range) ? teslaPosition.range - route.distanceRaw : false
+          // "range" : (includeDistance & teslaPosition.range) ? teslaPosition.range - route.distanceRaw : false
+          "range" : teslaPosition.range - route.distanceRaw
         },
         "geometry": {
           "type": "Point",
@@ -1277,7 +1278,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      newList.features.sort((a,b) => {return a.properties.distance - b.properties.distance});
+      newList.features.sort((a,b) => {
+        console.log('A:' + a.properties.name, a.properties.distance + ', B:'  + b.properties.name, b.properties.distance);
+        return a.properties.distance - b.properties.distance
+      });
       return newList;
     };
 
