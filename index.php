@@ -1242,7 +1242,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "distance" : includeDistance ? route.distance : false,
           "duration" : includeDistance ? route.duration : false,
           // "range" : (includeDistance & teslaPosition.range) ? teslaPosition.range - route.distanceRaw : false
-          "range" : includeDistance ? teslaPosition.range - route.distanceRaw
+          "range" : includeDistance ? teslaPosition.range - route.distanceRaw : false
         },
         "geometry": {
           "type": "Point",
