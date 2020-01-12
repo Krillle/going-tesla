@@ -166,6 +166,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     	text-align: center;
       text-transform: uppercase;
       font-weight: 600;
+      font-size: 18px;
     	padding: 8px;
       padding-top: 18px;
     	border-radius: 10px;
