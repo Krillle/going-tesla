@@ -384,10 +384,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargerList = '';
       var icon = '';
       routeChargers.features.forEach( chargeLocation => {
-        icon = (chargeLocation.properties.icon = "faultReport") ? faultReportImage :
-               (chargeLocation.properties.icon = "supercharger") ? superchargerImage :
-               (chargeLocation.properties.icon = "thirdSuperCharger") ? thirdSuperChargerImage :
-               (chargeLocation.properties.icon = "highwayCharger") ? highwayChargerImage :
+        icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
+               (chargeLocation.properties.icon == "supercharger") ? superchargerImage :
+               (chargeLocation.properties.icon == "thirdSuperCharger") ? thirdSuperChargerImage :
+               (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
                parkCharger;
        console.log(chargeLocation.properties.icon, icon);
         // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
