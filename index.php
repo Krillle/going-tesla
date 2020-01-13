@@ -292,6 +292,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       chargerParkColor = "e6e6e6"; // light marker for dark map
     };
 
+    const teslaSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`;
+    const thirdSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`;
+    const highwayChargerImage = `https://img.icons8.com/small/${chargerHighwaySize}/${chargerParkColor}/tesla-supercharger-pin.png`;
+    const parkChargerImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`;
+    const fualtReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
+
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
     const destinationCharger = {'minPower':'11', 'minZoom':14, 'toggle':1}
@@ -315,7 +321,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var zoomToggleState = 0;
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
-    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
+    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
     const positionSize = '44';
@@ -505,31 +511,31 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       });
 
       // Create Tesla Supercharger Image
-      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+      map.loadImage(teslaSuperChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('teslaSuperCharger', image);
       });
 
       // Create Third Party Supercharger Image
-      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+      map.loadImage(thirdSuperChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('thirdSuperCharger', image);
       });
 
       // Create DC Highway Charger Image
-      map.loadImage(`https://img.icons8.com/small/${chargerHighwaySize}/${chargerParkColor}/tesla-supercharger-pin.png`, function(error, image) {
+      map.loadImage(highwayChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('highwayCharger', image);
       });
 
       // Create Park Charger Image
-      map.loadImage(`https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`, function(error, image) {
+      map.loadImage(parkChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('parkCharger', image);
       });
 
       // Create Fault Report Image
-      map.loadImage(`https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`, function(error, image) {
+      map.loadImage(faultReportImage, function(error, image) {
         if (error) throw error;
         map.addImage('faultReport', image);
       });
@@ -1272,7 +1278,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           if (i < coordinates.length-1) {
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
-            chargerList = getChargersInBoundingBox(boundingBox(lineBox),superCharger.minPower);
+            chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
