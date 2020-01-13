@@ -392,7 +392,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
         // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<div style="position: relative; padding-left: ${toNumber(chargerBigSize)+10}px;">`;
+        routeChargerList += `<div style="position: relative; padding-left: ${Number(chargerBigSize)+10}px;">`;
         routeChargerList += `<img style="position: absolute; left: 0px; top: 15px;" src="${icon}"/>`
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
