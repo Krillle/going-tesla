@@ -392,8 +392,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                (chargeLocation.properties.icon == "thirdSuperCharger") ? thirdSuperChargerImage :
                (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
                parkChargerImage;
-       console.log(chargeLocation.properties.icon, icon);
-        // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
         routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
         routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
@@ -1293,7 +1291,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           if (i < coordinates.length-1) {
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
-            chargerList = getChargersInBoundingBox(boundingBox(lineBox),superCharger.minPower);
+            chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
