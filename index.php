@@ -292,6 +292,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       chargerParkColor = "e6e6e6"; // light marker for dark map
     };
 
+    const teslaSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`;
+    const thirdSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`;
+    const highwayChargerImage = `https://img.icons8.com/small/${chargerHighwaySize}/${chargerParkColor}/tesla-supercharger-pin.png`;
+    const parkChargerImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`;
+    const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
+
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
     const destinationCharger = {'minPower':'11', 'minZoom':14, 'toggle':1}
@@ -315,7 +321,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var zoomToggleState = 0;
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
-    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
+    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
     const positionSize = '44';
@@ -376,16 +382,29 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // showBoxes(route.coordinates);
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
+      var icon = '';
+
+      var iconColumnWidth = Number(chargerBigSize)+10;
+
       routeChargers.features.forEach( chargeLocation => {
-        // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
+        icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
+               (chargeLocation.properties.icon == "teslaSuperCharger") ? teslaSuperChargerImage :
+               (chargeLocation.properties.icon == "thirdSuperCharger") ? thirdSuperChargerImage :
+               (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
+               parkChargerImage;
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tr>`;
+        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
+        routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
+        routeChargerList += `</div>`;
+        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
         // routeChargerList += `<td align="center" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.duration}</strong></td>`;
         routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
-        routeChargerList += `</tr></table>`;
+        routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></a>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
+        routeChargerList += `</div></a>`;
       });
       routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="hideRouteList();hideRoute(); return false;">Abbrechen</a></div>`;
       routeList(routeChargerList);
@@ -505,31 +524,31 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       });
 
       // Create Tesla Supercharger Image
-      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+      map.loadImage(teslaSuperChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('teslaSuperCharger', image);
       });
 
       // Create Third Party Supercharger Image
-      map.loadImage(`https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`, function(error, image) {
+      map.loadImage(thirdSuperChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('thirdSuperCharger', image);
       });
 
       // Create DC Highway Charger Image
-      map.loadImage(`https://img.icons8.com/small/${chargerHighwaySize}/${chargerParkColor}/tesla-supercharger-pin.png`, function(error, image) {
+      map.loadImage(highwayChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('highwayCharger', image);
       });
 
       // Create Park Charger Image
-      map.loadImage(`https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`, function(error, image) {
+      map.loadImage(parkChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('parkCharger', image);
       });
 
       // Create Fault Report Image
-      map.loadImage(`https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`, function(error, image) {
+      map.loadImage(faultReportImage, function(error, image) {
         if (error) throw error;
         map.addImage('faultReport', image);
       });
@@ -1272,6 +1291,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           if (i < coordinates.length-1) {
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
+            // chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
             chargerList = getChargersInBoundingBox(boundingBox(lineBox),superCharger.minPower);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
