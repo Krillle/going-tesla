@@ -388,7 +388,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       routeChargers.features.forEach( chargeLocation => {
         icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
-               (chargeLocation.properties.icon == "supercharger") ? superchargerImage :
+               (chargeLocation.properties.icon == "teslaSuperCharger") ? superchargerImage :
                (chargeLocation.properties.icon == "thirdSuperCharger") ? thirdSuperChargerImage :
                (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
                parkChargerImage;
