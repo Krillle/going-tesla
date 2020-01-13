@@ -392,7 +392,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
         routeChargerList += `</tr></table>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p><div></a>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></div></a>`;
       });
       routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="hideRouteList();hideRoute(); return false;">Abbrechen</a></div>`;
       routeList(routeChargerList);
@@ -1279,7 +1279,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           if (i < coordinates.length-1) {
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
-            chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
+            chargerList = getChargersInBoundingBox(boundingBox(lineBox),superCharger.minPower);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
