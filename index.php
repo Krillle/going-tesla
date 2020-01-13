@@ -1291,7 +1291,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           if (i < coordinates.length-1) {
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
-            chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
+            // chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
+            chargerList = getChargersInBoundingBox(boundingBox(lineBox),superCharger.minPower);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
