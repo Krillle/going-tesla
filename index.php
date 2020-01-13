@@ -389,7 +389,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                (chargeLocation.properties.icon = "thirdSuperCharger") ? thirdSuperChargerImage :
                (chargeLocation.properties.icon = "highwayCharger") ? highwayChargerImage :
                parkCharger;
-
+       console.log(chargeLocation.properties.icon, icon);
         // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
         routeChargerList += `<div style="position: relative; padding-left: ${Number(chargerBigSize)+10}px;">`;
