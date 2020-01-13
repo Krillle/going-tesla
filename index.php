@@ -379,18 +379,26 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
       var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'simplified');
-      showBoxes(route.coordinates);
+      // showBoxes(route.coordinates);
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
+      var icon = '';
       routeChargers.features.forEach( chargeLocation => {
+        icon = (chargeLocation.properties.icon = "faultReport") ? faultReportImage :
+               (chargeLocation.properties.icon = "supercharger") ? superchargerImage :
+               (chargeLocation.properties.icon = "thirdSuperCharger") ? thirdSuperChargerImage :
+               (chargeLocation.properties.icon = "highwayCharger") ? highwayChargerImage :
+              parkCharger;
+
         // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<div style="position: relative; padding-left: ${chargerBigSize+20}px;"><img style="position: absolute; left: 10px; top: 15px;" src="${teslaSuperChargerImage}">`
-        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tr>`;
+        routeChargerList += `<div style="position: relative; padding-left: ${toNumber(chargerBigSize)+10}px;">`;
+        routeChargerList += `<img style="position: absolute; left: 0px; top: 15px;" src="${icon}"/>`
+        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
         // routeChargerList += `<td align="center" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.duration}</strong></td>`;
         routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
-        routeChargerList += `</tr></table>`;
+        routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></div></a>`;
       });
