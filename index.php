@@ -383,6 +383,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       var icon = '';
+
+      var iconColumnWidth = Number(chargerBigSize)+10;
+
       routeChargers.features.forEach( chargeLocation => {
         icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
                (chargeLocation.properties.icon == "supercharger") ? superchargerImage :
@@ -392,15 +395,18 @@ if (isset($_GET["dark"])) {$darkmode = true;};
        console.log(chargeLocation.properties.icon, icon);
         // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<div style="position: relative; padding-left: ${Number(chargerBigSize)+10}px;">`;
-        routeChargerList += `<img style="position: absolute; left: 10px; top: 20px;" src="${icon}"/>`
+        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+        routeChargerList += `<div style="position: absolute; left: 0px; width: ${iconColumnWidth}px;">`;
+        routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; top: 20px;" src="${icon}"/>`
+        routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
         // routeChargerList += `<td align="center" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.duration}</strong></td>`;
         routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p></div></a>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
+        routeChargerList += `</div></a>`;
       });
       routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="hideRouteList();hideRoute(); return false;">Abbrechen</a></div>`;
       routeList(routeChargerList);
