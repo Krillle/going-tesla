@@ -395,9 +395,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
        console.log(chargeLocation.properties.icon, icon);
         // routeChargerList += '<table border="0" width="100%"><tr><td align="left">Datum</td><td align="center">Text</td><td align="right">Quelle</td></tr></table>';
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth-10}px;">`;
         routeChargerList += `<div style="position: absolute; left: 0px; width: ${iconColumnWidth}px;">`;
-        routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; top: 20px;" src="${icon}"/>`
+        routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
