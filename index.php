@@ -341,7 +341,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
-    var currentDestination;
+    var currentDestination = {'center': [0,0], 'name': ''};
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -398,7 +398,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
       currentDestination.center = destination.result.center;
-      currentDestination.name = destination.result.text;
+      currentDestination.name = destination.result.place_name;
 
       document.cookie = 'destination=' + JSON.stringify(currentDestination) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
