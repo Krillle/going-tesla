@@ -835,7 +835,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     function updateRouteChargerList(destination) {
       var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'simplified');
-      // <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);"}; ?>
+      <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
       var icon = '';
