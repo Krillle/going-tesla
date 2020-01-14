@@ -396,7 +396,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
 
-      currentDestination.center = {
+      currentDestination = {
         'center': destination.result.center,
         'name': destination.result.place_name,
         'text': destination.result.text
