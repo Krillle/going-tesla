@@ -341,7 +341,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
-    var currentDestination = getEncodedCookie('destination');
+    var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
     console.log(currentDestination);
 
     const positionSize = '44';
@@ -397,10 +397,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       console.log('Destination:', destination.result.text);
 
       currentDestination.center = destination.result.center;
-      currentDestination.name = escape(destination.result.place_name);
-      currentDestination.text = escape(destination.result.text);
+      currentDestination.name = destination.result.place_name;
+      currentDestination.text = destination.result.text;
 
-      document.cookie = 'destination=' + encodeURIComponent(currentDestination) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+      document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
       updateRouteChargerList(currentDestination);
@@ -757,7 +757,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function getEncodedCookie(name) {
       var cookie = getCookie(name);
       console.log(cookie);
-      return (currentDestination != 'false') ? decodeURIComponent(cookie) : false;
+      return (cookie != 'false') ? decodeURIComponent(cookie) : false;
     };
 
     function settingsPopup () {
