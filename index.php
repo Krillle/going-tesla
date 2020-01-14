@@ -150,7 +150,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .onecolumn {
     	height: 70px;
-    	/* column-count: 1; */
       padding: 0px !important;
     }
     .twocolumns {
