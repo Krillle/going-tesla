@@ -399,7 +399,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       updateRouteChargerList(currentDestination);
       console.log ('Starting continous list update');
-      updateListInterval = setInterval(updateRouteChargerList(currentDestination), updateListTime);
+      updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
 
     });
     map.addControl(geocoderControl,'top-left');
