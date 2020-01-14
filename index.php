@@ -394,12 +394,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     })
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
-      console.log(destination);
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
       currentDestination.center = destination.result.center;
       currentDestination.name = escape(destination.result.place_name);
 
+      console.log(currentDestination);
       document.cookie = 'destination=' + JSON.stringify(currentDestination) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       updateRouteChargerList(currentDestination);
