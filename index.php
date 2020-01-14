@@ -341,7 +341,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
-    var currentDestination = JSON.parse(getEncodedCookie('destination'));
+    var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
     console.log(currentDestination);
 
     const positionSize = '44';
@@ -580,7 +580,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       console.log("Initalize Chargers");
       updateChargers();
 
-      if (!typeof currentDestination.center === 'undefined') {
+      if (currentDestination.center) {
         gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
         updateRouteChargerList(currentDestination);
         console.log ('Recovering continous list update');
@@ -755,11 +755,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var value = "; " + document.cookie;
       var parts = value.split("; " + name + "=");
       if (parts.length == 2) return parts.pop().split(";").shift();
-    };
-
-    function getEncodedCookie(name) {
-      var cookie = getCookie(name);
-      return decodeURIComponent(cookie);
     };
 
     function settingsPopup () {
