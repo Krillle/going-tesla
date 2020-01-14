@@ -341,7 +341,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
-    var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
+    var currentDestination = JSON.parse(getEncodedCookie('destination')));
     console.log(currentDestination);
 
     const positionSize = '44';
@@ -757,7 +757,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function getEncodedCookie(name) {
       var cookie = getCookie(name);
       console.log(cookie);
-      return (cookie != 'false') ? decodeURIComponent(cookie) : false;
+      return (!typeof (cookie  === 'undefined') ? decodeURIComponent(cookie) : false;
     };
 
     function settingsPopup () {
