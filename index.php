@@ -343,7 +343,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     var currentDestination = getCookie('destination');
     console.log(currentDestination);
-    currentDestination = currentDestination ? JSON.parse(currentDestination) : false;
+    currentDestination = currentDestination ? decodeURIComponent(currentDestination) : false;
     console.log(currentDestination);
 
     const positionSize = '44';
@@ -397,14 +397,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     })
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
-      gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
       currentDestination.center = destination.result.center;
       currentDestination.name = escape(destination.result.place_name);
       currentDestination.text = escape(destination.result.text);
 
-      document.cookie = 'destination=' + JSON.stringify(currentDestination) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+      document.cookie = 'destination=' + encodeURIComponent(currentDestination) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
+      gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
       updateRouteChargerList(currentDestination);
       console.log ('Starting continous list update');
       updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
@@ -578,6 +578,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       console.log("Initalize Chargers");
       updateChargers();
+
+      if (currentDestination) {
+        gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
+        updateRouteChargerList(currentDestination);
+        console.log ('Starting continous list update');
+        updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
+      };
 
     });
 
