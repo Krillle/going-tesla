@@ -403,7 +403,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       currentDestination.text = escape(destination.result.text);
 
       document.cookie = 'destination=' + encodeURIComponent(currentDestination) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
-
+console.log(currentDestination);
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
       updateRouteChargerList(currentDestination);
       console.log ('Starting continous list update');
@@ -582,7 +582,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       if (currentDestination) {
         gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
         updateRouteChargerList(currentDestination);
-        console.log ('Starting continous list update');
+        console.log ('Recovering continous list update');
         updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
       };
 
