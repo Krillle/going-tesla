@@ -773,7 +773,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         infoMessage(teslaConnection.status);
         gtag('event', 'No Token', {'event_category': 'Connect'});
         settingsPopup ();
-        return;
+        // return;
       };
 
       var vehicleData = getTeslaCarData();
