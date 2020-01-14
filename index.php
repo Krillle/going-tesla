@@ -397,6 +397,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       console.log(destination);
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
+      var A = destination.result.center;
+      currentDestination.center = [1,1];
       currentDestination.center = destination.result.center;
       currentDestination.name = destination.result.place_name;
 
