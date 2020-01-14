@@ -755,7 +755,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
       var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
 
-      createTeslaToken(email, password);
+      if (email & password) {createTeslaToken(email, password)};
     };
 
     function infoMessage(message) {
@@ -792,7 +792,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         infoMessage(teslaConnection.status);
         gtag('event', 'No Token', {'event_category': 'Connect'});
         settingsPopup ();
-        // return;
+        return;
       };
 
       var vehicleData = getTeslaCarData();
