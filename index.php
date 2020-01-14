@@ -577,7 +577,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       console.log("Initalize Chargers");
       updateChargers();
 
-      if (typeof currentDestination.center === 'undefined') {
+      if (!typeof currentDestination.center === 'undefined') {
         gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
         updateRouteChargerList(currentDestination);
         console.log ('Recovering continous list update');
