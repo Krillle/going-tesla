@@ -397,10 +397,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       console.log(destination);
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
 
-      var A = destination.result.center;
-      currentDestination.center = [1,1];
       currentDestination.center = destination.result.center;
-      currentDestination.name = destination.result.place_name;
+      currentDestination.name = escape(destination.result.place_name);
 
       document.cookie = 'destination=' + JSON.stringify(currentDestination) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
