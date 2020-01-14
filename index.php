@@ -16,7 +16,7 @@ if ($now < $sunrise or $now > $sunset) {
   $darkmode = false;
 };
 
-if(isset($_GET["light"])) {$darkmode = false;};
+if (isset($_GET["light"])) {$darkmode = false;};
 if (isset($_GET["dark"])) {$darkmode = true;};
 
 ?>
@@ -200,6 +200,20 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       background-position: center;
     }
 
+    a.popupbutton-icon-superCharger {
+      background-image: url('https://img.icons8.com/material-sharp/44/333333/tesla-supercharger-pin--v1.png'); /* light theme */
+      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/material-sharp/44/ffffff/tesla-supercharger-pin--v1.png');  /* dark theme */";} ?>
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    a.popupbutton-icon-highwayCharger {
+      background-image: url('https://img.icons8.com/small/39/333333/tesla-supercharger-pin.png'); /* light theme */
+      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/ffffff/tesla-supercharger-pin.png');  /* dark theme */";} ?>
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
     .info-container {
       position: absolute;
       top: 25px;
@@ -303,6 +317,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const destinationCharger = {'minPower':'11', 'minZoom':14, 'toggle':1}
 
     var minPower = superCharger.minPower;
+    var minPowerList = superCharger.minPower;
 
     const slowSpeed = 30;
     const highSpeed = 100;
@@ -311,7 +326,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     const maxChargerDistance = 3000; // max senkrechter Abstand Charger von Route
 
-    const updatePositionInterval = 20000;
+    const updatePositionTime = 20000;
+    const updateListTime = 120000;
+    var updateListInterval;
 
     var zoomToogle = [
       {name:'AutoZoom', zoom:null, autoZoom:true, autoFollow:true, headUp:true, icon:'url("https://img.icons8.com/small/40/333333/gps-device.png"'},
@@ -323,6 +340,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
+
+    var currentDestination;
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -375,43 +394,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     })
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
-      // ---- 8< -----v
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
+      currentDestination = destination;
 
-      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'simplified');
-      // showBoxes(route.coordinates);
-      var routeChargers = getRouteChargers(route.coordinates);
-      var routeChargerList = '';
-      var icon = '';
+      updateRouteChargerList(currentDestination);
+      console.log ('Starting continous list update');
+      updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
 
-      var iconColumnWidth = Number(chargerBigSize)+10;
-
-      routeChargers.features.forEach( chargeLocation => {
-        icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
-               (chargeLocation.properties.icon == "teslaSuperCharger") ? teslaSuperChargerImage :
-               (chargeLocation.properties.icon == "thirdSuperCharger") ? thirdSuperChargerImage :
-               (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
-               parkChargerImage;
-        routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
-        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
-        routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
-        routeChargerList += `</div>`;
-        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
-        routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        // routeChargerList += `<td align="center" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
-        routeChargerList += `</tr></tbody></table>`;
-        routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
-        routeChargerList += `</div></a>`;
-      });
-      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="hideRouteList();hideRoute(); return false;">Abbrechen</a></div>`;
-      routeList(routeChargerList);
-
-      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'full');
-      showRoute(route.coordinates);
-      // ---- 8< -----^
     });
     map.addControl(geocoderControl,'top-left');
 
@@ -766,7 +755,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
       var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
 
-      createTeslaToken(email, password);
+      if (email & password) {createTeslaToken(email, password)};
     };
 
     function infoMessage(message) {
@@ -830,8 +819,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         infoMessage(teslaConnection.status);
         gtag('event', 'Connected', {'event_category': 'Connect', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
         setTeslaPosition(vehicleData.response);
-        console.log ('Starting continous update');
-        setInterval(updatePosition, updatePositionInterval);
+        console.log ('Starting continous position update');
+        setInterval(updatePosition, updatePositionTime);
       };
     };
 
@@ -861,6 +850,47 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
         updateMapFocus ();
       };
+    };
+
+    function updateRouteChargerList(destination) {
+      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'simplified');
+      <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
+      var routeChargers = getRouteChargers(route.coordinates);
+      var routeChargerList = '';
+      var icon = '';
+
+      var iconColumnWidth = Number(chargerBigSize)+10;
+
+      routeChargers.features.forEach( chargeLocation => {
+        icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
+               (chargeLocation.properties.icon == "teslaSuperCharger") ? teslaSuperChargerImage :
+               (chargeLocation.properties.icon == "thirdSuperCharger") ? thirdSuperChargerImage :
+               (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
+               parkChargerImage;
+        routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
+        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
+        routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
+        routeChargerList += `</div>`;
+        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+        routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
+        routeChargerList += `</tr></tbody></table>`;
+        routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
+        routeChargerList += `</div></a>`;
+      });
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="clearInterval(updateListInterval); hideRouteList();hideRoute(); return false;">Abbrechen</a></div>`;
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton popupbutton-icon-highwayCharger" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
+      routeList(routeChargerList);
+
+      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'full');
+      showRoute(route.coordinates);
+    };
+
+    function toggleeRouteList(){
+      minPowerList = minPowerList == superCharger.minPower ? highwayCharger.minPower : superCharger.minPower;
+      updateRouteChargerList (currentDestination);
     };
 
     // - - - - - - - - Tesla requests - - - - - - - - -
@@ -1034,7 +1064,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var corners = [[+135,-135],[-45,+45]];
       var box = [];
 
-      // console.log("Ausgangsrichtung", bearing)
       corners.forEach( (vectors, i) => {
         vectors.forEach( (vector, j) => {
           box.push(bearingPoint(line[i], bearing + vector, distance));
@@ -1044,14 +1073,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function boundingBox(lineBox){
-      // var bounds = geolib.getBounds([
-      //     { latitude: lineBox[0][1], longitude: lineBox[0][0] },
-      //     { latitude: lineBox[1][1], longitude: lineBox[1][0] },
-      //     { latitude: lineBox[2][1], longitude: lineBox[2][0] },
-      //     { latitude: lineBox[3][1], longitude: lineBox[3][0] }
-      // ]);
-      // return([[bounds.minLng,bounds.minLat],[bounds.maxLng,bounds.minLat]]);
-
       var SW = [90,180];
       var NE = [0,0];
       lineBox.forEach( corner => {
@@ -1060,8 +1081,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         if (corner[0] > NE[0]) {NE[0] = corner[0]};
         if (corner[1] > NE[1]) {NE[1] = corner[1]};
       });
-      // console.log("Linebox", lineBox);
-      // console.log("Box", [SW,NE]);
       return([SW,NE]);
     };
 
@@ -1292,7 +1311,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
             // chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
-            chargerList = getChargersInBoundingBox(boundingBox(lineBox),superCharger.minPower);
+            chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
