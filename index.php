@@ -898,7 +898,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
         routeChargerList += `</div></a>`;
       });
-      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 292px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
       routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="margin-left: 8px; width: 60px;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       routeList(routeChargerList);
 
