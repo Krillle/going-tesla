@@ -341,9 +341,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
-console.log(getCookie('destination'));
     var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
-    console.log(currentDestination);
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -408,7 +406,7 @@ console.log(getCookie('destination'));
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
       updateRouteChargerList(currentDestination);
-      console.log ('Starting continous list update');
+      console.log ('Starting continuous list update');
       updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
 
     });
@@ -584,7 +582,7 @@ console.log(getCookie('destination'));
       if (currentDestination) {
         gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
         updateRouteChargerList(currentDestination);
-        console.log ('Recovering continous list update');
+        console.log ('Recovering continuous list update');
         updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
       };
 
@@ -839,7 +837,7 @@ console.log(getCookie('destination'));
         infoMessage(teslaConnection.status);
         gtag('event', 'Connected', {'event_category': 'Connect', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
         setTeslaPosition(vehicleData.response);
-        console.log ('Starting continous position update');
+        console.log ('Starting continuous position update');
         setInterval(updatePosition, updatePositionTime);
       };
     };
@@ -900,7 +898,7 @@ console.log(getCookie('destination'));
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
         routeChargerList += `</div></a>`;
       });
-      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="clearInterval(updateListInterval); hideRouteList();hideRoute(); return false;">Abbrechen</a></div>`;
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" onclick="cancelRouteChargerList(); return false;">Abbrechen</a></div>`;
       routeChargerList += `<div class="onecolumn"><a class="popupbutton popupbutton-icon-highwayCharger" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       routeList(routeChargerList);
 
@@ -911,6 +909,13 @@ console.log(getCookie('destination'));
     function toggleeRouteList(){
       minPowerList = minPowerList == superCharger.minPower ? highwayCharger.minPower : superCharger.minPower;
       updateRouteChargerList (currentDestination);
+    };
+
+    function cancelRouteChargerList() {
+      clearInterval(updateListInterval);
+      hideRouteList();
+      hideRoute()
+      document.cookie = "destination=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Destination Cookie löschen
     };
 
     // - - - - - - - - Tesla requests - - - - - - - - -
