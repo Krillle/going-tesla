@@ -150,7 +150,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .onecolumn {
     	height: 70px;
-    	column-count: 1;
+    	/* column-count: 1; */
       padding: 0px !important;
     }
     .twocolumns {
@@ -899,7 +899,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `</div></a>`;
       });
       routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
-      routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="margin-left: 20px; width: 60px;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
+      routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="margin-left: 20px; width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       routeList(routeChargerList);
 
       var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'full');
