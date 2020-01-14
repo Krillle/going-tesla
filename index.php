@@ -396,10 +396,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
 
-      currentDestination.center = destination.result.center;
-      currentDestination.name = destination.result.place_name;
-      currentDestination.text = destination.result.text;
-
+      currentDestination.center = {
+        'center': destination.result.center,
+        'name': destination.result.place_name,
+        'text': destination.result.text
+      };
       console.log(currentDestination);
 
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
