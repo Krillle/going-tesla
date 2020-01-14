@@ -759,8 +759,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     function getEncodedCookie(name) {
       var cookie = getCookie(name);
-      console.log(cookie);
-      return (!typeof (cookie  === 'undefined')) ? decodeURIComponent(cookie) : false;
+      return decodeURIComponent(cookie);
     };
 
     function settingsPopup () {
