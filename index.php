@@ -341,9 +341,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
 
-    var currentDestination = getCookie('destination');
-    console.log(currentDestination);
-    currentDestination = currentDestination ? decodeURIComponent(currentDestination) : false;
+    var currentDestination = getEncodedCookie('destination');
     console.log(currentDestination);
 
     const positionSize = '44';
@@ -756,6 +754,11 @@ console.log(currentDestination);
       if (parts.length == 2) return parts.pop().split(";").shift();
     };
 
+    function getEncodedCookie(name) {
+      var cookie = getCookie(name);
+      console.log(cookie);
+      return (currentDestination != 'false') ? decodeURIComponent(cookie) : false;
+    };
 
     function settingsPopup () {
       // var popup = new mapboxgl.Popup({closeOnClick: false})
