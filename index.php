@@ -394,8 +394,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     })
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
+      console.log(destination);
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${destination.result.text}`});
-      currentDestination = destination;
+
+      currentDestination.center = destination.result.center;
+      currentDestination.name = destination.result.text;
+
+      document.cookie = 'destination=' + JSON.stringify(currentDestination) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       updateRouteChargerList(currentDestination);
       console.log ('Starting continous list update');
@@ -853,7 +858,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function updateRouteChargerList(destination) {
-      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'simplified');
+      var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'simplified');
       <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
       var routeChargers = getRouteChargers(route.coordinates);
       var routeChargerList = '';
@@ -884,7 +889,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       routeChargerList += `<div class="onecolumn"><a class="popupbutton popupbutton-icon-highwayCharger" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       routeList(routeChargerList);
 
-      var route = getRoute(teslaPosition,{'longitude' : destination.result.center[0], 'latitude' : destination.result.center[1]},'full');
+      var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'full');
       showRoute(route.coordinates);
     };
 
