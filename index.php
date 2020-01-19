@@ -287,6 +287,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const chargerBigSize = '44';
     const chargerHighwaySize = '39';
     const chargerParkSize = '34';
+    const socketChargerSize = '24';
     const chargerFaultSize = '24';
 
     var mapStyle = 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true'; // Light Tesla
@@ -309,7 +310,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const thirdSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`;
     const highwayChargerImage = `https://img.icons8.com/small/${chargerHighwaySize}/${chargerParkColor}/tesla-supercharger-pin.png`;
     const parkChargerImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`;
-    const socketChargerImage = `https://img.icons8.com/ios${chargerParkSize}/${chargerParkColor}/wall-socket-with-plug.png`;
+    const socketChargerImage = `https://img.icons8.com/ios/${chargerParkSize}/${chargerParkColor}/wall-socket-with-plug.png`;
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
