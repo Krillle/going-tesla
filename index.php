@@ -312,6 +312,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const parkChargerImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`;
     const socketChargerImage = `https://img.icons8.com/material-outlined/${chargerParkSize}/${chargerParkColor}/wall-socket.png`;
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
+    const destinationImage = `https://img.icons8.com/small/${chargerBigSize}/${chargerThirdColor}/order-delivered.png`;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
@@ -911,7 +912,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
       routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
       routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
-      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${socketChargerImage}"/>`
+      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${destinationImage}"/>`
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
