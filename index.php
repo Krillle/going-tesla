@@ -803,7 +803,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       console.log ('Access cookie: ' + getCookie('access'));
       console.log ('Access data: ' + teslaConnection.accessToken);
 
-      if (typeof(teslaConnection.accessToken) == 'undefined') {
+      if (!teslaConnection.accessToken) {
         teslaConnection.status = 'Kein Token';
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
