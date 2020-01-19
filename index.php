@@ -1333,21 +1333,25 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
     };
 
-    function xsleep(milliseconds) {
+    function sleep(milliseconds) {
       return new Promise(resolve => setTimeout(resolve, milliseconds));
-    }
+    };
 
-    async function getRouteChargers(coordinates) {
+    async function giveBackControl(milliseconds) {
+      await sleep(milliseconds);
+    };
+
+    function getRouteChargers(coordinates) {
       var checkList = [];
       var newList = {
           "type": "FeatureCollection",
           "features": []
       };
       var lineBox, chargerList;
-      await xsleep(10);
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
+            giveBackControl(10);
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
             chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
@@ -1368,6 +1372,37 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
       return newList;
     };
+
+    // function getRouteChargers(coordinates) {
+    //   var checkList = [];
+    //   var newList = {
+    //       "type": "FeatureCollection",
+    //       "features": []
+    //   };
+    //   var lineBox, chargerList;
+    //
+    //   coordinates.forEach( (point, i) => {
+    //       if (i < coordinates.length-1) {
+    //         lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+    //
+    //         chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
+    //         if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+    //         if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+    //
+    //         chargerList.chargelocations.forEach(chargeLocation => {
+    //           if (!checkList.includes(chargeLocation.ge_id)) {
+    //             if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
+    //               console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+    //               checkList.push(chargeLocation.ge_id);
+    //               newList.features.push(chargeLocationDetails(chargeLocation,true));
+    //             }
+    //           }
+    //         });
+    //       };
+    //   });
+    //   newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
+    //   return newList;
+    // };
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
