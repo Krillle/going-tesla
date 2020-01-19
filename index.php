@@ -770,9 +770,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // document.querySelector('status').textContent = teslaConnection.status;
 
       var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
+      if email == null return;
       var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
+      if password == null return;
 
-      if (email & password) {createTeslaToken(email, password)};
+      createTeslaToken(email, password);
     };
 
     function infoMessage(message) {
