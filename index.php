@@ -1333,7 +1333,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
     };
 
-    function getRouteChargers(coordinates) {
+    function Sleep(milliseconds) {
+      return new Promise(resolve => setTimeout(resolve, milliseconds));
+    }
+
+    async function getRouteChargers(coordinates) {
       var checkList = [];
       var newList = {
           "type": "FeatureCollection",
@@ -1343,10 +1347,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+            lineBox = await distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
-            // chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
-            chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
+            chargerList = await getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
