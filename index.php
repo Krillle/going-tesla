@@ -289,6 +289,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const chargerParkSize = '34';
     const socketChargerSize = '24';
     const chargerFaultSize = '24';
+    const destinationSize = '39';
 
     var mapStyle = 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true'; // Light Tesla
     const mapStyleSatellite = 'mapbox://styles/mapbox/satellite-v9'; // Satellite
@@ -312,6 +313,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const parkChargerImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`;
     const socketChargerImage = `https://img.icons8.com/material-outlined/${chargerParkSize}/${chargerParkColor}/wall-socket.png`;
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
+    const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
@@ -901,12 +903,25 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
         routeChargerList += `</div></a>`;
       });
+
+      routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
+      routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+      routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
+      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${destinationImage}"/>`
+      routeChargerList += `</div>`;
+      routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+      routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${route.range ? route.range : ""}</xstrong></td>`;
+      routeChargerList += `</tr></tbody></table>`;
+      routeChargerList += `${destination.name}</p>`;
+      routeChargerList += `</div></a>`;
+
       routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
       routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       routeList(routeChargerList);
@@ -1345,7 +1360,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           if (i < coordinates.length-1) {
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
-            // chargerList = getChargersInBoundingBox(boundingBox(lineBox),highwayCharger.minPower);
             chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
