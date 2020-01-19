@@ -1347,9 +1347,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            lineBox = await distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+            await sleep(10)<;
+            
+            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
-            chargerList = await getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
+            chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
             if (chargerList.status != "ok") {throw "GoingElectric request failed"};
             if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
