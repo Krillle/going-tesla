@@ -309,6 +309,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const thirdSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`;
     const highwayChargerImage = `https://img.icons8.com/small/${chargerHighwaySize}/${chargerParkColor}/tesla-supercharger-pin.png`;
     const parkChargerImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`;
+    const socketChargerImage = `https://img.icons8.com/ios${chargerParkSize}/${chargerParkColor}/wall-socket-with-plug.png`;
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
@@ -541,6 +542,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       map.loadImage(parkChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('parkCharger', image);
+      });
+
+      // Create Socket Charger Image
+      map.loadImage(socketChargerImage, function(error, image) {
+        if (error) throw error;
+        map.addImage('socketCharger', image);
       });
 
       // Create Fault Report Image
