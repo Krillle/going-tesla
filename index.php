@@ -282,11 +282,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
-    const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
+    const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
     const chargerHighwaySize = '39';
     const chargerParkSize = '34';
+    const socketChargerSize = '24';
     const chargerFaultSize = '24';
 
     var mapStyle = 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true'; // Light Tesla
@@ -309,6 +310,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const thirdSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerThirdColor}/tesla-supercharger-pin--v1.png`;
     const highwayChargerImage = `https://img.icons8.com/small/${chargerHighwaySize}/${chargerParkColor}/tesla-supercharger-pin.png`;
     const parkChargerImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/park-and-charge.png`;
+    const socketChargerImage = `https://img.icons8.com/material-outlined/${chargerParkSize}/${chargerParkColor}/wall-socket.png`;
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
@@ -541,6 +543,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       map.loadImage(parkChargerImage, function(error, image) {
         if (error) throw error;
         map.addImage('parkCharger', image);
+      });
+
+      // Create Socket Charger Image
+      map.loadImage(socketChargerImage, function(error, image) {
+        if (error) throw error;
+        map.addImage('socketCharger', image);
       });
 
       // Create Fault Report Image
@@ -1298,7 +1306,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
             (maxChargePoint.power >= superCharger.minPower) ? "thirdSuperCharger" :
             (maxChargePoint.power >= highwayCharger.minPower) ? "highwayCharger" :
-            "parkCharger",
+            (maxChargePoint.type == "Typ2") ? "parkCharger" :
+            "socketCharger",
 
           "coordinates": chargeLocation.coordinates,
           "chargepoints": chargeLocation.chargepoints,
