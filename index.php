@@ -282,7 +282,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
 
     const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
-    const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2';
+    const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
     const chargerHighwaySize = '39';
@@ -1305,7 +1305,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
             (maxChargePoint.power >= superCharger.minPower) ? "thirdSuperCharger" :
             (maxChargePoint.power >= highwayCharger.minPower) ? "highwayCharger" :
-            "parkCharger",
+            (maxChargePoint.type == "Typ2") ? "parkCharger" :
+            "socketCharger",
 
           "coordinates": chargeLocation.coordinates,
           "chargepoints": chargeLocation.chargepoints,
