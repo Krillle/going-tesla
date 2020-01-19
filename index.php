@@ -880,9 +880,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function updateRouteChargerList(destination) {
+      console.log('Start', new Date().format("HH:MM:ss l"));
       var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'simplified');
+      console.log('Route calculated', new Date().format("HH:MM:ss l"));
       <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
       var routeChargers = getRouteChargers(route.coordinates);
+      console.log('Chargers determined', new Date().format("HH:MM:ss l"));
+
       var routeChargerList = '';
       var icon = '';
 
@@ -1359,6 +1363,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                 }
               }
             });
+            console.log(i,'done', new Date().format("HH:MM:ss l"));
+
           };
       });
       newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
