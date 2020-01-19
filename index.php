@@ -1338,7 +1338,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     async function giveBackControl(milliseconds) {
+      console.log("Wating");
       await sleep(milliseconds);
+      console.log("continueing");
     };
 
     function getRouteChargers(coordinates) {
@@ -1351,7 +1353,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            giveBackControl(10);
+            giveBackControl(100);
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
             chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
