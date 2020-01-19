@@ -901,12 +901,25 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</xstrong></td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
         routeChargerList += `</div></a>`;
       });
+
+      routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
+      routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+      routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
+      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${socketChargerImage}"/>`
+      routeChargerList += `</div>`;
+      routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+      routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${route.range ? route.range : ""}</xstrong></td>`;
+      routeChargerList += `</tr></tbody></table>`;
+      routeChargerList += `${destination.name}</p>`;
+      routeChargerList += `</div></a>`;
+
       routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
       routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       routeList(routeChargerList);
@@ -1333,16 +1346,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
     };
 
-    function sleep(milliseconds) {
-      return new Promise(resolve => setTimeout(resolve, milliseconds));
-    };
-
-    async function giveBackControl(milliseconds) {
-      console.log("Wating");
-      await sleep(milliseconds);
-      console.log("continueing");
-    };
-
     function getRouteChargers(coordinates) {
       var checkList = [];
       var newList = {
@@ -1353,7 +1356,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            giveBackControl(100);
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
             chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
@@ -1374,37 +1376,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
       return newList;
     };
-
-    // function getRouteChargers(coordinates) {
-    //   var checkList = [];
-    //   var newList = {
-    //       "type": "FeatureCollection",
-    //       "features": []
-    //   };
-    //   var lineBox, chargerList;
-    //
-    //   coordinates.forEach( (point, i) => {
-    //       if (i < coordinates.length-1) {
-    //         lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
-    //
-    //         chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
-    //         if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-    //         if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-    //
-    //         chargerList.chargelocations.forEach(chargeLocation => {
-    //           if (!checkList.includes(chargeLocation.ge_id)) {
-    //             if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
-    //               console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
-    //               checkList.push(chargeLocation.ge_id);
-    //               newList.features.push(chargeLocationDetails(chargeLocation,true));
-    //             }
-    //           }
-    //         });
-    //       };
-    //   });
-    //   newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
-    //   return newList;
-    // };
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
