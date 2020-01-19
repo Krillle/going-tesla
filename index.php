@@ -777,9 +777,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // document.querySelector('status').textContent = teslaConnection.status;
 
       var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
+      if (email == null) {return};
       var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
+      if (password == null) {return};
 
-      if (email & password) {createTeslaToken(email, password)};
+      createTeslaToken(email, password);
     };
 
     function infoMessage(message) {
@@ -810,7 +812,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       console.log ('Access cookie: ' + getCookie('access'));
       console.log ('Access data: ' + teslaConnection.accessToken);
 
-      if (typeof(teslaConnection.accessToken) == 'undefined') {
+      if (!teslaConnection.accessToken) {
         teslaConnection.status = 'Kein Token';
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
