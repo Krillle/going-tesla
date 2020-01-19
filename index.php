@@ -1344,11 +1344,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "features": []
       };
       var lineBox, chargerList;
+      await xsleep(10);
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            await xsleep(10);
-
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
             chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
