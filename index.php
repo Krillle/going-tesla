@@ -1333,7 +1333,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
     };
 
-    function Sleep(milliseconds) {
+    function sleep(milliseconds) {
       return new Promise(resolve => setTimeout(resolve, milliseconds));
     }
 
@@ -1348,7 +1348,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
             await sleep(10)<;
-            
+
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
             chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
