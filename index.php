@@ -1347,7 +1347,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       coordinates.forEach( (point, i) => {
           if (i < coordinates.length-1) {
-            await sleep(10)<;
+            await sleep(10);
 
             lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
 
