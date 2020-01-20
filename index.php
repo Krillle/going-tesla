@@ -872,12 +872,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       if (positionIcon.geometry.coordinates != [teslaPosition.longitude,teslaPosition.latitude]
           && positionIcon.properties.bearing != teslaPosition.heading) {
+
         positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
         positionIcon.properties.bearing = teslaPosition.heading;
 
         map.getSource('positionIcon').setData(positionIcon);
-
         updateMapFocus ();
+
+        if (lineDistance([[teslaPosition.latitude,teslaPosition.longitude],currentDestination.center]) < 100) {hideRouteList()};
       };
     };
 
