@@ -1191,8 +1191,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
             'durationRaw': result.routes[0].duration,
             'duration': secondsToTime(result.routes[0].duration),
-            'rangeRaw' : teslaPosition.range - result.routes[0].distance/1000,
-            'range' : (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km',
+            'rangeRaw' : teslaPosition.range ? teslaPosition.range - result.routes[0].distance/1000 : false,
+            'range' : teslaPosition.range ? (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km' : false,
             'coordinates': route ? decodePolyline(result.routes[0].geometry) : false
           }
         } else {
