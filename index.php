@@ -399,8 +399,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
 
-      routeList(`<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${waitImage}"/>`);
-      return;
+      routeList(`<img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/>`);
 
       currentDestination = {
         'center': destination.result.center,
