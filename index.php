@@ -314,6 +314,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const socketChargerImage = `https://img.icons8.com/material-outlined/${chargerParkSize}/${chargerParkColor}/wall-socket.png`;
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
     const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
+    const waitImage = `https://img.icons8.com/ios-glyphs/${chargerBigSize}/${chargerThirdColor}/hourglass.png`;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
@@ -397,6 +398,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     })
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
+
+      routeList(`<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${waitImage}"/>`);
+      return;
 
       currentDestination = {
         'center': destination.result.center,
@@ -797,9 +801,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     function routeList(message) {
       if (routeContainer.innerHTML) {routeContainer.innerHTML = '';};
-      // var pre = document.createElement('pre');
       routeContainer.innerHTML = message;
-      // routeContainer.appendChild(pre);
       routeContainer.style.visibility = 'visible';
     };
 
@@ -879,69 +881,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.getSource('positionIcon').setData(positionIcon);
         updateMapFocus ();
 
-        if (lineDistance([[teslaPosition.latitude,teslaPosition.longitude],currentDestination.center]) < 250) {hideRouteList()};
+        if (lineDistance([[teslaPosition.latitude,teslaPosition.longitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
       };
-    };
-
-    function updateRouteChargerList(destination) {
-      var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'simplified');
-      <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
-      var routeChargers = getRouteChargers(route.coordinates);
-      var routeChargerList = '';
-      var icon = '';
-
-      var iconColumnWidth = Number(chargerBigSize)+10;
-
-      routeChargers.features.forEach( chargeLocation => {
-        icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
-               (chargeLocation.properties.icon == "teslaSuperCharger") ? teslaSuperChargerImage :
-               (chargeLocation.properties.icon == "thirdSuperCharger") ? thirdSuperChargerImage :
-               (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
-               parkChargerImage;
-        routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
-        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
-        routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
-        routeChargerList += `</div>`;
-        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
-        routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
-        routeChargerList += `</tr></tbody></table>`;
-        routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
-        routeChargerList += `</div></a>`;
-      });
-
-      routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
-      routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
-      routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
-      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${destinationImage}"/>`
-      routeChargerList += `</div>`;
-      routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
-      routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${route.range ? route.range : ""}</xstrong></td>`;
-      routeChargerList += `</tr></tbody></table>`;
-      routeChargerList += `${destination.name}</p>`;
-      routeChargerList += `</div></a>`;
-
-      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
-      routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
-      routeList(routeChargerList);
-
-      var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'full');
-      showRoute(route.coordinates);
-    };
-
-    function toggleeRouteList(){
-      minPowerList = minPowerList == superCharger.minPower ? highwayCharger.minPower : superCharger.minPower;
-      updateRouteChargerList (currentDestination);
-    };
-
-    function cancelRouteChargerList() {
-      clearInterval(updateListInterval);
-      hideRouteList();
-      hideRoute()
-      document.cookie = "destination=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Destination Cookie löschen
     };
 
     // - - - - - - - - Tesla requests - - - - - - - - -
@@ -1380,6 +1321,68 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
       return newList;
     };
+
+    function updateRouteChargerList(destination) {
+      var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'simplified');
+      <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
+      var routeChargers = getRouteChargers(route.coordinates);
+
+      var routeChargerList = '';
+      var icon = '';
+      var iconColumnWidth = Number(chargerBigSize)+10;
+
+      routeChargers.features.forEach( chargeLocation => {
+        icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
+               (chargeLocation.properties.icon == "teslaSuperCharger") ? teslaSuperChargerImage :
+               (chargeLocation.properties.icon == "thirdSuperCharger") ? thirdSuperChargerImage :
+               (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
+               parkChargerImage;
+        routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
+        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
+        routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
+        routeChargerList += `</div>`;
+        routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+        routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
+        routeChargerList += `</tr></tbody></table>`;
+        routeChargerList += `${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
+        routeChargerList += `</div></a>`;
+      });
+
+      routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
+      routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+      routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
+      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${destinationImage}"/>`
+      routeChargerList += `</div>`;
+      routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+      routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${route.range ? route.range : ""}</xstrong></td>`;
+      routeChargerList += `</tr></tbody></table>`;
+      routeChargerList += `${destination.name}</p>`;
+      routeChargerList += `</div></a>`;
+
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
+      routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
+      routeList(routeChargerList);
+
+      var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'full');
+      showRoute(route.coordinates);
+    };
+
+    function toggleeRouteList(){
+      minPowerList = minPowerList == superCharger.minPower ? highwayCharger.minPower : superCharger.minPower;
+      updateRouteChargerList (currentDestination);
+    };
+
+    function cancelRouteChargerList() {
+      clearInterval(updateListInterval);
+      hideRouteList();
+      hideRoute()
+      document.cookie = "destination=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Destination Cookie löschen
+    };
+
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
