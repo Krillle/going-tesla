@@ -342,8 +342,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var zoomToggleState = 0;
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
-    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
-    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
+    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
+    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
 
     var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
 
@@ -1330,6 +1330,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var icon = '';
       var iconColumnWidth = Number(chargerBigSize)+10;
 
+      routeChargerList += `<div style="max-height: 700px; box-sizing: border-box; overflow-y: auto;">`;
+      // routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 10px;" src="${waitImage}"/>`;
+
       routeChargers.features.forEach( chargeLocation => {
         icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
                (chargeLocation.properties.icon == "teslaSuperCharger") ? teslaSuperChargerImage :
@@ -1350,8 +1353,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `</div></a>`;
       });
 
-      // routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 10px;" src="${waitImage}"/>`;
-
       routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
       routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
       routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
@@ -1364,8 +1365,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       routeChargerList += `${destination.name}</p>`;
       routeChargerList += `</div></a>`;
 
+      routeChargerList += `</div>`;
+
       routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
       routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
+
       routeList(routeChargerList);
 
       var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'full');
