@@ -343,7 +343,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
     // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
-    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 0};
+    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 100};
 
     var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
 
@@ -1279,6 +1279,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           "distanceRaw" : includeDistance ? route.distanceRaw : false,
           "distance" : includeDistance ? route.distance : false,
           "duration" : includeDistance ? route.duration : false,
+          "rangeRaw" : includeDistance ? route.rangeRaw : false
           "range" : includeDistance ? route.range : false
         },
         "geometry": {
@@ -1337,7 +1338,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                parkChargerImage;
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
         routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
-        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px; ${chargeLocation.properties.range < 10 ? 'opacity: 0.5;' : ''}">`;
+        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px; ${chargeLocation.properties.rangeRaw < 10 ? 'opacity: 0.5;' : ''}">`;
         routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
