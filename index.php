@@ -879,7 +879,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.getSource('positionIcon').setData(positionIcon);
         updateMapFocus ();
 
-        if (lineDistance([[teslaPosition.latitude,teslaPosition.longitude],currentDestination.center]) < 100) {hideRouteList()};
+        if (lineDistance([[teslaPosition.latitude,teslaPosition.longitude],currentDestination.center]) < 250) {hideRouteList()};
       };
     };
 
