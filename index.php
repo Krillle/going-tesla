@@ -1322,10 +1322,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function updateRouteChargerList(destination) {
       var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'simplified');
       <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
-      var routeChargers = {
-          "type": "FeatureCollection",
-          "features": []
-      };; //getRouteChargers(route.coordinates);
+      var routeChargers = getRouteChargers(route.coordinates);
+      // var routeChargers = {"type": "FeatureCollection","features": []};
 
       var routeChargerList = '';
       var icon = '';
@@ -1339,7 +1337,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
                parkChargerImage;
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
         routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
-        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
+        routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px; ${chargeLocation.properties.range < 10 ? 'opacity: 0.5;' : ''}">`;
         routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
@@ -1351,7 +1349,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `</div></a>`;
       });
 
-      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 10px;" src="${waitImage}"/>`;
+      // routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 10px;" src="${waitImage}"/>`;
 
       routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
       routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
