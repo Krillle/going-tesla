@@ -399,8 +399,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     geocoderControl.on('result', function(destination) {
       console.log('Destination:', destination.result.text);
 
-      routeList(`<img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/>`);
-
       currentDestination = {
         'center': destination.result.center,
         'name': destination.result.place_name,
@@ -1324,7 +1322,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function updateRouteChargerList(destination) {
       var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'simplified');
       <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
-      var routeChargers = getRouteChargers(route.coordinates);
+      var routeChargers = []; //getRouteChargers(route.coordinates);
 
       var routeChargerList = '';
       var icon = '';
@@ -1349,6 +1347,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
         routeChargerList += `</div></a>`;
       });
+
+      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/>`;
 
       routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
       routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
