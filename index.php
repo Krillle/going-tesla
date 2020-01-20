@@ -150,8 +150,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .onecolumn {
     	height: 70px;
-      padding: 0px !important;
+      padding-top: 20px;
     }
+    
     .twocolumns {
     	height: 70px;
     	column-count: 2; column-gap: 8px;
@@ -1330,7 +1331,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var icon = '';
       var iconColumnWidth = Number(chargerBigSize)+10;
 
-      routeChargerList += `<div style="max-height: 700px; box-sizing: border-box; overflow-y: auto;">`;
+      routeChargerList += `<div style="max-height: 690px; box-sizing: border-box; overflow-y: auto;">`;
       // routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 10px;" src="${waitImage}"/>`;
 
       routeChargers.features.forEach( chargeLocation => {
