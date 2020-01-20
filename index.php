@@ -1351,7 +1351,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `</div></a>`;
       });
 
-      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/>`;
+      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 10px;" src="${waitImage}"/>`;
 
       routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
       routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
