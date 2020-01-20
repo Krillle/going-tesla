@@ -314,7 +314,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const socketChargerImage = `https://img.icons8.com/material-outlined/${chargerParkSize}/${chargerParkColor}/wall-socket.png`;
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
     const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
-    const waitImage = `https://img.icons8.com/ios-glyphs/${chargerBigSize}/${chargerThirdColor}/hourglass.png`;
+    const waitImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/hourglass.png`;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
