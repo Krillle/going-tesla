@@ -152,7 +152,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     	height: 70px;
       padding-top: 20px;
     }
-    
+
     .twocolumns {
     	height: 70px;
     	column-count: 2; column-gap: 8px;
@@ -879,7 +879,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.getSource('positionIcon').setData(positionIcon);
         updateMapFocus ();
 
-        if (lineDistance([[teslaPosition.latitude,teslaPosition.longitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
+        if (lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
       };
     };
 
