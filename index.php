@@ -398,6 +398,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       trackProximity: true
     })
     geocoderControl.on('result', function(destination) {
+      cancelRouteChargerList();
       console.log('Destination:', destination.result.text);
 
       currentDestination = {
@@ -1383,7 +1384,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function cancelRouteChargerList() {
+      console.log(updateListInterval);
       clearInterval(updateListInterval);
+      console.log(updateListInterval);
+      
       hideRouteList();
       hideRoute()
       document.cookie = "destination=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Destination Cookie löschen
