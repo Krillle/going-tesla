@@ -152,7 +152,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     	height: 70px;
       padding-top: 20px;
     }
-    
+
     .twocolumns {
     	height: 70px;
     	column-count: 2; column-gap: 8px;
@@ -398,15 +398,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       trackProximity: true
     })
     geocoderControl.on('result', function(destination) {
-      console.log('Destination:', destination.result.text);
+      cancelRouteChargerList(); // Stop previous list update in case one is running
 
+      console.log('Destination:', destination.result.text);
       currentDestination = {
         'center': destination.result.center,
         'name': destination.result.place_name,
         'text': destination.result.text
       };
-      console.log(currentDestination);
-
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
@@ -879,7 +878,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.getSource('positionIcon').setData(positionIcon);
         updateMapFocus ();
 
-        if (lineDistance([[teslaPosition.latitude,teslaPosition.longitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
+        if (lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
       };
     };
 
