@@ -398,16 +398,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       trackProximity: true
     })
     geocoderControl.on('result', function(destination) {
-      cancelRouteChargerList();
-      console.log('Destination:', destination.result.text);
+      cancelRouteChargerList(); // Stop previous list update in case one is running
 
+      console.log('Destination:', destination.result.text);
       currentDestination = {
         'center': destination.result.center,
         'name': destination.result.place_name,
         'text': destination.result.text
       };
-      console.log(currentDestination);
-
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
@@ -1384,10 +1382,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function cancelRouteChargerList() {
-      console.log(updateListInterval);
       clearInterval(updateListInterval);
-      console.log(updateListInterval);
-      
       hideRouteList();
       hideRoute()
       document.cookie = "destination=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Destination Cookie löschen
