@@ -1349,7 +1349,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
           actionFunc( i++ );  // closure on i
           setTimeout( f, 50 )
         }
-        else if (doneFunc & contCond) {
+        else if (doneFunc && contCond()) {
           doneFunc();
         }
       };
