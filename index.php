@@ -1348,6 +1348,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var f = function () {
         if (i < numTimes) {
           actionFunc( i++ );  // closure on i
+          console.log('Setting timeout before',i);
           setTimeout( f, 10 )
         }
         else if (doneFunc) {
@@ -1384,6 +1385,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function postProcessSegments() {
+      console.log('Sorting list');
       newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
     };
 
@@ -1398,36 +1400,36 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return newList;
     };
 
-    function getRouteChargers(coordinates) {
-      var checkList = [];
-      var newList = {
-          "type": "FeatureCollection",
-          "features": []
-      };
-      var lineBox, chargerList;
-
-      coordinates.forEach( (point, i) => {
-          if (i < coordinates.length-1) {
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
-
-            chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
-            if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-            if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-
-            chargerList.chargelocations.forEach(chargeLocation => {
-              if (!checkList.includes(chargeLocation.ge_id)) {
-                if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
-                  console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
-                  checkList.push(chargeLocation.ge_id);
-                  newList.features.push(chargeLocationDetails(chargeLocation,true));
-                }
-              }
-            });
-          };
-      });
-      newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
-      return newList;
-    };
+    // function getRouteChargers(coordinates) {
+    //   var checkList = [];
+    //   var newList = {
+    //       "type": "FeatureCollection",
+    //       "features": []
+    //   };
+    //   var lineBox, chargerList;
+    //
+    //   coordinates.forEach( (point, i) => {
+    //       if (i < coordinates.length-1) {
+    //         lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+    //
+    //         chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
+    //         if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+    //         if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+    //
+    //         chargerList.chargelocations.forEach(chargeLocation => {
+    //           if (!checkList.includes(chargeLocation.ge_id)) {
+    //             if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
+    //               console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+    //               checkList.push(chargeLocation.ge_id);
+    //               newList.features.push(chargeLocationDetails(chargeLocation,true));
+    //             }
+    //           }
+    //         });
+    //       };
+    //   });
+    //   newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
+    //   return newList;
+    // };
 
     function setRouteChargerList() {
       currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'simplified');
