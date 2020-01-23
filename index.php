@@ -412,7 +412,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-      initalRouteChargerList();
+      setTimeout(initalRouteChargerList, 20);
       console.log ('Starting continuous list update');
       updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
 
