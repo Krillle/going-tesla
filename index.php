@@ -1345,7 +1345,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function processLoop( actionFunc, numTimes, doneFunc, contCond ) {
       var i = 0;
       var f = function () {
-        if (i < numTimes & contCond) {
+        if (i < numTimes && contCond()) {
           actionFunc( i++ );  // closure on i
           setTimeout( f, 50 )
         }
