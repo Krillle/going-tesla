@@ -292,6 +292,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const chargerFaultSize = '24';
     const destinationSize = '39';
 
+    const iconColumnWidth = Number(chargerBigSize)+10;
+
     var mapStyle = 'mapbox://styles/krillle/ck0my3cjp4nfm1cksdx1rap0q?optimize=true'; // Light Tesla
     const mapStyleSatellite = 'mapbox://styles/mapbox/satellite-v9'; // Satellite
     const chargerTeslaColor = "ff514a";
@@ -347,6 +349,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
 
     var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
+    var currentRoute = false;
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -409,9 +412,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-      updateRouteChargerList(currentDestination);
+      setTimeout(initalRouteChargerList, 20);
       console.log ('Starting continuous list update');
-      updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
+      updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
 
     });
     map.addControl(geocoderControl,'top-left');
@@ -591,9 +594,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       if (currentDestination) {
         gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-        updateRouteChargerList(currentDestination);
+        initalRouteChargerList();
         console.log ('Recovering continuous list update');
-        updateListInterval = setInterval(function() {updateRouteChargerList(currentDestination);}, updateListTime);
+        updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
       };
 
     });
@@ -1142,21 +1145,21 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       )
     };
 
-    function showBoxes(coordinates) {
+    function showBoxes() {
       var newList = {
           "type": "FeatureCollection",
           "features": []
       };
       var lineBox;
 
-      coordinates.forEach( (point, i) => {
-          if (i < coordinates.length-1) {
+      currentRoute.coordinates.forEach( (point, i) => {
+          if (i < currentRoute.coordinates.length-1) {
             // Bounding Boxes
             // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
             // lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
 
             // Boxes aloung Route
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+            lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
             lineBox.push(lineBox[0]); // close Polygon
 
             // console.log(lineBox);
@@ -1171,7 +1174,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      // console.log('distantBox:',newList.features[0].geometry.coordinates);
       map.getSource('distantBox').setData(newList);
     };
 
@@ -1289,50 +1291,102 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       };
     };
 
-    function getRouteChargers(coordinates) {
-      var checkList = [];
-      var newList = {
-          "type": "FeatureCollection",
-          "features": []
-      };
-      var lineBox, chargerList;
-
-      coordinates.forEach( (point, i) => {
-          if (i < coordinates.length-1) {
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
-
-            chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
-            if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-            if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-
-            chargerList.chargelocations.forEach(chargeLocation => {
-              if (!checkList.includes(chargeLocation.ge_id)) {
-                if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
-                  console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
-                  checkList.push(chargeLocation.ge_id);
-                  newList.features.push(chargeLocationDetails(chargeLocation,true));
-                }
-              }
-            });
-          };
-      });
-      newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
-      return newList;
+    function chargerListHeader() {
+      var routeChargerList = '';
+      routeChargerList += `<div style="max-height: 690px; box-sizing: border-box; overflow-y: auto;">`;
+      return routeChargerList;
     };
 
-    function updateRouteChargerList(destination) {
-      var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'simplified');
-      <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
-      var routeChargers = getRouteChargers(route.coordinates);
-      // var routeChargers = {"type": "FeatureCollection","features": []};
-
+    function chargerListFooter() {
       var routeChargerList = '';
+      routeChargerList += `<a href="#" onclick="flyToCharger(${currentDestination.center[0]},${currentDestination.center[1]},'${currentDestination.text}',''); return false;">`;
+      routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
+      routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
+      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${destinationImage}"/>`
+      routeChargerList += `</div>`;
+      routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+      routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${currentRoute.range ? currentRoute.range : ""}</xstrong></td>`;
+      routeChargerList += `</tr></tbody></table>`;
+      routeChargerList += `${currentDestination.name}</p>`;
+      routeChargerList += `</div></a>`;
+
+      routeChargerList += `</div>`;
+
+      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
+      routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
+      return routeChargerList;
+    };
+
+    function waitChargerList() {
+      var routeChargerList = chargerListHeader();
+      routeChargerList += `<p style="text-align: center;">Ladestationen für die Route werden gesucht.</p>`;
+      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/>`;
+      routeChargerList += chargerListFooter();
+      routeList(routeChargerList);
+    };
+
+    function setRouteLine() {
+      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full');
+      showRoute(currentRoute.coordinates);
+    };
+
+    function initalRouteChargerList() {
+      setRouteLine();
+      waitChargerList();
+      updateRouteChargerList();
+    };
+
+    function updateRouteChargerList() {
+      setRouteLine();
+      setRouteChargerList();
+    };
+
+    function processLoop( actionFunc, numTimes, doneFunc ) {
+      var i = 0;
+      var f = function () {
+        if (i < numTimes) {
+          actionFunc( i++ );  // closure on i
+          setTimeout( f, 50 )
+        }
+        else if (doneFunc) {
+          doneFunc();
+        }
+      };
+      f();
+    }
+
+    var checkList = [];
+    var routeChargers = {
+        "type": "FeatureCollection",
+        "features": []
+    };
+
+    function processRouteSegments(i) {
+      var lineBox, chargerList;
+
+      lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
+
+      chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
+      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+
+      chargerList.chargelocations.forEach(chargeLocation => {
+        if (!checkList.includes(chargeLocation.ge_id)) {
+          if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
+            console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+            checkList.push(chargeLocation.ge_id);
+            routeChargers.features.push(chargeLocationDetails(chargeLocation,true));
+          }
+        }
+      });
+    };
+
+    function postProcessSegments() {
+      routeChargers.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
+
+      var routeChargerList = chargerListHeader();
       var icon = '';
-      var iconColumnWidth = Number(chargerBigSize)+10;
-
-      routeChargerList += `<div style="max-height: 690px; box-sizing: border-box; overflow-y: auto;">`;
-      // routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 10px;" src="${waitImage}"/>`;
-
       routeChargers.features.forEach( chargeLocation => {
         icon = (chargeLocation.properties.icon == "faultReport") ? faultReportImage :
                (chargeLocation.properties.icon == "teslaSuperCharger") ? teslaSuperChargerImage :
@@ -1353,32 +1407,60 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `</div></a>`;
       });
 
-      routeChargerList += `<a href="#" onclick="flyToCharger(${destination.center[0]},${destination.center[1]},'${destination.text}',''); return false;">`;
-      routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;">`;
-      routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
-      routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${destinationImage}"/>`
-      routeChargerList += `</div>`;
-      routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
-      routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${route.range ? route.range : ""}</xstrong></td>`;
-      routeChargerList += `</tr></tbody></table>`;
-      routeChargerList += `${destination.name}</p>`;
-      routeChargerList += `</div></a>`;
-
-      routeChargerList += `</div>`;
-
-      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
-      routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
-
+      routeChargerList += chargerListFooter();
       routeList(routeChargerList);
 
-      var route = getRoute(teslaPosition,{'longitude' : destination.center[0], 'latitude' : destination.center[1]},'full');
-      showRoute(route.coordinates);
+    };
+
+    function processRouteChargers() {
+      checkList = [];
+      routeChargers = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments);
+    };
+
+    // function getRouteChargers(coordinates) {
+    //   var checkList = [];
+    //   var newList = {
+    //       "type": "FeatureCollection",
+    //       "features": []
+    //   };
+    //   var lineBox, chargerList;
+    //
+    //   coordinates.forEach( (point, i) => {
+    //       if (i < coordinates.length-1) {
+    //         lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+    //
+    //         chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
+    //         if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+    //         if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+    //
+    //         chargerList.chargelocations.forEach(chargeLocation => {
+    //           if (!checkList.includes(chargeLocation.ge_id)) {
+    //             if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
+    //               console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+    //               checkList.push(chargeLocation.ge_id);
+    //               newList.features.push(chargeLocationDetails(chargeLocation,true));
+    //             }
+    //           }
+    //         });
+    //       };
+    //   });
+    //   newList.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
+    //   return newList;
+    // };
+
+    function setRouteChargerList() {
+      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'simplified');
+      <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
+      processRouteChargers();
     };
 
     function toggleeRouteList(){
       minPowerList = minPowerList == superCharger.minPower ? highwayCharger.minPower : superCharger.minPower;
-      updateRouteChargerList (currentDestination);
+      updateRouteChargerList();
     };
 
     function cancelRouteChargerList() {
@@ -1387,7 +1469,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       hideRoute()
       document.cookie = "destination=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Destination Cookie löschen
     };
-
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
@@ -1431,7 +1512,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       return {'text': description, 'address': address};
     };
 
-    function chargerDescription (id) {
+    function chargerDescription(id) {
       var chargerDetails = getChargerDetails(id);
       if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
       var chargeLocation = chargerDetails.chargelocations[0];
