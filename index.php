@@ -331,7 +331,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const slowSpeedZoom = '16';
     const highSpeedZoom = '9';
 
-    const maxChargerDistance = 3000; // max senkrechter Abstand Charger von Route in m
+    const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
 
     const updatePositionTime = 20000;
     const updateListTime = 120000;
@@ -1422,7 +1422,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function setRouteChargerList() {
-      // currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'simplified');
+      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'simplified');
       <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
       processRouteChargers();
     };
