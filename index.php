@@ -1145,21 +1145,21 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       )
     };
 
-    function showBoxes(coordinates) {
+    function showBoxes() {
       var newList = {
           "type": "FeatureCollection",
           "features": []
       };
       var lineBox;
 
-      coordinates.forEach( (point, i) => {
-          if (i < coordinates.length-1) {
+      currentRoute.coordinates.forEach( (point, i) => {
+          if (i < currentRoute.coordinates.length-1) {
             // Bounding Boxes
             // box = boundingBox(distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance));
             // lineBox = [box[0], [box[0][0],box[1][1]], box[1], [box[1][0],box[0][1]] ,box[0]];
 
             // Boxes aloung Route
-            lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+            lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
             lineBox.push(lineBox[0]); // close Polygon
 
             // console.log(lineBox);
