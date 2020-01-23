@@ -1347,7 +1347,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var f = function () {
         if (i < numTimes) {
           actionFunc( i++ );  // closure on i
-          setTimeout( f, 20 )
+          setTimeout( f, 50 )
         }
         else if (doneFunc) {
           doneFunc();
