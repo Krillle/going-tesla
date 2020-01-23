@@ -1367,7 +1367,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     function processRouteSegments(i) {
       var lineBox, chargerList;
 
-      lineBox = distantLineBox([coordinates[i],coordinates[i+1]],maxChargerDistance);
+      lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
 
       chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
