@@ -1174,7 +1174,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
             });
           };
       });
-      // console.log('distantBox:',newList.features[0].geometry.coordinates);
       map.getSource('distantBox').setData(newList);
     };
 
@@ -1348,8 +1347,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var f = function () {
         if (i < numTimes) {
           actionFunc( i++ );  // closure on i
-          console.log('Setting timeout before',i);
-          setTimeout( f, 10 )
+          setTimeout( f, 20 )
         }
         else if (doneFunc) {
           doneFunc();
@@ -1385,7 +1383,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function postProcessSegments() {
-      console.log('Sorting list',routeChargers,checkList);
       routeChargers.features.sort((a,b) => { return a.properties.distanceRaw - b.properties.distanceRaw });
 
       var routeChargerList = chargerListHeader();
