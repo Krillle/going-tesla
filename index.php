@@ -331,7 +331,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     const slowSpeedZoom = '16';
     const highSpeedZoom = '9';
 
-    const maxChargerDistance = 3000; // max senkrechter Abstand Charger von Route
+    const maxChargerDistance = 5000; // max senkrechter Abstand Charger von Route in m
 
     const updatePositionTime = 20000;
     const updateListTime = 120000;
