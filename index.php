@@ -1402,7 +1402,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
         routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
-        routeChargerList += `${chargeLocation.properties.name.includes(chargeLocation.properties.network) ? '' : chargeLocation.properties.network} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
+        routeChargerList += `${chargeLocation.network && chargeLocation.properties.name.includes(chargeLocation.properties.network) ? '' : chargeLocation.properties.network} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
         routeChargerList += `</div></a>`;
       });
@@ -1494,9 +1494,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var description = '';
       description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.address.city) ? '' : chargeLocation.address.city}</strong>`;
 
-      description += (chargeLocation.network && chargeLocation.network != chargeLocation.name && chargeLocation.network != chargeLocation.name + ' ' + chargeLocation.address.city) ?
+      description += (chargeLocation.network && !chargeLocation.name.includes(chargeLocation.network) ?
                      (`<br>${chargeLocation.network}<p>`) :
-                     (chargeLocation.operator && chargeLocation.operator != chargeLocation.name && chargeLocation.operator != chargeLocation.name + ' ' + chargeLocation.address.city) ?
+                     (chargeLocation.operator && !chargeLocation.name.includes(chargeLocation.operator) ?
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
