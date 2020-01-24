@@ -1494,9 +1494,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var description = '';
       description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.address.city) ? '' : chargeLocation.address.city}</strong>`;
 
-      description += (chargeLocation.network && !chargeLocation.name.includes(chargeLocation.network) ?
+      description += (chargeLocation.network && !chargeLocation.name.includes(chargeLocation.network)) ?
                      (`<br>${chargeLocation.network}<p>`) :
-                     (chargeLocation.operator && !chargeLocation.name.includes(chargeLocation.operator) ?
+                     (chargeLocation.operator && !chargeLocation.name.includes(chargeLocation.operator)) ?
                      `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
