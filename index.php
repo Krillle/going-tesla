@@ -38,6 +38,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
   <script src="lib/geolib.js"></script>
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
+  <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
   <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -94,19 +101,19 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .mapboxgl-ctrl-geocoder {
-      font-family: 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       background-color: #fff;
       <? if ($darkmode) {echo "background-color:#1a1a1a; /* dark theme */";} ?>
+    }
+
+    #map .mapboxgl-ctrl-geocoder--input {
+      height: 60px;
     }
 
     #map .mapboxgl-ctrl-geocoder .suggestions {
       font: 20px/1.4 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;5
     }
 
-    #map .mapboxgl-ctrl-geocoder--input {
-      font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      height: 60px;
-    }
     #map .mapboxgl-ctrl-geocoder--icon {
       top: 18px !important;
       left: 5px !important;
@@ -301,13 +308,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
   </style>
 </head>
 <body>
-
-  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
-  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
-  <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-
   <div id='map'></div>
   <div id='info' class='info-container'></div>
   <div id='route' class='route-container'></div>
