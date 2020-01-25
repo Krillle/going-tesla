@@ -85,13 +85,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       height:40px;
     }
 
-    #map .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
-      width: 400px;
-      min-width: 400px;
-      max-width:400px;
-      opacity: 0.9;
-    }
-
     #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-autozoom > .mapboxgl-ctrl-autozoom-icon {
       width: 40px;
       height: 40px;
@@ -99,6 +92,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       background-image: url("https://img.icons8.com/small/40/333333/gps-device.png");
       background-repeat: no-repeat;
       display: inline-block;
+    }
+
+    #map .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
+      width: 400px;
+      min-width: 400px;
+      max-width:400px;
+      opacity: 0.9;
     }
 
     .mapboxgl-ctrl-geocoder {
@@ -132,12 +132,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
-
-    #map .mapboxgl-ctrl-geocoder--icon {
-      top: 18px !important;
-      left: 5px !important;
-      width: 25px !important;
-      height: 25px !important;
+    .mapboxgl-ctrl-geocoder--icon {
+      top: 18px;
+      left: 5px;
+      width: 25px;
+      height: 25px;
     }
     #map .mapboxgl-ctrl-geocoder--icon-close {
       margin-top:11px !important;
