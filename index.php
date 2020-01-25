@@ -120,12 +120,17 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .mapboxgl-ctrl-geocoder .suggestions {
       background-color: #fff;
       <? if ($darkmode) {echo "background-color:#1a1a1a; /* dark theme */";} ?>
+      /* font: 20px/1.4 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;5 */
       font-size: 20px;
     }
 
-    #map .mapboxgl-ctrl-geocoder .suggestions {
-      font: 20px/1.4 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;5
+    .mapboxgl-ctrl-geocoder .suggestions > li > a,
+    .mapboxgl-ctrl-geocoder .suggestions > .active > a,
+    .mapboxgl-ctrl-geocoder .suggestions > li > a:hover {
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
+
 
     #map .mapboxgl-ctrl-geocoder--icon {
       top: 18px !important;
