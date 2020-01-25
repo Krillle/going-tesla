@@ -128,6 +128,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .mapboxgl-ctrl-geocoder .suggestions > li > a,
     .mapboxgl-ctrl-geocoder .suggestions > .active > a,
     .mapboxgl-ctrl-geocoder .suggestions > li > a:hover {
+      background-color: #fff;
+      <? if ($darkmode) {echo "background-color:#000000; /* dark theme */";} ?>
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
