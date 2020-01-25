@@ -150,7 +150,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .mapboxgl-ctrl-geocoder--icon-loading {
       width: 36px;
       height: 36px;
-      margin-top: 10px;
+      margin-top: 7px;
       margin-left: 350px;
     }
 
