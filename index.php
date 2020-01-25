@@ -122,14 +122,21 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       background-color: #fff;
       <? if ($darkmode) {echo "background-color:#000000; /* dark theme */";} ?>
       font-size: 20px;
-      opacity: 0.9;
     }
 
     .mapboxgl-ctrl-geocoder .suggestions > li > a,
     .mapboxgl-ctrl-geocoder .suggestions > .active > a,
     .mapboxgl-ctrl-geocoder .suggestions > li > a:hover {
+      background-color: #fff;
+      <? if ($darkmode) {echo "background-color:#000000; /* dark theme */";} ?>
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
+    }
+
+    .mapboxgl-ctrl-geocoder--suggestion-title {
+      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      color:#000000; /* light theme  */
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-geocoder--button {
@@ -316,8 +323,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       box-sizing: border-box;
       overflow-y: auto;
 
-      background-color: rgba(255, 255, 255, 0.8); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.8); /* dark theme */";} ?>
+      background-color: rgba(255, 255, 255, 0.9); /* light theme  */
+      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.9); /* dark theme */";} ?>
       /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
