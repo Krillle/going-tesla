@@ -50,14 +50,20 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 10px 20px 0; float: right; }
 
     .mapboxgl-ctrl-group {
-        border-radius: 4px;
-        background: #000;
+      background:#ffffff; /* light theme  */
+      <? if ($darkmode) {echo "background:#191a1a; /* dark theme */";} ?>
     }
 
     #map .mapboxgl-ctrl-group > button {
       width:70px;
       height:70px;
     }
+
+    .mapboxgl-ctrl-group > button + button {
+        border-top: 1px solid #ddd;
+        <? if ($darkmode) {echo "border-top: 1px solid #9c9c9c; /* dark theme */";} ?>
+    }
+
 
     #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow  {
       width:40px;
