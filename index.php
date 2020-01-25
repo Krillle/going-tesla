@@ -134,6 +134,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
+    .mapboxgl-ctrl-geocoder--suggestion-title {
+      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      color:#000000; /* light theme  */
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
+    }
+
     .mapboxgl-ctrl-geocoder--button {
       background-color: transparent;
     }
