@@ -412,7 +412,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-      setTimeout(initalRouteChargerList, 20);
+      setTimeout(initalRouteChargerList, 10);
       console.log ('Starting continuous list update');
       updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
 
@@ -796,7 +796,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       var pre = document.createElement('pre');
       pre.textContent = message;
       infoContainer.appendChild(pre);
-      // setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
+      setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
     };
 
     function routeList(message) {
@@ -1332,9 +1332,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function initalRouteChargerList() {
-      setRouteLine();
+      // setRouteLine();
       waitChargerList();
-      updateRouteChargerList();
+      setTimeout(updateRouteChargerList(),10);
     };
 
     function updateRouteChargerList() {
