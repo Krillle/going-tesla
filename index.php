@@ -208,8 +208,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     a.popupbutton-icon-highwayCharger {
-      background-image: url('https://img.icons8.com/small/39/333333/tesla-supercharger-pin.png'); /* light theme */
-      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/ffffff/tesla-supercharger-pin.png');  /* dark theme */";} ?>
+      background-image: url('https://img.icons8.com/small/39/8F8F8F/tesla-supercharger-pin.png'); /* light theme */
+      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/9c9c9c/tesla-supercharger-pin.png');  /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
@@ -1314,7 +1314,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       routeChargerList += `</div>`;
 
       routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
-      routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right;" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
+      routeChargerList += `<a class="popupbutton popupbutton-icon-highwayCharger" style="width: 60px; float: right; o" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       return routeChargerList;
     };
 
