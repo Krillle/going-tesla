@@ -133,7 +133,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .mapboxgl-ctrl-geocoder--button {
-      background: #transparent;
+      background-color: transparent;
     }
 
     .mapboxgl-ctrl-geocoder--icon {
