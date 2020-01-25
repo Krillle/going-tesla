@@ -215,8 +215,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     a.popupbutton-icon-highwayCharger-active {
-      background-image: url('https://img.icons8.com/small/39/333333/tesla-supercharger-pin.png'); /* light theme */
-      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/ffffff/tesla-supercharger-pin.png');  /* dark theme */";} ?>
+      background-image: url('https://img.icons8.com/small/39/5a5a5a/tesla-supercharger-pin.png'); /* light theme */
+      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/e6e6e6/tesla-supercharger-pin.png');  /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
