@@ -68,6 +68,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .mapboxgl-ctrl-group > button:focus:focus-visible,
     .mapboxgl-ctrl-group > button:focus:first-child,
     .mapboxgl-ctrl-group > button:focus:last-child {
+      outline: none;
+      border: none;
       box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
