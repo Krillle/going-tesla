@@ -151,7 +151,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       width: 36px;
       height: 36px;
       margin-top: 5px;
-      margin-left: 355px;
+      margin-left: 356px;
     }
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
@@ -177,8 +177,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .mapboxgl-popup-content {
       /* font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      padding:40px;
-      padding-bottom: 25px;
+      padding:40px 40px 25px;
       border-radius:10px 10px 10px 10px;
       width:420px;
       background:#ffffff; /* light theme  */
