@@ -148,7 +148,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .mapboxgl-ctrl-geocoder--icon-loading {
-
+      width: 36px;
+      height: 36px;
+      margin-top: 11px;
+      margin-right: 0px;
+    }
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
       border-top-color: #ffffff; /* light theme */
