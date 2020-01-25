@@ -245,11 +245,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       overflow-y: auto;
 
       background-color: rgba(255, 255, 255, 0.8); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.8); /* dark theme */";} ?>
+      <? if ($darkmode) {echo "background-color: rgba(25, 26, 26, 0.8); /* dark theme */";} ?>
       /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
       display: block;
       margin: 0;
       padding: 10px 20px;
@@ -257,8 +257,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .route-container a {
-      color:#8F8F8F;  /* light theme  */
       text-decoration: none;
+      color:#8F8F8F;  /* light theme  */
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
@@ -412,7 +412,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-      setTimeout(initalRouteChargerList, 10);
+      setTimeout(initalRouteChargerList, 20);
       console.log ('Starting continuous list update');
       updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
 
@@ -1332,9 +1332,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function initalRouteChargerList() {
-      // setRouteLine();
+      setRouteLine();
       waitChargerList();
-      setTimeout(updateRouteChargerList(),10);
+      setTimeout(setRouteChargerList,20);
     };
 
     function updateRouteChargerList() {
