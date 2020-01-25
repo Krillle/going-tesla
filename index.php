@@ -132,6 +132,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
+    .mapboxgl-ctrl-geocoder--button {
+      background-color: #transparent;
+    }
+
     .mapboxgl-ctrl-geocoder--icon {
       top: 18px;
       left: 5px;
@@ -141,9 +145,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .mapboxgl-ctrl-geocoder--icon-close {
       margin-top:11px
-      background-color: #fff;
-      <? if ($darkmode) {echo "background-color:#1a1a1a; /* dark theme */";} ?>
-
     }
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
