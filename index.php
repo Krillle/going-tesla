@@ -108,6 +108,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     #map .mapboxgl-ctrl-geocoder--input {
       height: 60px;
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
     #map .mapboxgl-ctrl-geocoder .suggestions {
