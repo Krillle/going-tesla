@@ -151,7 +151,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       width: 36px;
       height: 36px;
       margin-top: 11px;
-      margin-right: 0px;
+      margin-left: 360px;
     }
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
