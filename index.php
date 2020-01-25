@@ -38,6 +38,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
   <script src="lib/geolib.js"></script>
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
+  <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
   <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -46,20 +53,36 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       opacity: 0.7;
     }
 
-    #map .mapboxgl-ctrl-group > button {
+    .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl  { margin: 0 0 10px 10px; float: left; }
+    .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 10px 20px 0; float: right; }
+
+    .mapboxgl-ctrl-group {
+      background:#ffffff; /* light theme  */
+      <? if ($darkmode) {echo "background:#1a1a1a; /* dark theme */";} ?>
+    }
+
+    .mapboxgl-ctrl-group > button {
       width:70px;
       height:70px;
+    }
+
+    .mapboxgl-ctrl-group > button + button {
+        border-top: 1px solid #ddd;
+        <? if ($darkmode) {echo "border-top: 1px solid #333333; /* dark theme */";} ?>
+    }
+
+    .mapboxgl-ctrl-group > button:focus,
+    .mapboxgl-ctrl-group > button:focus:focus-visible,
+    .mapboxgl-ctrl-group > button:focus:first-child,
+    .mapboxgl-ctrl-group > button:focus:last-child {
+      outline: none;
+      border: none;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
     #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow  {
       width:40px;
       height:40px;
-    }
-
-    #map .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
-      width: 400px;
-      min-width: 400px;
-      max-width:400px;
     }
 
     #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-autozoom > .mapboxgl-ctrl-autozoom-icon {
@@ -71,22 +94,64 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       display: inline-block;
     }
 
-    #map .mapboxgl-ctrl-geocoder .suggestions {
-      font: 20px/1.4 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;5
+    #map .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
+      width: 400px;
+      min-width: 400px;
+      max-width:400px;
+      opacity: 0.9;
+    }
+
+    .mapboxgl-ctrl-geocoder {
+      font:400 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      background-color: #fff;
+      <? if ($darkmode) {echo "background-color:#1a1a1a; /* dark theme */";} ?>
     }
 
     #map .mapboxgl-ctrl-geocoder--input {
-      font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       height: 60px;
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
-    #map .mapboxgl-ctrl-geocoder--icon {
-      top: 18px !important;
-      left: 5px !important;
-      width: 25px !important;
-      height: 25px !important;
+
+    .mapboxgl-ctrl-geocoder--input:focus {
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
-    #map .mapboxgl-ctrl-geocoder--icon-close {
-      margin-top:11px !important;
+
+    .mapboxgl-ctrl-geocoder .suggestions {
+      background-color: #fff;
+      <? if ($darkmode) {echo "background-color:#1a1a1a; /* dark theme */";} ?>
+      font-size: 20px;
+      opacity: 0.9;
+    }
+
+    .mapboxgl-ctrl-geocoder .suggestions > li > a,
+    .mapboxgl-ctrl-geocoder .suggestions > .active > a,
+    .mapboxgl-ctrl-geocoder .suggestions > li > a:hover {
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
+    }
+
+    .mapboxgl-ctrl-geocoder--button {
+      background-color: transparent;
+    }
+
+    .mapboxgl-ctrl-geocoder--icon {
+      top: 18px;
+      left: 5px;
+      width: 25px;
+      height: 25px;
+    }
+
+    .mapboxgl-ctrl-geocoder--icon-close {
+      margin-top:11px
+    }
+
+    .mapboxgl-ctrl-geocoder--icon-loading {
+      width: 36px;
+      height: 36px;
+      margin-top: 5px;
+      margin-left: 356px;
     }
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
@@ -110,9 +175,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .mapboxgl-popup-content {
-      font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      padding:40px;
-      padding-bottom: 25px;
+      /* font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
+      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      padding:40px 40px 25px;
       border-radius:10px 10px 10px 10px;
       width:420px;
       background:#ffffff; /* light theme  */
@@ -230,7 +295,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .info-container > * {
       background-color: rgba(255, 255, 255, 0.7); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
+      <? if ($darkmode) {echo "background-color: rgba(25, 26, 26, 0.7); /* dark theme */";} ?>
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
@@ -251,8 +316,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       box-sizing: border-box;
       overflow-y: auto;
 
-      background-color: rgba(255, 255, 255, 0.8); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(25, 26, 26, 0.8); /* dark theme */";} ?>
+      background-color: rgba(255, 255, 255, 0.9); /* light theme  */
+      <? if ($darkmode) {echo "background-color: rgba(25, 26, 26, 0.9); /* dark theme */";} ?>
       /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
@@ -272,13 +337,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
   </style>
 </head>
 <body>
-
-  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
-  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
-  <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-
   <div id='map'></div>
   <div id='info' class='info-container'></div>
   <div id='route' class='route-container'></div>
