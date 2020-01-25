@@ -295,7 +295,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .info-container > * {
       background-color: rgba(255, 255, 255, 0.7); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
+      <? if ($darkmode) {echo "background-color: rgba(25, 26, 26, 0.7); /* dark theme */";} ?>
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
