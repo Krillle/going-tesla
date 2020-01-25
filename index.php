@@ -43,8 +43,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     #map { position:absolute; top:0; bottom:0; width:100%; }
 
     #map .mapboxgl-ctrl {
-      opacity: 0.7;
+      opacity: 0.8;
     }
+
+    .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl  { margin: 0 0 20px 10px; float: left; }
+    .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 10px 20px 0; float: right; }
 
     #map .mapboxgl-ctrl-group > button {
       width:70px;
@@ -110,7 +113,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .mapboxgl-popup-content {
-      font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      /* font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
+      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif
       padding:40px;
       padding-bottom: 25px;
       border-radius:10px 10px 10px 10px;
@@ -251,8 +255,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       box-sizing: border-box;
       overflow-y: auto;
 
-      background-color: rgba(255, 255, 255, 0.8); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(25, 26, 26, 0.8); /* dark theme */";} ?>
+      background-color: rgba(255, 255, 255, 0.9); /* light theme  */
+      <? if ($darkmode) {echo "background-color: rgba(25, 26, 26, 0.9); /* dark theme */";} ?>
       /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
