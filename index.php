@@ -164,7 +164,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .mapboxgl-popup-content {
       /* font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
-      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif
+      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       padding:40px;
       padding-bottom: 25px;
       border-radius:10px 10px 10px 10px;
