@@ -43,11 +43,16 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     #map { position:absolute; top:0; bottom:0; width:100%; }
 
     #map .mapboxgl-ctrl {
-      opacity: 0.8;
+      opacity: 0.7;
     }
 
-    .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl  { margin: 0 0 20px 10px; float: left; }
+    .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl  { margin: 0 0 10px 10px; float: left; }
     .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 10px 20px 0; float: right; }
+
+    .mapboxgl-ctrl-group {
+        border-radius: 4px;
+        background: #000;
+    }
 
     #map .mapboxgl-ctrl-group > button {
       width:70px;
