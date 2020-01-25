@@ -122,7 +122,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       background-color: #fff;
       <? if ($darkmode) {echo "background-color:#000000; /* dark theme */";} ?>
       font-size: 20px;
-      opacity: 0.9;
     }
 
     .mapboxgl-ctrl-geocoder .suggestions > li > a,
