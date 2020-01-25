@@ -51,7 +51,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .mapboxgl-ctrl-group {
       background:#ffffff; /* light theme  */
-      <? if ($darkmode) {echo "background:#191a1a; /* dark theme */";} ?>
+      <? if ($darkmode) {echo "background:#1a1a1a; /* dark theme */";} ?>
     }
 
     #map .mapboxgl-ctrl-group > button {
@@ -61,7 +61,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .mapboxgl-ctrl-group > button + button {
         border-top: 1px solid #ddd;
-        <? if ($darkmode) {echo "border-top: 1px solid #9c9c9c; /* dark theme */";} ?>
+        <? if ($darkmode) {echo "border-top: 1px solid #333333; /* dark theme */";} ?>
     }
 
 
