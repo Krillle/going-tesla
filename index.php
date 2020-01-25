@@ -73,6 +73,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
+    button:active {
+      outline: none;
+      border: none;
+    }
+
     #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow  {
       width:40px;
       height:40px;
