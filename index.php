@@ -64,10 +64,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         <? if ($darkmode) {echo "border-top: 1px solid #333333; /* dark theme */";} ?>
     }
 
-    .mapboxgl-ctrl-group > button:focus,
-    .mapboxgl-ctrl-group > button:focus:focus-visible,
-    .mapboxgl-ctrl-group > button:focus:first-child,
-    .mapboxgl-ctrl-group > button:focus:last-child {
+    #map .mapboxgl-ctrl-group > button:focus,
+    #map .mapboxgl-ctrl-group > button:focus:focus-visible,
+    #map .mapboxgl-ctrl-group > button:focus:first-child,
+    #map .mapboxgl-ctrl-group > button:focus:last-child {
         box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
