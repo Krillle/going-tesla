@@ -89,6 +89,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       width: 400px;
       min-width: 400px;
       max-width:400px;
+      opacity: 0.9;
     }
 
     #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-autozoom > .mapboxgl-ctrl-autozoom-icon {
