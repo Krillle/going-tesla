@@ -165,19 +165,19 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
       border-top-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-top-color: #0d0d0b; /* dark theme */";} ?>
+      <? if ($darkmode) {echo "border-top-color: #000000; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
       border-bottom-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-bottom-color: #0d0d0b; /* dark theme */";} ?>
+      <? if ($darkmode) {echo "border-bottom-color: #000000; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-left > .mapboxgl-popup-tip {
       border-right-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-right-color: #0d0d0b; /* dark theme */";} ?>
+      <? if ($darkmode) {echo "border-right-color: #000000; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-right > .mapboxgl-popup-tip {
       border-left-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-left-color: #0d0d0b; /* dark theme */";} ?>
+      <? if ($darkmode) {echo "border-left-color: #000000; /* dark theme */";} ?>
     }
     .mapboxgl-popup-close-button {
       display:none;
@@ -435,7 +435,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     var infoContainer = document.getElementById('info');
     var routeContainer = document.getElementById('route');
-    // hideRouteList();
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
