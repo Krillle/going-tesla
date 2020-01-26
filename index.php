@@ -105,12 +105,12 @@
     .mapboxgl-popup-content,
     .info-container,
     .route-container {
-      font:400 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     }
 
     .mapboxgl-ctrl-geocoder--suggestion-title,
     .mapboxgl-popup-content strong {
-      font-weight: 900;
+      font-weight: 700;
       color:#000000; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
