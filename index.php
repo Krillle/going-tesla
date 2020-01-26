@@ -1385,7 +1385,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       routeChargerList += `</div>`;
 
-      routeChargerList += `<div class="onecolumn" style="padding: 20px;"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
+      routeChargerList += `<div class="onecolumn" style="padding: 20px 20px 0px;"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
       routeChargerList += `<a class="popupbutton ${minPowerList == highwayCharger.minPower ? 'popupbutton-icon-highwayCharger-active': 'popupbutton-icon-highwayCharger'}" style="width: 60px; float: right; o" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       return routeChargerList;
     };
