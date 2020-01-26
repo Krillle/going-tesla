@@ -18,6 +18,7 @@
     $lon = $location->longitude;
 
     console_log($location . "," . $lat . "," . $lon,true);
+    echo "<meta keywords='Iwashere'>";
 
   } else {
     // Sunset for location of Berlin
