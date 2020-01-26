@@ -3,25 +3,24 @@
 <head>
   <?php
   function console_log($output, $with_script_tags = true) {
-      $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-  ');';
+      $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . ');';
       if ($with_script_tags) {
           $js_code = '<script>' . $js_code . '</script>';
       }
       echo $js_code;
   }
 
-  if (isset($_GET["location"])) {
+  if (isset($_COOKIE["location"])) {
     // Sunset for last known location
-    $location = json_decode($_GET["location"]);
+    $location = json_decode($_COOKIE["location"]);
     $lat = $location->latitude;
     $lon = $location->longitude;
 
-    console_log("Location Cookie found",true);
+    console_log("Location Cookie found. Using individual daylight times.",true);
     console_log($location . "," . $lat . "," . $lon,true);
 
   } else {
-    console_log("no location Cookie found",true);
+    console_log("No location Cookie found. Usind default daylight times.",true);
     // Sunset for location of Berlin
     $lat = 52.52;
     $lon = 13.41;
