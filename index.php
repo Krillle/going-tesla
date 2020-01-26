@@ -237,8 +237,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     	height: 60px;
     	background: #d6d6d6; /* light theme */
       <? if ($darkmode) {echo "background: #4a4848; /* dark theme */";} ?>
-    	color: #000000; /* light theme  */
-    	<? if ($darkmode) {echo "color: #ffffff; /* dark theme */";} ?>
     	margin: 0px 0;
     	line-height: 1;
     	break-inside: avoid-column;
