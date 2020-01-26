@@ -4,7 +4,6 @@ if (isset($_GET["location"])) {
   $location = json_decode($_GET["location"]);
   $lat = $location->latitude;
   $lon = $location->longitude;
-  //echo ($location, $lat, $lon)
 } else {
   // Sunset for location of Berlin
   $lat = 52.52;
@@ -338,6 +337,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
 
     console.log("App started");
+    <? echo ("console.log('Cookie',",$location,",", $lat,",", $lon,");") ?>
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
 
@@ -942,7 +942,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.getSource('positionIcon').setData(positionIcon);
         updateMapFocus ();
 
-        if (lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
+        if (currentDestination && lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
       };
     };
 
