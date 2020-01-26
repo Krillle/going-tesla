@@ -331,7 +331,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
       display: block;
       margin: 0;
-      padding: 10px 20px;
+      padding: 10px 0px;
       border-radius:10px 10px 10px 10px;
     }
 
@@ -1365,7 +1365,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     function chargerListHeader() {
       var routeChargerList = '';
-      routeChargerList += `<div style="max-height: 690px; box-sizing: border-box; overflow-y: auto;">`;
+      routeChargerList += `<div style="max-height: 690px; box-sizing: border-box; overflow-y: auto; padding: 0px 20px;">`;
       return routeChargerList;
     };
 
@@ -1385,7 +1385,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
       routeChargerList += `</div>`;
 
-      routeChargerList += `<div class="onecolumn"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
+      routeChargerList += `<div class="onecolumn" style="padding: 20px;"><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a>`;
       routeChargerList += `<a class="popupbutton ${minPowerList == highwayCharger.minPower ? 'popupbutton-icon-highwayCharger-active': 'popupbutton-icon-highwayCharger'}" style="width: 60px; float: right; o" href="#" onclick="toggleeRouteList(); return false;"></a></div>`;
       return routeChargerList;
     };
