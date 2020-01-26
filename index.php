@@ -8,7 +8,7 @@
           $js_code = '<script>' . $js_code . '</script>';
       }
       echo $js_code;
-  }
+  };
 
   if (isset($_COOKIE["location"])) {
     // Sunset for last known location
@@ -20,10 +20,9 @@
     // console_log($location,true);
     console_log($lat,true);
     console_log($lon,true);
-
   } else {
     console_log("No location Cookie found. Usind default daylight times.",true);
-    // Sunset for location of Berlin
+    // Sunset defalut location Berlin
     $lat = 52.52;
     $lon = 13.41;
   };
@@ -43,7 +42,6 @@
   if (isset($_GET["dark"])) {$darkmode = true;};
 
   ?>
-
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154570316-1"></script>
   <script>
@@ -916,6 +914,9 @@
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
         gtag('event', 'Not reachable', {'event_category': 'Connect'});
+
+        teslaPosition = JSON.parse(decodeURIComponent(getCookie('location')));
+
         return;
       }
       else {
