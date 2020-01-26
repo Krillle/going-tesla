@@ -4,9 +4,11 @@ if (isset($_GET["location"])) {
   $location = json_decode($_GET["location"]);
   $lat = $location->latitude;
   $lon = $location->longitude;
+
+  echo $location . "," . $lat . "," . $lon;
+
 } else {
   // Sunset for location of Berlin
-  $location = false;
   $lat = 52.52;
   $lon = 13.41;
 };
@@ -338,7 +340,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
 
     console.log("App started");
-    <? echo "console.log('Cookie'," . $location . "," . $lat . "," . $lon . ");" ?>
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
 
