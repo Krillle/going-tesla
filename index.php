@@ -17,10 +17,11 @@
     $lat = $location->latitude;
     $lon = $location->longitude;
 
+    console_log("Location Cookie found",true);
     console_log($location . "," . $lat . "," . $lon,true);
-    echo "<meta keywords='Iwashere'>";
 
   } else {
+    console_log("no location Cookie found",true);
     // Sunset for location of Berlin
     $lat = 52.52;
     $lon = 13.41;
