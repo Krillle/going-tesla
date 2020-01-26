@@ -864,12 +864,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     };
 
     function infoMessage(message) {
-      if (infoContainer.innerHTML) {infoContainer.innerHTML = '';};
+      if (infoContainer.innerHTML) {infoContainer.innerHTML = null;};
       // var pre = document.createElement('pre');
       // pre.textContent = message;
       // infoContainer.appendChild(pre);
       infoContainer.innerHTML = message;
-      setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
+      setTimeout(function(){ infoContainer.innerHTML = null; }, 3000);
     };
 
     function routeList(message) {
