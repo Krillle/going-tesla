@@ -246,7 +246,7 @@
     	text-decoration: none;
     	text-align: center;
       text-transform: uppercase;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 18px;
     	padding: 8px;
       padding-top: 21px;
