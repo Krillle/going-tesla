@@ -295,6 +295,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .info-container,
     .route-container {
+      visibility: hidden;
       box-shadow: 0 0 10px 2px rgba(0,0,0,.1);
       border-radius:10px 10px 10px 10px;
       margin: 0;
@@ -434,7 +435,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     var infoContainer = document.getElementById('info');
     var routeContainer = document.getElementById('route');
-    hideRouteList();
+    // hideRouteList();
 
     console.log('Establish Connection to Tesla');
     try {connectTesla ()}
@@ -869,7 +870,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       // pre.textContent = message;
       // infoContainer.appendChild(pre);
       infoContainer.innerHTML = message;
-      setTimeout(function(){ infoContainer.innerHTML = null; }, 3000);
+      infoContainer.style.visibility = 'visible';
+      setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
     };
 
     function routeList(message) {
