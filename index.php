@@ -69,6 +69,13 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       <? if ($darkmode) {echo "background:#000000; /* dark theme */";} ?>
     }
 
+    .mapboxgl-ctrl-geocoder,
+    .mapboxgl-popup-content,
+    .info-container,
+    .route-container {
+      font:400 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    }
+
     .mapboxgl-ctrl-group > button {
       width:70px;
       height:70px;
@@ -109,10 +116,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       opacity: 0.9;
     }
 
-    .mapboxgl-ctrl-geocoder {
-      font:400 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-    }
-
     #map .mapboxgl-ctrl-geocoder--input {
       height: 60px;
       color:#8F8F8F; /* light theme  */
@@ -136,7 +139,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .mapboxgl-ctrl-geocoder--suggestion-title {
-      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
+      font-weight: 700;
       color:#000000; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
@@ -184,8 +188,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .mapboxgl-popup-content {
-      /* font:700 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
-      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       padding:40px 40px 25px;
       border-radius:10px 10px 10px 10px;
       width:420px;
@@ -197,7 +199,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
     .mapboxgl-popup-content strong {
-      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
+      font-weight: 700;
       color:#000000; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
@@ -310,7 +313,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .info-container {
       opacity: 0.7;
-      font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      font-weight: 700;
+      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
       display: block;
@@ -329,7 +333,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       overflow-y: auto;
 
       opacity: 0.9;
-      font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
       display: block;
