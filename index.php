@@ -49,7 +49,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
 
-    #map .mapboxgl-ctrl {
+    .mapboxgl-ctrl {
       opacity: 0.7;
     }
 
@@ -116,12 +116,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
-    #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow  {
+    .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow  {
       width:40px;
       height:40px;
     }
 
-    #map .mapboxgl-ctrl-icon.mapboxgl-ctrl-autozoom > .mapboxgl-ctrl-autozoom-icon {
+    .mapboxgl-ctrl-icon.mapboxgl-ctrl-autozoom > .mapboxgl-ctrl-autozoom-icon {
       width: 40px;
       height: 40px;
       margin: 5px;
@@ -130,14 +130,14 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       display: inline-block;
     }
 
-    #map .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
+    .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
       width: 400px;
       min-width: 400px;
       max-width:400px;
       opacity: 0.9;
     }
 
-    #map .mapboxgl-ctrl-geocoder--input {
+    .mapboxgl-ctrl-geocoder--input {
       height: 60px;
     }
 
