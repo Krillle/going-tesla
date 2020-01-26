@@ -56,7 +56,15 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl  { margin: 0 0 10px 10px; float: left; }
     .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 10px 20px 0; float: right; }
 
-    .mapboxgl-ctrl-group {
+    .mapboxgl-ctrl-group,
+    .mapboxgl-ctrl-geocoder,
+    .mapboxgl-ctrl-geocoder .suggestions,
+    .mapboxgl-ctrl-geocoder .suggestions > li > a,
+    .mapboxgl-ctrl-geocoder .suggestions > .active > a,
+    .mapboxgl-ctrl-geocoder .suggestions > li > a:hover,
+    .mapboxgl-popup-content,
+    .info-container,
+    .route-container {
       background:#ffffff; /* light theme  */
       <? if ($darkmode) {echo "background:#000000; /* dark theme */";} ?>
     }
@@ -103,8 +111,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     .mapboxgl-ctrl-geocoder {
       font:400 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      background-color: #fff;
-      <? if ($darkmode) {echo "background-color:#000000; /* dark theme */";} ?>
     }
 
     #map .mapboxgl-ctrl-geocoder--input {
@@ -119,16 +125,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .mapboxgl-ctrl-geocoder .suggestions {
-      background-color: #fff;
-      <? if ($darkmode) {echo "background-color:#000000; /* dark theme */";} ?>
       font-size: 20px;
     }
 
     .mapboxgl-ctrl-geocoder .suggestions > li > a,
     .mapboxgl-ctrl-geocoder .suggestions > .active > a,
     .mapboxgl-ctrl-geocoder .suggestions > li > a:hover {
-      background-color: #fff;
-      <? if ($darkmode) {echo "background-color:#000000; /* dark theme */";} ?>
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
@@ -187,8 +189,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       padding:40px 40px 25px;
       border-radius:10px 10px 10px 10px;
       width:420px;
-      background:#ffffff; /* light theme  */
-      <? if ($darkmode) {echo "background:#000000; /* dark theme */";} ?>
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
@@ -296,6 +296,8 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     .info-container,
     .route-container {
       box-shadow: 0 0 10px 2px rgba(0,0,0,.1);
+      border-radius:10px 10px 10px 10px;
+      margin: 0;
     }
 
     .info-container {
@@ -306,15 +308,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
     }
 
     .info-container > * {
-      background-color: rgba(255, 255, 255, 0.7); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.7); /* dark theme */";} ?>
+      opacity: 0.7;
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
       display: block;
-      margin: 0;
       padding: 10px 20px;
-      border-radius:10px 10px 10px 10px;
     }
 
     .route-container {
@@ -328,16 +327,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       box-sizing: border-box;
       overflow-y: auto;
 
-      background-color: rgba(255, 255, 255, 0.9); /* light theme  */
-      <? if ($darkmode) {echo "background-color: rgba(0, 0, 0, 0.9); /* dark theme */";} ?>
-      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
+      opacity: 0.9;
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
       <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
       display: block;
-      margin: 0;
       padding: 10px 0px;
-      border-radius:10px 10px 10px 10px;
     }
 
     .route-container a {
