@@ -6,6 +6,7 @@ if (isset($_GET["location"])) {
   $lon = $location->longitude;
 } else {
   // Sunset for location of Berlin
+  $location = false;
   $lat = 52.52;
   $lon = 13.41;
 };
