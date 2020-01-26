@@ -110,7 +110,7 @@
 
     .mapboxgl-ctrl-geocoder--suggestion-title,
     .mapboxgl-popup-content strong {
-      font-weight: 700;
+      font-weight: 900;
       color:#000000; /* light theme  */
       <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
@@ -246,7 +246,7 @@
     	text-decoration: none;
     	text-align: center;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 900;
       font-size: 18px;
     	padding: 8px;
       padding-top: 21px;
