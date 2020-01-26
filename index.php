@@ -69,11 +69,32 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       <? if ($darkmode) {echo "background:#000000; /* dark theme */";} ?>
     }
 
+    .mapboxgl-ctrl-geocoder--input,
+    .mapboxgl-ctrl-geocoder--input:focus,
+    .mapboxgl-ctrl-geocoder .suggestions > li > a,
+    .mapboxgl-ctrl-geocoder .suggestions > .active > a,
+    .mapboxgl-ctrl-geocoder .suggestions > li > a:hover,
+    .mapboxgl-popup-content,
+    .mapboxgl-popup-content a,
+    .info-container,
+    .route-container,
+    .route-container a {
+      color:#8F8F8F; /* light theme  */
+      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
+    }
+
     .mapboxgl-ctrl-geocoder,
     .mapboxgl-popup-content,
     .info-container,
     .route-container {
       font:400 20px/1.15 'Gotham Light', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    }
+
+    .mapboxgl-ctrl-geocoder--suggestion-title,
+    .mapboxgl-popup-content strong {
+      font-weight: 700;
+      color:#000000; /* light theme  */
+      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-group > button {
@@ -118,31 +139,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     #map .mapboxgl-ctrl-geocoder--input {
       height: 60px;
-      color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
-    }
-
-    .mapboxgl-ctrl-geocoder--input:focus {
-      color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-geocoder .suggestions {
       font-size: 20px;
-    }
-
-    .mapboxgl-ctrl-geocoder .suggestions > li > a,
-    .mapboxgl-ctrl-geocoder .suggestions > .active > a,
-    .mapboxgl-ctrl-geocoder .suggestions > li > a:hover {
-      color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
-    }
-
-    .mapboxgl-ctrl-geocoder--suggestion-title {
-      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
-      font-weight: 700;
-      color:#000000; /* light theme  */
-      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-geocoder--button {
@@ -191,18 +191,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       padding:40px 40px 25px;
       border-radius:10px 10px 10px 10px;
       width:420px;
-      color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
-    }
-    .mapboxgl-popup-content a {
-      color:#8F8F8F;  /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
-    }
-    .mapboxgl-popup-content strong {
-      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
-      font-weight: 700;
-      color:#000000; /* light theme  */
-      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
 
     .mapboxgl-popup-content-warning {
@@ -315,8 +303,6 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       opacity: 0.7;
       font-weight: 700;
       /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
-      color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
       display: block;
       padding: 10px 20px;
     }
@@ -333,16 +319,12 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       overflow-y: auto;
 
       opacity: 0.9;
-      color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
       display: block;
       padding: 10px 0px;
     }
 
     .route-container a {
       text-decoration: none;
-      color:#8F8F8F;  /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
   </style>
