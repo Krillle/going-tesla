@@ -1,11 +1,19 @@
 <?php
-// include_once("index.html");
+if (isset($_GET["location"])) {
+  // Sunset for last known location
+  $location = json_decode($_GET["location"]);
+  $lat = $location->latitude;
+  $lon = $location->longitude;
 
-// Sunset for location of Berlin
-$lat = 52.52;
-$lon = 13.41;
+  echo $location . "," . $lat . "," . $lon;
+
+} else {
+  // Sunset for location of Berlin
+  $lat = 52.52;
+  $lon = 13.41;
+};
+
 $offset = 0; // Herokuserver timezome is GMT
-
 $sunrise = date_sunrise(time(), SUNFUNCS_RET_TIMESTAMP, $lat, $lon, 90, $offset);
 $sunset = date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, $lat, $lon, 90, $offset);
 $now = time();
@@ -921,6 +929,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         'zoom': zoom,
         'range': milesToKm(vehicleData.charge_state.est_battery_range).kmRaw
       };
+      document.cookie = 'location=' + encodeURIComponent(JSON.stringify(teslaPosition)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
     };
 
     function updatePosition() {
@@ -935,7 +944,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
         map.getSource('positionIcon').setData(positionIcon);
         updateMapFocus ();
 
-        if (lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
+        if (currentDestination && lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
       };
     };
 
