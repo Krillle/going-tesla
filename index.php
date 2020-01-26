@@ -1,46 +1,46 @@
-<?php
-function console_log($output, $with_script_tags = true) {
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
-');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
-
-if (isset($_GET["location"])) {
-  // Sunset for last known location
-  $location = json_decode($_GET["location"]);
-  $lat = $location->latitude;
-  $lon = $location->longitude;
-
-  console_log($location . "," . $lat . "," . $lon,true);
-
-} else {
-  // Sunset for location of Berlin
-  $lat = 52.52;
-  $lon = 13.41;
-};
-
-$offset = 0; // Herokuserver timezome is GMT
-$sunrise = date_sunrise(time(), SUNFUNCS_RET_TIMESTAMP, $lat, $lon, 90, $offset);
-$sunset = date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, $lat, $lon, 90, $offset);
-$now = time();
-
-if ($now < $sunrise or $now > $sunset) {
-  $darkmode = true;
-} else {
-  $darkmode = false;
-};
-
-if (isset($_GET["light"])) {$darkmode = false;};
-if (isset($_GET["dark"])) {$darkmode = true;};
-
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
+  <?php
+  function console_log($output, $with_script_tags = true) {
+      $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+  ');';
+      if ($with_script_tags) {
+          $js_code = '<script>' . $js_code . '</script>';
+      }
+      echo $js_code;
+  }
+
+  if (isset($_GET["location"])) {
+    // Sunset for last known location
+    $location = json_decode($_GET["location"]);
+    $lat = $location->latitude;
+    $lon = $location->longitude;
+
+    console_log($location . "," . $lat . "," . $lon,true);
+
+  } else {
+    // Sunset for location of Berlin
+    $lat = 52.52;
+    $lon = 13.41;
+  };
+
+  $offset = 0; // Herokuserver timezome is GMT
+  $sunrise = date_sunrise(time(), SUNFUNCS_RET_TIMESTAMP, $lat, $lon, 90, $offset);
+  $sunset = date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, $lat, $lon, 90, $offset);
+  $now = time();
+
+  if ($now < $sunrise or $now > $sunset) {
+    $darkmode = true;
+  } else {
+    $darkmode = false;
+  };
+
+  if (isset($_GET["light"])) {$darkmode = false;};
+  if (isset($_GET["dark"])) {$darkmode = true;};
+
+  ?>
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154570316-1"></script>
   <script>
