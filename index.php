@@ -17,7 +17,9 @@
     $lon = $location->longitude;
 
     console_log("Location Cookie found. Using individual daylight times.",true);
-    console_log($location . "," . $lat . "," . $lon,true);
+    // console_log($location,true);
+    console_log($lat,true);
+    console_log($lon,true);
 
   } else {
     console_log("No location Cookie found. Usind default daylight times.",true);
