@@ -307,7 +307,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       z-index: 1;
     }
 
-    .info-container > * {
+    .info-container {
       opacity: 0.7;
       font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
       color:#8F8F8F; /* light theme  */
@@ -865,9 +865,10 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     function infoMessage(message) {
       if (infoContainer.innerHTML) {infoContainer.innerHTML = '';};
-      var pre = document.createElement('pre');
-      pre.textContent = message;
-      infoContainer.appendChild(pre);
+      // var pre = document.createElement('pre');
+      // pre.textContent = message;
+      // infoContainer.appendChild(pre);
+      infoContainer.innerHTML = message;
       setTimeout(function(){ infoContainer.innerHTML = ''; }, 3000);
     };
 
