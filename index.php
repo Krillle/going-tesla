@@ -293,6 +293,11 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       background-position: center;
     }
 
+    .info-container,
+    .route-container {
+      box-shadow: 0 0 10px 2px rgba(0,0,0,.1);
+    }
+
     .info-container {
       position: absolute;
       top: 25px;
