@@ -1392,7 +1392,7 @@ if (isset($_GET["dark"])) {$darkmode = true;};
 
     function waitChargerList() {
       var routeChargerList = chargerListHeader();
-      routeChargerList += `<p style="text-align: center;">Ladestationen für die Route<br>werden gesucht.</p>`;
+      routeChargerList += `<p style="text-align: center;">Ladestationen für die Route<br>werden gesucht</p>`;
       routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/>`;
       routeChargerList += chargerListFooter();
       routeList(routeChargerList);
