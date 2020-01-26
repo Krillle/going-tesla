@@ -295,12 +295,9 @@ if (isset($_GET["dark"])) {$darkmode = true;};
       top: 25px;
       right: 100px;
       z-index: 1;
-    }
 
-    .info-container {
       opacity: 0.7;
       font-weight: 700;
-      /* font:700 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif; */
       display: block;
       padding: 10px 20px;
     }
