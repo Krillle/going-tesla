@@ -72,7 +72,7 @@
     }
 
     .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl  { margin: 0 0 10px 10px; float: left; }
-    .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 10px 20px 0; float: right; }
+    .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 10px 15px 0; float: right; }
 
     .mapboxgl-ctrl-group,
     .mapboxgl-ctrl-geocoder,
