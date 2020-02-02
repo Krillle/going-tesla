@@ -828,7 +828,9 @@
       var httpReq = new XMLHttpRequest();
       httpReq.open('GET', url, false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
+      infoMessage('Waiting for HTTP request',true);
       httpReq.send(null);
+      infoMessage(null,true);
       // console.log("Result: " + httpReq.responseText);
       return httpReq.responseText;
     };
@@ -861,14 +863,14 @@
       createTeslaToken(email, password);
     };
 
-    function infoMessage(message) {
+    function infoMessage(message, sustain) {
       if (infoContainer.innerHTML) {infoContainer.innerHTML = null;};
       // var pre = document.createElement('pre');
       // pre.textContent = message;
       // infoContainer.appendChild(pre);
       infoContainer.innerHTML = message;
       infoContainer.style.visibility = 'visible';
-      setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
+      if (!sustain) {setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);}
     };
 
     function routeList(message) {
@@ -1055,7 +1057,7 @@
 
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
-          console.log('Send destination: ' + this.responseText);
+          console.log('Sent destination: ' + this.responseText);
         }
       });
 
