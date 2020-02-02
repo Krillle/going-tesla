@@ -828,9 +828,11 @@
       var httpReq = new XMLHttpRequest();
       httpReq.open('GET', url, false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
-      infoMessage('Waiting for HTTP request',true);
+      infoContainer.innerHTML = 'Waiting for HTTP request';
+      infoContainer.style.visibility = 'visible';
       httpReq.send(null);
-      // infoMessage(null,true);
+      infoContainer.style.visibility = 'hidden';
+      infoContainer.innerHTML = null;
       // console.log("Result: " + httpReq.responseText);
       return httpReq.responseText;
     };
@@ -863,14 +865,14 @@
       createTeslaToken(email, password);
     };
 
-    function infoMessage(message, sustain) {
+    function infoMessage(message) {
       if (infoContainer.innerHTML) {infoContainer.innerHTML = null;};
       // var pre = document.createElement('pre');
       // pre.textContent = message;
       // infoContainer.appendChild(pre);
       infoContainer.innerHTML = message;
       infoContainer.style.visibility = 'visible';
-      if (!sustain) {setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);}
+      setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
     };
 
     function routeList(message) {
