@@ -830,7 +830,7 @@
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
       infoMessage('Waiting for HTTP request',true);
       httpReq.send(null);
-      infoMessage(null,true);
+      // infoMessage(null,true);
       // console.log("Result: " + httpReq.responseText);
       return httpReq.responseText;
     };
