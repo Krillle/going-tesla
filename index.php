@@ -1549,8 +1549,8 @@
                      // `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}<p>`;
-      description += `<span id='location_description'></span>`;
+      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
+      description += `<span id='location_description'></span><p>`;
       description += `<span id='fault_report'></span>`;
       description += '<hr>';
       description += `<span id='ladeweile'></span>`;
@@ -1579,7 +1579,7 @@
           if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
           var chargeLocation = chargerDetails.chargelocations[0];
 
-          locationDescription.innerHTML = (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
+          locationDescription.innerHTML = (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}`) : '';
           faultReport.innerHTML = (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
 
           ladeweile.innerHTML = (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
