@@ -1578,12 +1578,11 @@
           var chargerDetails = JSON.parse(this.responseText);
           if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
           var chargeLocation = chargerDetails.chargelocations[0];
-          console.log('chargeLocation:',chargeLocation);
 
-          locationDescription += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
-          faultReport += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
+          locationDescription.innerHTML = (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
+          faultReport.innerHTML = (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
 
-          ladeweile += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
+          ladeweile.innerHTML = (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
         }
       });
     };
@@ -1604,10 +1603,10 @@
               'rangeRaw' : teslaPosition.range ? teslaPosition.range - result.routes[0].distance/1000 : false,
               'range' : teslaPosition.range ? (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km' : false
             }
-            distance += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+            distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
-            distance += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
-            distance += '<p>'
+            distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+            distance.innerHTML += '<p>'
           };
         }
       });
