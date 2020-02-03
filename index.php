@@ -1589,11 +1589,8 @@
 
     function addChargerDistance(coordinates) {
       var distance = document.getElementById('distance');
-      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
-        `key=${goingelectricToken}&`+
-        `ge_id=${id}`;
 
-      getRoute(teslaPosition,{'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
+      getRoute(teslaPosition,{'longitude' : coordinates[1], 'latitude' : coordinates[0]}, false, function () {
         if (this.readyState === 4) {
           console.log("Gert Route Listener Result: " + this.responseText);
           var result = JSON.parse(this.responseText);
