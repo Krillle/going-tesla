@@ -1578,6 +1578,7 @@
           var chargerDetails = JSON.parse(this.responseText);
           if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
           var chargeLocation = chargerDetails.chargelocations[0];
+          console.log('chargeLocation:',chargeLocation);
 
           locationDescription += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
           faultReport += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
@@ -1590,9 +1591,9 @@
     function addChargerDistance(coordinates) {
       var distance = document.getElementById('distance');
 
-      getRoute(teslaPosition,{'longitude' : coordinates[1], 'latitude' : coordinates[0]}, false, function () {
+      getRoute(teslaPosition,{'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
         if (this.readyState === 4) {
-          console.log("Gert Route Listener Result: " + this.responseText);
+          console.log("Get Route Listener Result: " + this.responseText);
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
             var route = {
