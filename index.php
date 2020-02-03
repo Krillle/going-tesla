@@ -727,8 +727,10 @@
       popup.setLngLat(e.features[0].geometry.coordinates)
       .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map);
-      addChargerDetails(e.features[0].id);
-      addChargerDistance(e.features[0].geometry.coordinates);
+      .once('open',function () {
+        addChargerDetails(e.features[0].id);
+        addChargerDistance(e.features[0].geometry.coordinates);
+      })
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
