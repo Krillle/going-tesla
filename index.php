@@ -727,8 +727,8 @@
       popup.setLngLat(e.features[0].geometry.coordinates)
       .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map);
-      // addChargerDetails(e.features[0].id);
-      // addChargerDistance(e.features[0].geometry.coordinates);
+      addChargerDetails(e.features[0].id);
+      addChargerDistance(e.features[0].geometry.coordinates);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -1264,8 +1264,7 @@
           + destination.longitude + ',' + destination.latitude
           + '?access_token=' + mapboxgl.accessToken
           + (route ? '&geometries=polyline&overview='+route : '&overview=false');
-      result = httpGet(routeUrl,false,f)
-      // console.log("Result" + result);
+      result = httpGet(routeUrl,false,f);
       if (result) {
         result = JSON.parse(result);
         if (result.code == "Ok") {
@@ -1408,8 +1407,14 @@
     };
 
     function setRouteLine() {
-      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full');
-      showRoute(currentRoute.coordinates);
+      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
+        if (this.readyState === 4) {
+          var result = JSON.parse(this.responseText);
+          if (result.code == "Ok") {
+            showRoute(decodePolyline(result.routes[0].geometry));
+          };
+        }
+      });
     };
 
     function initalRouteChargerList() {
@@ -1592,7 +1597,6 @@
 
       getRoute(teslaPosition,{'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
         if (this.readyState === 4) {
-          console.log("Get Route Listener Result: " + this.responseText);
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
             var route = {
