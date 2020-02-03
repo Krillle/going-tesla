@@ -716,16 +716,19 @@
       var coordinates = e.features[0].geometry.coordinates.slice();
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
-      chargerID = e.features[0].id
+      var chargerID = e.features[0].id
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      map.once('idle', function(e) {
-        console.log('Map idle',chargerID);
-        popup.setHTML(chargerDescription(chargerID).text)
-      });
+      // map.once('idle', function(e) {
+      //   console.log('Map idle',chargerID);
+      //   popup.setHTML(chargerDescription(chargerID).text)
+      // });
       popup.setLngLat(coordinates)
       .setHTML(chargerShortDescription(e.features[0].properties).text)
       .addTo(map);
+      addChargerDetails(e.features[0].id);
+      console.log("Route to", e.features[0].geometry.coordinates);
+      addChargerDistance(e.features[0].geometry.coordinates);
     });
 
     // Change the cursor to a pointer when the mouse is over the places layer
@@ -824,17 +827,14 @@
       return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
     };
 
-    function httpGet(url, token) {
+    function httpGet(url, token, f) {
       var httpReq = new XMLHttpRequest();
       httpReq.open('GET', url, false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
-      infoContainer.innerHTML = 'Waiting for HTTP request';
-      infoContainer.style.visibility = 'visible';
+      if (f) {httpReq.addEventListener("readystatechange", f)}
       httpReq.send(null);
-      infoContainer.style.visibility = 'hidden';
-      infoContainer.innerHTML = null;
-      // console.log("Result: " + httpReq.responseText);
-      return httpReq.responseText;
+      if (f) { return false}
+      else { return httpReq.responseText };
     };
 
     function getCookie(name) {
@@ -1258,12 +1258,13 @@
     };
 
     // - - - - - mapBox requests - - - - - -
-    function getRoute(start,destination,route){  // set route = true if we need route coordinates
+    function getRoute(start,destination,route,f){  // set route = true if we need route coordinates
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.longitude + ',' + destination.latitude
-          + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview='+route : '&overview=false');
-      result = httpGet(routeUrl)
+          + '?access_token=' + mapboxgl.accessToken
+          + (route ? '&geometries=polyline&overview='+route : '&overview=false');
+      result = httpGet(routeUrl,false,f)
       // console.log("Result" + result);
       if (result) {
         result = JSON.parse(result);
@@ -1549,15 +1550,69 @@
                      '<p>';
 
       description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}<p>`;
+      description += `<div id='location_description'></div>`;
+      description += `<div id='fault_report'></div>`;
       description += '<hr>';
-      description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
+      description += `<div id='ladeweile'></div>`;
 
-      // description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric</a><p>`;
-      // description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
+      description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
+      description += `<div id='distance'></div>`;
 
       description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
       return {'text': description, 'address': address};
+    };
+
+    function addChargerDetails(id) {
+      var locationDescription = document.getElementById('location_description');
+      var faultReport = document.getElementById('fault_report');
+      var ladeweile = document.getElementById('ladeweile');
+
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
+        `key=${goingelectricToken}&`+
+        `ge_id=${id}`;
+
+      httpGet(geUrl, false, function () {
+        if (this.readyState === 4) {
+          console.log("Charger Details Listener Result: " + this.responseText);
+          var chargerDetails = JSON.parse(this.responseText);
+          if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
+          var chargeLocation = chargerDetails.chargelocations[0];
+
+          locationDescription += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
+          faultReport += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
+
+          ladeweile += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
+        }
+      });
+    };
+
+    function addChargerDistance(coordinates) {
+      var distance = document.getElementById('distance');
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
+        `key=${goingelectricToken}&`+
+        `ge_id=${id}`;
+
+      getRoute(teslaPosition,{'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
+        if (this.readyState === 4) {
+          console.log("Gert Route Listener Result: " + this.responseText);
+          var result = JSON.parse(this.responseText);
+          if (result.code == "Ok") {
+            var route = {
+              'distanceRaw': result.routes[0].distance/1000,
+              'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
+              'durationRaw': result.routes[0].duration,
+              'duration': secondsToTime(result.routes[0].duration),
+              'rangeRaw' : teslaPosition.range ? teslaPosition.range - result.routes[0].distance/1000 : false,
+              'range' : teslaPosition.range ? (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km' : false
+            }
+            distance += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+            var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
+            distance += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+            distance += '<p>'
+          };
+        }
+      });
     };
 
     function chargerDescription(id) {
