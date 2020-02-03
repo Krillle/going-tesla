@@ -1550,13 +1550,13 @@
                      '<p>';
 
       description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}<p>`;
-      description += `<div id='location_description'></div>`;
-      description += `<div id='fault_report'></div>`;
+      description += `<span id='location_description'></span>`;
+      description += `<span id='fault_report'></span>`;
       description += '<hr>';
-      description += `<div id='ladeweile'></div>`;
+      description += `<span id='ladeweile'></span>`;
 
       description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
-      description += `<div id='distance'></div>`;
+      description += `<span id='distance'></span>`;
 
       description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
