@@ -725,10 +725,10 @@
       // var coordinates = e.features[0].geometry.coordinates.slice();
       // popup.setLngLat(coordinates)
       popup.setLngLat(e.features[0].geometry.coordinates)
-      .setHTML(chargerShortDescription(e.features[0].properties).text)
+      .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
       .once('open',function () {
         addChargerDetails(e.features[0].id);
-        addChargerDistance(e.features[0].geometry.coordinates);
+        addChargerDistance(e.features[0].id, e.features[0].geometry.coordinates);
       })
       .addTo(map);
     });
@@ -1544,7 +1544,7 @@
       map.getSource('chargers').setData(newList);
     };
 
-    function chargerShortDescription (chargeLocation) {
+    function chargerShortDescription (id, chargeLocation) {
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
       var description = '';
@@ -1557,13 +1557,13 @@
                      '<p>';
 
       description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
-      description += `<span id='location_description'></span><p>`;
-      description += `<span id='fault_report'></span>`;
+      description += `<span id='location_description_${id}'></span><p>`;
+      description += `<span id='fault_report_${id}'></span>`;
       description += '<hr>';
-      description += `<span id='ladeweile'></span>`;
+      description += `<span id='ladeweile_${id}'></span>`;
 
       description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
-      description += `<span id='distance'></span>`;
+      description += `<span id='distance_${id}'></span>`;
 
       description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
@@ -1571,9 +1571,9 @@
     };
 
     function addChargerDetails(id) {
-      var locationDescription = document.getElementById('location_description');
-      var faultReport = document.getElementById('fault_report');
-      var ladeweile = document.getElementById('ladeweile');
+      var locationDescription = document.getElementById(`location_description_${id}`);
+      var faultReport = document.getElementById(`fault_report_${id}`);
+      var ladeweile = document.getElementById(`ladeweile_${id}`);
 
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
@@ -1594,8 +1594,8 @@
       });
     };
 
-    function addChargerDistance(coordinates) {
-      var distance = document.getElementById('distance');
+    function addChargerDistance(id, coordinates) {
+      var distance = document.getElementById(`distance_${id}`);
 
       getRoute(teslaPosition,{'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
         if (this.readyState === 4) {
