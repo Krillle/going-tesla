@@ -348,10 +348,10 @@
   <div id='route' class='route-container'></div>
   <script>
     if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
-    if (mapboxgl.supported()) {
+    if (!mapboxgl.supported()) {
       gtag('event', 'No Mapbox GL', {'event_category': 'Connect'});
-      alert('Diese Anwendung läuft leider nicht auf MCU1.');
-      throw new Error('Browser does not support Mapbox GL.');
+      alert('Diese Anwendung läuft leider nicht auf MCU1');
+      throw new Error('Browser does not support Mapbox GL');
     };
 
     console.log("App started");
