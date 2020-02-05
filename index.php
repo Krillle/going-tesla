@@ -728,6 +728,7 @@
       .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
       .once('open',function () {
         addChargerDetails(e.features[0].id);
+        console.log('HTTP returned');
         addChargerDistance(e.features[0].id, e.features[0].geometry.coordinates);
       })
       .addTo(map);
@@ -831,10 +832,11 @@
 
     function httpGet(url, token, f) {
       var httpReq = new XMLHttpRequest();
-      httpReq.open('GET', url, false);
+      httpReq.open('GET', url, f ? true : false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
       if (f) {httpReq.addEventListener("readystatechange", f)}
       httpReq.send(null);
+      console.log('HTTP send');
       if (f) { return false}
       else { return httpReq.responseText };
     };
