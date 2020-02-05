@@ -1408,6 +1408,19 @@
       routeList(routeChargerList);
     };
 
+    function routeChargerList(initial) {
+      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
+        if (this.readyState === 4) {
+          var result = JSON.parse(this.responseText);
+          if (result.code == "Ok") {
+            showRoute(decodePolyline(result.routes[0].geometry));
+          };
+          if (initial) { waitChargerList() };
+          setTimeout(setRouteChargerList,20);
+        }
+      });
+    };
+
     function setRouteLine() {
       currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
         if (this.readyState === 4) {
@@ -1420,14 +1433,16 @@
     };
 
     function initalRouteChargerList() {
-      setRouteLine();
-      waitChargerList();
-      setTimeout(setRouteChargerList,20);
+      routeChargerList(true);
+      // setRouteLine();
+      // waitChargerList();
+      // setTimeout(setRouteChargerList,20);
     };
 
     function updateRouteChargerList() {
-      setRouteLine();
-      setRouteChargerList();
+      routeChargerList();
+      // setRouteLine();
+      // setRouteChargerList();
     };
 
     function processLoop( actionFunc, numTimes, doneFunc, contCond ) {
