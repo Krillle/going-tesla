@@ -450,19 +450,19 @@
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
     if (!mapboxgl.supported()) {
-      console.log('Browser does not support Mapbox GL.');
       gtag('event', 'No Mapbox GL', {'event_category': 'Connect'});
       alert('Diese Anwendung läuft leider nicht auf MCU1.');
-    } else {
-      var map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: mapStyle,
-        center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
-        zoom: teslaPosition.zoom, // starting zoom
-        bearing: teslaPosition.heading,
-        attributionControl: false
-      });
+      throw new Error('Browser does not support Mapbox GL.');
     };
+    console.log('Continue');
+    var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: mapStyle,
+      center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
+      zoom: teslaPosition.zoom, // starting zoom
+      bearing: teslaPosition.heading,
+      attributionControl: false
+    });
 
     // Add geocoder search field
     var geocoderControl = new MapboxGeocoder({
@@ -836,7 +836,6 @@
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
       if (f) {httpReq.addEventListener("readystatechange", f)}
       httpReq.send(null);
-      console.log('HTTP send');
       if (f) { return false}
       else { return httpReq.responseText };
     };
