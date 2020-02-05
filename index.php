@@ -449,7 +449,7 @@
     zoomToPower(teslaPosition.zoom);
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
-    if (!mapboxgl.supported()) {
+    if (mapboxgl.supported()) {
       gtag('event', 'No Mapbox GL', {'event_category': 'Connect'});
       alert('Diese Anwendung läuft leider nicht auf MCU1.');
       throw new Error('Browser does not support Mapbox GL.');
