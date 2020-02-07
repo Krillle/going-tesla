@@ -481,7 +481,7 @@
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-      setTimeout(initalRouteChargerList, 20);
+      updateRouteChargerList(true);
       console.log ('Starting continuous list update');
       updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
 
@@ -663,7 +663,7 @@
 
       if (currentDestination) {
         gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-        initalRouteChargerList();
+        updateRouteChargerList(true);
         console.log ('Recovering continuous list update');
         updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
       };
@@ -1408,22 +1408,6 @@
       routeList(routeChargerList);
     };
 
-    function processRouteResults(result) {
-      if (result.code == "Ok") {
-        return {
-          'distanceRaw': result.routes[0].distance/1000,
-          'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
-          'durationRaw': result.routes[0].duration,
-          'duration': secondsToTime(result.routes[0].duration),
-          'rangeRaw' : teslaPosition.range ? teslaPosition.range - result.routes[0].distance/1000 : false,
-          'range' : teslaPosition.range ? (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km' : false,
-          'coordinates': result.routes[0].geometry ? decodePolyline(result.routes[0].geometry) : false
-        }
-      } else {
-        return null
-      }
-    };
-
     function setRouteLine(showWait) {
       getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
         if (this.readyState === 4) {
@@ -1439,14 +1423,25 @@
       });
     };
 
-    function initalRouteChargerList() {
-      setRouteLine(true);
+    function updateRouteChargerList(showWait) {
+      setRouteLine(showWait);
       setRouteChargerList();
     };
 
-    function updateRouteChargerList() {
-      setRouteLine();
-      setRouteChargerList();
+    function processRouteResults(result) {
+      if (result.code == "Ok") {
+        return {
+          'distanceRaw': result.routes[0].distance/1000,
+          'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
+          'durationRaw': result.routes[0].duration,
+          'duration': secondsToTime(result.routes[0].duration),
+          'rangeRaw' : teslaPosition.range ? teslaPosition.range - result.routes[0].distance/1000 : false,
+          'range' : teslaPosition.range ? (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km' : false,
+          'coordinates': result.routes[0].geometry ? decodePolyline(result.routes[0].geometry) : false
+        }
+      } else {
+        return null
+      }
     };
 
     function processLoop( actionFunc, numTimes, doneFunc, contCond ) {
@@ -1536,7 +1531,7 @@
 
     function toggleeRouteList(){
       minPowerList = minPowerList == superCharger.minPower ? highwayCharger.minPower : superCharger.minPower;
-      initalRouteChargerList();
+      updateRouteChargerList(true);
     };
 
     function cancelRouteChargerList() {
