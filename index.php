@@ -1408,41 +1408,45 @@
       routeList(routeChargerList);
     };
 
-    function routeChargerList(initial) {
-      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
-        if (this.readyState === 4) {
-          var result = JSON.parse(this.responseText);
-          if (result.code == "Ok") {
-            showRoute(decodePolyline(result.routes[0].geometry));
-          };
-          if (initial) { waitChargerList() };
-          setTimeout(setRouteChargerList,20);
+    function processRouteResults(result) {
+      if (result.code == "Ok") {
+        return {
+          'distanceRaw': result.routes[0].distance/1000,
+          'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
+          'durationRaw': result.routes[0].duration,
+          'duration': secondsToTime(result.routes[0].duration),
+          'rangeRaw' : teslaPosition.range ? teslaPosition.range - result.routes[0].distance/1000 : false,
+          'range' : teslaPosition.range ? (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km' : false,
+          'coordinates': result.routes[0].geometry ? decodePolyline(result.routes[0].geometry) : false
         }
-      });
+      } else {
+        return null
+      }
     };
 
-    function setRouteLine() {
-      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
+    function setRouteLine(showWait) {
+      getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
         if (this.readyState === 4) {
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
-            showRoute(decodePolyline(result.routes[0].geometry));
+            currentRoute = processRouteResults(result);
+            showRoute(currentRoute.coordinates);
+            if (showWait) {
+              waitChargerList()
+            };
           };
         }
       });
     };
 
     function initalRouteChargerList() {
-      routeChargerList(true);
-      // setRouteLine();
-      // waitChargerList();
-      // setTimeout(setRouteChargerList,20);
+      setRouteLine(true);
+      setRouteChargerList();
     };
 
     function updateRouteChargerList() {
-      routeChargerList();
-      // setRouteLine();
-      // setRouteChargerList();
+      setRouteLine();
+      setRouteChargerList();
     };
 
     function processLoop( actionFunc, numTimes, doneFunc, contCond ) {
@@ -1616,14 +1620,7 @@
         if (this.readyState === 4) {
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
-            var route = {
-              'distanceRaw': result.routes[0].distance/1000,
-              'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
-              'durationRaw': result.routes[0].duration,
-              'duration': secondsToTime(result.routes[0].duration),
-              'rangeRaw' : teslaPosition.range ? teslaPosition.range - result.routes[0].distance/1000 : false,
-              'range' : teslaPosition.range ? (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km' : false
-            }
+            var route = processRouteResults(result);
             distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
             distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
