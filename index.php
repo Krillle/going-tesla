@@ -1267,7 +1267,7 @@
       var bigBox;
 
       bigBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
-      bigBox.push(lineBox[0]); // close Polygon
+      bigBox.push(bigBox[0]); // close Polygon
 
       // console.log(lineBox);
       newList.features.push({
