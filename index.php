@@ -1264,19 +1264,19 @@
           "type": "FeatureCollection",
           "features": []
       };
-      var lineBox;
+      var bigBox;
 
-      lineBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
-      lineBox.push(lineBox[0]); // close Polygon
+      bigBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
+      bigBox.push(lineBox[0]); // close Polygon
 
       // console.log(lineBox);
       newList.features.push({
-        "id": i.toString(),
+        "id": "0",
         "type": "Feature",
         "properties": {},
         "geometry": {
           "type": "Polygon",
-          "coordinates": [lineBox]
+          "coordinates": [bigBox]
         }
       });
 
@@ -1534,11 +1534,10 @@
           "type": "FeatureCollection",
           "features": []
       };
-      var lineBox;
+      var routeBox;
+      routeBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
 
-      lineBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
-
-      chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
+      chargerList = getChargersInBoundingBox(routeBox, minPowerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
