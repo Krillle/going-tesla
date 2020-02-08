@@ -1266,7 +1266,7 @@
       };
       var bigBox;
 
-      bigBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
+      bigBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
       bigBox.push(bigBox[0]); // close Polygon
 
       // console.log(lineBox);
@@ -1538,7 +1538,7 @@
           "features": []
       };
       var routeBox;
-      routeBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
+      routeBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
 
       chargerList = getChargersInBoundingBox(routeBox, minPowerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
