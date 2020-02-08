@@ -1487,10 +1487,13 @@
     };
 
     function processRouteSegments(i) {
+      var lineBox;
+      lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
+
       chargerList.chargelocations.forEach(chargeLocation => {
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
-            console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+            console.log('Add:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
             checkList.push(chargeLocation.ge_id);
             routeChargers.features.push(chargeLocationDetails(chargeLocation,true));
           }
@@ -1540,7 +1543,7 @@
       chargerList = getChargersInBoundingBox(routeBox, minPowerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-
+      console.log(chargerList);
       processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination ? true : false});
     };
 
