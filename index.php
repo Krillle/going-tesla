@@ -1259,6 +1259,30 @@
       map.getSource('distantBox').setData(newList);
     };
 
+    function showBigBox() {
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      var lineBox;
+
+      lineBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
+      lineBox.push(lineBox[0]); // close Polygon
+
+      // console.log(lineBox);
+      newList.features.push({
+        "id": i.toString(),
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [lineBox]
+        }
+      });
+
+      map.getSource('distantBox').setData(newList);
+    };
+
     // - - - - - mapBox requests - - - - - -
     function getRoute(start,destination,route,f){  // set route = true if we need route coordinates
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
@@ -1408,24 +1432,21 @@
       routeList(routeChargerList);
     };
 
-    function setRouteLine(showWait) {
+    function setRouteLine() {
       getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
         if (this.readyState === 4) {
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
             currentRoute = processRouteResults(result);
             showRoute(currentRoute.coordinates);
-            if (showWait) {
-              waitChargerList()
-            };
           };
         }
       });
     };
 
     function updateRouteChargerList(showWait) {
-      setRouteLine(showWait);
-      setRouteChargerList();
+      setRouteLine();
+      setRouteChargerList(showWait);
     };
 
     function processRouteResults(result) {
@@ -1458,6 +1479,7 @@
       f();
     }
 
+    var chargerList;
     var checkList = [];
     var routeChargers = {
         "type": "FeatureCollection",
@@ -1465,14 +1487,6 @@
     };
 
     function processRouteSegments(i) {
-      var lineBox, chargerList;
-
-      lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
-
-      chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
-      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-
       chargerList.chargelocations.forEach(chargeLocation => {
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
@@ -1520,13 +1534,32 @@
           "type": "FeatureCollection",
           "features": []
       };
+      var lineBox;
+
+      lineBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
+
+      chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
+      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+
       processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination ? true : false});
     };
 
-    function setRouteChargerList() {
-      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'simplified');
-      <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
-      processRouteChargers();
+    function setRouteChargerList(showWait) {
+      getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]}, 'simplified', function () {
+        if (this.readyState === 4) {
+          var result = JSON.parse(this.responseText);
+          if (result.code == "Ok") {
+            currentRoute = processRouteResults(result);
+            if (showWait) {
+              waitChargerList()
+            };
+            <? if (isset($_GET["bigbox"])) {echo "showBigBox();";} ?>
+            <? if (isset($_GET["boxes"])) {echo "showBoxes();";} ?>
+            processRouteChargers();
+          };
+        }
+      });
     };
 
     function toggleeRouteList(){
