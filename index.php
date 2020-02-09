@@ -453,7 +453,7 @@
     };
     zoomToPower(teslaPosition.zoom);
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazZmYjlzMzcwYXYwM2xscmY3cHhvb2RzIn0.xeNX7w2LYyVJgnZN3tewrA';
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazZmYnRwbWYyMDkxM2xwazloYTF5aGx0In0.m3-Hna4DaMltJ6_UZ5I-mg';
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: mapStyle,
