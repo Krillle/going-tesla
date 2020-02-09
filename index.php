@@ -14,7 +14,7 @@
     console_log("No mapbox API key found.",true);
   };
 
-  if (!isset($_SERVER["goingelectric"])) {
+  if (isset($_SERVER["goingelectric"])) {
     console_log("No GoingElectric API key found.",true);
   };
 
@@ -461,7 +461,7 @@
     };
     zoomToPower(teslaPosition.zoom);
 
-    mapboxgl.accessToken = '<? echo $_SERVER["goingelectric"] ?>';
+    mapboxgl.accessToken = '<? echo $_SERVER["mapbox"] ?>';
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: mapStyle,
