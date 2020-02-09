@@ -10,6 +10,10 @@
       echo $js_code;
   };
 
+  if (isset($__SERVER["mapbox"])) {
+    console_log("Server variable found:" .$__SERVER["mapbox"],true);
+  };
+
   if (isset($_COOKIE["location"])) {
     // Sunset for last known location
     $location = json_decode($_COOKIE["location"]);
