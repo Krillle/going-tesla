@@ -735,7 +735,6 @@
       .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
       .once('open',function () {
         addChargerDetails(e.features[0].id);
-        console.log('HTTP returned');
         addChargerDistance(e.features[0].id, e.features[0].geometry.coordinates);
       })
       .addTo(map);
@@ -1459,7 +1458,7 @@
     function updateRouteChargerList(showWait) {
       if (showWait) { numUpdates = 0 };
       numUpdates++;
-      if (showWait == maxUpdates) {
+      if (numUpdates >= maxUpdates) {
         clearInterval(updateListInterval);
         console.log('Max List updates reached. Updates stopped.');
       };
@@ -1649,7 +1648,6 @@
 
       httpGet(geUrl, false, function () {
         if (this.readyState === 4) {
-          console.log("Charger Details Listener Result: " + this.responseText);
           var chargerDetails = JSON.parse(this.responseText);
           if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
           var chargeLocation = chargerDetails.chargelocations[0];
