@@ -1447,8 +1447,8 @@
         if (this.readyState === 4) {
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
-            currentRoute = processRouteResults(result);
-            showRoute(currentRoute.coordinates);
+            var detailRoute = processRouteResults(result);
+            showRoute(detailRoute.coordinates);
           };
         }
       });
