@@ -489,6 +489,7 @@
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
+console.log('Before first call:', currentDestination);
       updateRouteChargerList(true);
       console.log ('Starting continuous list update');
       updateListInterval = setInterval(updateRouteChargerList, updateListTime);
@@ -1456,6 +1457,7 @@
 
     function updateRouteChargerList(showWait) {
       setRouteLine();
+console.log('After setRouteLine:', currentDestination);
       setRouteChargerList(showWait);
     };
 
@@ -1478,6 +1480,7 @@
     function processLoop( actionFunc, numTimes, doneFunc, contCond ) {
       var i = 0;
       var f = function () {
+console.log('Inside processLoop:', currentDestination, 'Cond >', contCond());
         if (i < numTimes && contCond()) {
           actionFunc( i++ );  // closure on i
           setTimeout( f, 50 )
@@ -1568,6 +1571,7 @@
             };
             <? if (isset($_GET["bigbox"])) {echo "showBigBox();";} ?>
             <? if (isset($_GET["boxes"])) {echo "showBoxes();";} ?>
+console.log('Before processRouteChargers:', currentDestination);
             processRouteChargers();
           };
         }
