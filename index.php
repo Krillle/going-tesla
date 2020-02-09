@@ -448,7 +448,7 @@
     };
     zoomToPower(teslaPosition.zoom);
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazZmYjlzMzcwYXYwM2xscmY3cHhvb2RzIn0.xeNX7w2LYyVJgnZN3tewrA';
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazZmYnRwbWYyMDkxM2xwazloYTF5aGx0In0.m3-Hna4DaMltJ6_UZ5I-mg';
     if (!mapboxgl.supported()) {
       console.log('Browser does not support Mapbox GL.');
       gtag('event', 'No Mapbox GL', {'event_category': 'Connect'});
