@@ -14,7 +14,7 @@
     console_log("No mapbox API key found.",true);
   };
 
-  if (isset($_SERVER["goingelectric"])) {
+  if (!isset($_SERVER["goingelectric"])) {
     console_log("No GoingElectric API key found.",true);
   };
 
@@ -1554,7 +1554,7 @@
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
       console.log('Charger List:', chargerList);
-      processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination ? true : false});
+      processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination !== false});
     };
 
     function setRouteChargerList(showWait) {
