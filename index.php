@@ -489,7 +489,6 @@
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-console.log('Before first call:', currentDestination);
       updateRouteChargerList(true);
       console.log ('Starting continuous list update');
       updateListInterval = setInterval(updateRouteChargerList, updateListTime);
@@ -1457,7 +1456,6 @@ console.log('Before first call:', currentDestination);
 
     function updateRouteChargerList(showWait) {
       setRouteLine();
-console.log('After setRouteLine:', currentDestination);
       setRouteChargerList(showWait);
     };
 
@@ -1480,10 +1478,9 @@ console.log('After setRouteLine:', currentDestination);
     function processLoop( actionFunc, numTimes, doneFunc, contCond ) {
       var i = 0;
       var f = function () {
-console.log('Inside processLoop:', currentDestination, 'Cond >', contCond());
         if (i < numTimes && contCond()) {
-          actionFunc( i++ );  // closure on i
-          setTimeout( f, 50 )
+          actionFunc( i++ );
+          setTimeout( f, 50 );
         }
         else if (doneFunc && contCond()) {
           doneFunc();
@@ -1502,7 +1499,7 @@ console.log('Inside processLoop:', currentDestination, 'Cond >', contCond());
     function processRouteSegments(i) {
       var lineBox;
       lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
-
+console.log('Segment',i);
       chargerList.chargelocations.forEach(chargeLocation => {
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
@@ -1571,7 +1568,6 @@ console.log('Inside processLoop:', currentDestination, 'Cond >', contCond());
             };
             <? if (isset($_GET["bigbox"])) {echo "showBigBox();";} ?>
             <? if (isset($_GET["boxes"])) {echo "showBoxes();";} ?>
-console.log('Before processRouteChargers:', currentDestination);
             processRouteChargers();
           };
         }
