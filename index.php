@@ -1454,7 +1454,16 @@
       });
     };
 
+    var numUpdates, maxUpdates = 2;
+
     function updateRouteChargerList(showWait) {
+      if (showWait) { numUpdates = 0 };
+      numUpdates++;
+      if (showWait == maxUpdates) {
+        clearInterval(updateListInterval);
+        console.log('Max List updates reached. Updates stopped.');
+      };
+
       setRouteLine();
       setRouteChargerList(showWait);
     };
