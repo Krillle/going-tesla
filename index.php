@@ -1499,9 +1499,7 @@
     function processRouteSegments(i) {
       var lineBox;
       lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
-console.log('Segment',i, [currentRoute.coordinates[i],currentRoute.coordinates[i+1]]);
       chargerList.chargelocations.forEach(chargeLocation => {
-console.log('Check', chargeLocation.name);
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
             console.log('Add:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
@@ -1555,7 +1553,6 @@ console.log('Check', chargeLocation.name);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
       console.log('Charger List:', chargerList);
-      console.log('Route:',currentRoute.coordinates);
       processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination !== false});
     };
 
