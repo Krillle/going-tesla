@@ -1555,6 +1555,7 @@ console.log('Check', chargeLocation.name);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
       console.log('Charger List:', chargerList);
+      console.log('Route:',currentRoute.coordinates);
       processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination !== false});
     };
 
@@ -1569,6 +1570,7 @@ console.log('Check', chargeLocation.name);
             };
             <? if (isset($_GET["bigbox"])) {echo "showBigBox();";} ?>
             <? if (isset($_GET["boxes"])) {echo "showBoxes();";} ?>
+            <? if (isset($_GET["debugroute"])) {echo "showRoute(currentRoute.coordinates);";} ?>
             processRouteChargers();
           };
         }
