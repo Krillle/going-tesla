@@ -10,10 +10,12 @@
       echo $js_code;
   };
 
-  if (isset($_SERVER["mapbox"])) {
-    console_log("Server variable found:" .$_SERVER["mapbox"],true);
-  } else {
-    console_log("No server variable found:",true);
+  if (!isset($_SERVER["mapbox"])) {
+    console_log("No mapbox API key found.",true);
+  };
+
+  if (!isset($_SERVER["goingelectric"])) {
+    console_log("No GoingElectric API key found.",true);
   };
 
   if (isset($_COOKIE["location"])) {
