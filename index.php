@@ -1499,8 +1499,9 @@
     function processRouteSegments(i) {
       var lineBox;
       lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
-console.log('Segment',i, 'Checklis', checkList);
+console.log('Segment',i, [currentRoute.coordinates[i],currentRoute.coordinates[i+1]]);
       chargerList.chargelocations.forEach(chargeLocation => {
+console.log('Check', chargeLocation.name);
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
             console.log('Add:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
