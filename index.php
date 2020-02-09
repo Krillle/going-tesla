@@ -21,7 +21,7 @@
     console_log($lat,true);
     console_log($lon,true);
   } else {
-    console_log("No location Cookie found. Usind default daylight times.",true);
+    console_log("No location Cookie found. Using default daylight times.",true);
     // Sunset defalut location Berlin
     $lat = 52.52;
     $lon = 13.41;
@@ -1264,9 +1264,13 @@
           "type": "FeatureCollection",
           "features": []
       };
-      var bigBox;
+      var boundingBox, bigBox;
 
-      bigBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
+      boundingBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
+      bigBox = [[boundingBox[0][0],boundingBox[0][1]],
+                [boundingBox[1][0],boundingBox[0][1]],
+                [boundingBox[1][0],boundingBox[1][1]],
+                [boundingBox[0][0],boundingBox[1][1]]];
       bigBox.push(bigBox[0]); // close Polygon
 console.log(bigBox);
       // console.log(lineBox);
@@ -1538,9 +1542,9 @@ console.log(bigBox);
           "features": []
       };
       var routeBox;
-      routeBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
+      routeBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
 
-      chargerList = getChargersInBoundingBox(routeBox, minPowerList);
+      chargerList = getChargersInBoundingBox(boundingBox(routeBox), minPowerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
       console.log('Charger List:', chargerList);
