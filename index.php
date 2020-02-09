@@ -1268,7 +1268,7 @@
 
       bigBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
       bigBox.push(bigBox[0]); // close Polygon
-
+console.log(bigBox);
       // console.log(lineBox);
       newList.features.push({
         "id": "0",
@@ -1543,7 +1543,7 @@
       chargerList = getChargersInBoundingBox(routeBox, minPowerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-      console.log(chargerList);
+      console.log('Charger List:' chargerList);
       processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination ? true : false});
     };
 
@@ -1579,7 +1579,7 @@
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
-      console.log("GE Reply: ", chargerList);
+      console.log("Update Chargers: ", chargerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
