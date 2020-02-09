@@ -10,6 +10,14 @@
       echo $js_code;
   };
 
+  if (!isset($_SERVER["mapbox"])) {
+    console_log("No mapbox API key found.",true);
+  };
+
+  if (!isset($_SERVER["goingelectric"])) {
+    console_log("No GoingElectric API key found.",true);
+  };
+
   if (isset($_COOKIE["location"])) {
     // Sunset for last known location
     $location = json_decode($_COOKIE["location"]);
@@ -21,7 +29,7 @@
     console_log($lat,true);
     console_log($lon,true);
   } else {
-    console_log("No location Cookie found. Usind default daylight times.",true);
+    console_log("No location Cookie found. Using default daylight times.",true);
     // Sunset defalut location Berlin
     $lat = 52.52;
     $lon = 13.41;
@@ -347,13 +355,18 @@
   <div id='info' class='info-container'></div>
   <div id='route' class='route-container'></div>
   <script>
-    if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
+    if (location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
+    if (!mapboxgl.supported()) {
+      gtag('event', 'No Mapbox GL', {'event_category': 'Connect'});
+      alert('Diese Anwendung läuft leider nicht auf MCU1');
+      throw new Error('Browser does not support Mapbox GL');
+    };
 
     console.log("App started");
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
 
-    const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
+    const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
@@ -448,21 +461,15 @@
     };
     zoomToPower(teslaPosition.zoom);
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazZmYnRwbWYyMDkxM2xwazloYTF5aGx0In0.m3-Hna4DaMltJ6_UZ5I-mg';
-    if (!mapboxgl.supported()) {
-      console.log('Browser does not support Mapbox GL.');
-      gtag('event', 'No Mapbox GL', {'event_category': 'Connect'});
-      alert('Diese Anwendung läuft leider nicht auf MCU1.');
-    } else {
-      var map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: mapStyle,
-        center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
-        zoom: teslaPosition.zoom, // starting zoom
-        bearing: teslaPosition.heading,
-        attributionControl: false
-      });
-    };
+    mapboxgl.accessToken = '<? echo $_SERVER["mapbox"] ?>';
+    var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: mapStyle,
+      center: [teslaPosition.longitude,teslaPosition.latitude], // starting position
+      zoom: teslaPosition.zoom, // starting zoom
+      bearing: teslaPosition.heading,
+      attributionControl: false
+    });
 
     // Add geocoder search field
     var geocoderControl = new MapboxGeocoder({
@@ -482,9 +489,9 @@
       document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-      setTimeout(initalRouteChargerList, 20);
+      updateRouteChargerList(true);
       console.log ('Starting continuous list update');
-      updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
+      updateListInterval = setInterval(updateRouteChargerList, updateListTime);
 
     });
     map.addControl(geocoderControl,'top-left');
@@ -664,9 +671,9 @@
 
       if (currentDestination) {
         gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-        initalRouteChargerList();
+        updateRouteChargerList(true);
         console.log ('Recovering continuous list update');
-        updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
+        updateListInterval = setInterval(updateRouteChargerList, updateListTime);
       };
 
     });
@@ -713,18 +720,24 @@
       autoFollow = false;
       gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
 
-      var coordinates = e.features[0].geometry.coordinates.slice();
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
-      chargerID = e.features[0].id
+      var chargerID = e.features[0].id
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      map.once('idle', function(e) {
-        console.log('Map idle',chargerID);
-        popup.setHTML(chargerDescription(chargerID).text)
-      });
-      popup.setLngLat(coordinates)
-      .setHTML(chargerShortDescription(e.features[0].properties).text)
+      // map.once('idle', function(e) {
+      //   console.log('Map idle',chargerID);
+      //   popup.setHTML(chargerDescription(chargerID).text)
+      // });
+      // var coordinates = e.features[0].geometry.coordinates.slice();
+      // popup.setLngLat(coordinates)
+      popup.setLngLat(e.features[0].geometry.coordinates)
+      .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
+      .once('open',function () {
+        addChargerDetails(e.features[0].id);
+        console.log('HTTP returned');
+        addChargerDistance(e.features[0].id, e.features[0].geometry.coordinates);
+      })
       .addTo(map);
     });
 
@@ -824,13 +837,14 @@
       return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
     };
 
-    function httpGet(url, token) {
+    function httpGet(url, token, f) {
       var httpReq = new XMLHttpRequest();
-      httpReq.open('GET', url, false);
+      httpReq.open('GET', url, f ? true : false);
       if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
+      if (f) {httpReq.addEventListener("readystatechange", f)}
       httpReq.send(null);
-      // console.log("Result: " + httpReq.responseText);
-      return httpReq.responseText;
+      if (f) { return false}
+      else { return httpReq.responseText };
     };
 
     function getCookie(name) {
@@ -1055,7 +1069,7 @@
 
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
-          console.log('Send destination: ' + this.responseText);
+          console.log('Sent destination: ' + this.responseText);
         }
       });
 
@@ -1253,14 +1267,40 @@
       map.getSource('distantBox').setData(newList);
     };
 
+    function showBigBox() {
+      var newList = {
+          "type": "FeatureCollection",
+          "features": []
+      };
+      var bigBox, showBox;
+
+      bigBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
+      showBox = [[bigBox[0][0],bigBox[0][1]],
+                 [bigBox[1][0],bigBox[0][1]],
+                 [bigBox[1][0],bigBox[1][1]],
+                 [bigBox[0][0],bigBox[1][1]]];
+      showBox.push(showBox[0]); // close Polygon
+      newList.features.push({
+        "id": "0",
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [showBox]
+        }
+      });
+
+      map.getSource('distantBox').setData(newList);
+    };
+
     // - - - - - mapBox requests - - - - - -
-    function getRoute(start,destination,route){  // set route = true if we need route coordinates
+    function getRoute(start,destination,route,f){  // set route = true if we need route coordinates
        var routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
           + start.longitude + ',' + start.latitude + ';'
           + destination.longitude + ',' + destination.latitude
-          + '?access_token=' + mapboxgl.accessToken + (route ? '&geometries=polyline&overview='+route : '&overview=false');
-      result = httpGet(routeUrl)
-      // console.log("Result" + result);
+          + '?access_token=' + mapboxgl.accessToken
+          + (route ? '&geometries=polyline&overview='+route : '&overview=false');
+      result = httpGet(routeUrl,false,f);
       if (result) {
         result = JSON.parse(result);
         if (result.code == "Ok") {
@@ -1403,27 +1443,44 @@
     };
 
     function setRouteLine() {
-      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full');
-      showRoute(currentRoute.coordinates);
+      getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'full',function () {
+        if (this.readyState === 4) {
+          var result = JSON.parse(this.responseText);
+          if (result.code == "Ok") {
+            var lineRoute = processRouteResults(result);
+            showRoute(lineRoute.coordinates);
+          };
+        }
+      });
     };
 
-    function initalRouteChargerList() {
+    function updateRouteChargerList(showWait) {
       setRouteLine();
-      waitChargerList();
-      setTimeout(setRouteChargerList,20);
+      setRouteChargerList(showWait);
     };
 
-    function updateRouteChargerList() {
-      setRouteLine();
-      setRouteChargerList();
+    function processRouteResults(result) {
+      if (result.code == "Ok") {
+        return {
+          'distanceRaw': result.routes[0].distance/1000,
+          'distance': (result.routes[0].distance/1000).toFixed((result.routes[0].distance < 10000) ? 1 : 0).toString().replace(".",",")  + ' km',
+          'durationRaw': result.routes[0].duration,
+          'duration': secondsToTime(result.routes[0].duration),
+          'rangeRaw' : teslaPosition.range ? teslaPosition.range - result.routes[0].distance/1000 : false,
+          'range' : teslaPosition.range ? (teslaPosition.range - result.routes[0].distance/1000).toFixed(0).toString() + ' km' : false,
+          'coordinates': result.routes[0].geometry ? decodePolyline(result.routes[0].geometry) : false
+        }
+      } else {
+        return null
+      }
     };
 
     function processLoop( actionFunc, numTimes, doneFunc, contCond ) {
       var i = 0;
       var f = function () {
         if (i < numTimes && contCond()) {
-          actionFunc( i++ );  // closure on i
-          setTimeout( f, 50 )
+          actionFunc( i++ );
+          setTimeout( f, 50 );
         }
         else if (doneFunc && contCond()) {
           doneFunc();
@@ -1432,6 +1489,7 @@
       f();
     }
 
+    var chargerList;
     var checkList = [];
     var routeChargers = {
         "type": "FeatureCollection",
@@ -1439,18 +1497,12 @@
     };
 
     function processRouteSegments(i) {
-      var lineBox, chargerList;
-
+      var lineBox;
       lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
-
-      chargerList = getChargersInBoundingBox(boundingBox(lineBox), minPowerList);
-      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-
       chargerList.chargelocations.forEach(chargeLocation => {
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
-            console.log(chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+            console.log('Add:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
             checkList.push(chargeLocation.ge_id);
             routeChargers.features.push(chargeLocationDetails(chargeLocation,true));
           }
@@ -1494,18 +1546,37 @@
           "type": "FeatureCollection",
           "features": []
       };
-      processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination ? true : false});
+      var routeBox;
+      routeBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
+
+      chargerList = getChargersInBoundingBox(boundingBox(routeBox), minPowerList);
+      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+      console.log('Charger List:', chargerList);
+      processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination !== false});
     };
 
-    function setRouteChargerList() {
-      currentRoute = getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]},'simplified');
-      <? if (isset($_GET["boxes"])) {echo "showBoxes(route.coordinates);";} ?>
-      processRouteChargers();
+    function setRouteChargerList(showWait) {
+      getRoute(teslaPosition,{'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]}, 'simplified', function () {
+        if (this.readyState === 4) {
+          var result = JSON.parse(this.responseText);
+          if (result.code == "Ok") {
+            currentRoute = processRouteResults(result);
+            if (showWait) {
+              waitChargerList()
+            };
+            <? if (isset($_GET["bigbox"])) {echo "showBigBox();";} ?>
+            <? if (isset($_GET["boxes"])) {echo "showBoxes();";} ?>
+            <? if (isset($_GET["debugroute"])) {echo "showRoute(currentRoute.coordinates);";} ?>
+            processRouteChargers();
+          };
+        }
+      });
     };
 
     function toggleeRouteList(){
       minPowerList = minPowerList == superCharger.minPower ? highwayCharger.minPower : superCharger.minPower;
-      initalRouteChargerList();
+      updateRouteChargerList(true);
     };
 
     function cancelRouteChargerList() {
@@ -1518,7 +1589,7 @@
 
     function updateChargers() {
       var chargerList = getChargersInBounds(map.getBounds())
-      console.log("GE Reply: ", chargerList);
+      console.log("Update Chargers: ", chargerList);
       if (chargerList.status != "ok") {throw "GoingElectric request failed"};
       if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
 
@@ -1532,7 +1603,7 @@
       map.getSource('chargers').setData(newList);
     };
 
-    function chargerShortDescription (chargeLocation) {
+    function chargerShortDescription (id, chargeLocation) {
       var address = `${chargeLocation.street}, ${chargeLocation.city}, ${chargeLocation.country}`;
 
       var description = '';
@@ -1544,57 +1615,100 @@
                      // `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}<p>`;
+      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
+      description += `<span id='location_description_${id}'></span><p>`;
+      description += `<span id='fault_report_${id}'></span>`;
       description += '<hr>';
+      description += `<span id='ladeweile_${id}'></span>`;
+
       description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
-
-      // description += `<a href=${chargeLocation.url} target="_blank">Details auf GoingElectric</a><p>`;
-      // description += `<a href=# onclick='sendDestinationToTesla("${address}");'>Als Navigationsziel setzen</a>`;
+      description += `<span id='distance_${id}'></span>`;
 
       description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
       return {'text': description, 'address': address};
     };
 
-    function chargerDescription(id) {
-      var chargerDetails = getChargerDetails(id);
-      if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
-      var chargeLocation = chargerDetails.chargelocations[0];
+    function addChargerDetails(id) {
+      var locationDescription = document.getElementById(`location_description_${id}`);
+      var faultReport = document.getElementById(`fault_report_${id}`);
+      var ladeweile = document.getElementById(`ladeweile_${id}`);
 
-      var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
-      var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
+      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
+        `key=${goingelectricToken}&`+
+        `ge_id=${id}`;
 
-      var description = '';
-      description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.address.city) ? '' : chargeLocation.address.city}</strong>`;
+      httpGet(geUrl, false, function () {
+        if (this.readyState === 4) {
+          console.log("Charger Details Listener Result: " + this.responseText);
+          var chargerDetails = JSON.parse(this.responseText);
+          if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
+          var chargeLocation = chargerDetails.chargelocations[0];
 
-      description += (chargeLocation.network && !chargeLocation.name.includes(chargeLocation.network)) ?
-                     (`<br>${chargeLocation.network}<p>`) :
-                     // (chargeLocation.operator && !chargeLocation.name.includes(chargeLocation.operator)) ?
-                     // `<br>${chargeLocation.operator}<p>` :
-                     '<p>';
+          locationDescription.innerHTML = (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}`) : '';
+          faultReport.innerHTML = (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
 
-      var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
-      description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}`;
-      // description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
-      description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
-      description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
-      description += '<hr>';
-      // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : '';
-
-      description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
-      description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
-
-      if (route) {
-        description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
-        rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
-        description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
-        description += '<p>'
-      };
-
-      description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
-
-      return {'text': description, 'address': address};
+          ladeweile.innerHTML = (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
+        }
+      });
     };
+
+    function addChargerDistance(id, coordinates) {
+      var distance = document.getElementById(`distance_${id}`);
+
+      getRoute(teslaPosition,{'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
+        if (this.readyState === 4) {
+          var result = JSON.parse(this.responseText);
+          if (result.code == "Ok") {
+            var route = processRouteResults(result);
+            distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+            var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
+            distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+            distance.innerHTML += '<p>'
+          };
+        }
+      });
+    };
+
+    // function chargerDescription(id) {
+    //   var chargerDetails = getChargerDetails(id);
+    //   if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
+    //   var chargeLocation = chargerDetails.chargelocations[0];
+    //
+    //   var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
+    //   var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
+    //
+    //   var description = '';
+    //   description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.address.city) ? '' : chargeLocation.address.city}</strong>`;
+    //
+    //   description += (chargeLocation.network && !chargeLocation.name.includes(chargeLocation.network)) ?
+    //                  (`<br>${chargeLocation.network}<p>`) :
+    //                  // (chargeLocation.operator && !chargeLocation.name.includes(chargeLocation.operator)) ?
+    //                  // `<br>${chargeLocation.operator}<p>` :
+    //                  '<p>';
+    //
+    //   var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
+    //   description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}`;
+    //   // description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
+    //   description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
+    //   description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
+    //   description += '<hr>';
+    //   // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : '';
+    //
+    //   description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
+    //   description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
+    //
+    //   if (route) {
+    //     description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+    //     rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
+    //     description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+    //     description += '<p>'
+    //   };
+    //
+    //   description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
+    //
+    //   return {'text': description, 'address': address};
+    // };
 
     // function settingsContent(){
     //   var content = '';
