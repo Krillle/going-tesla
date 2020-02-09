@@ -1264,15 +1264,16 @@
           "type": "FeatureCollection",
           "features": []
       };
-      var boundingBox, bigBox;
+      var bigBox, showBox;
 
-      boundingBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
-      bigBox = [[boundingBox[0][0],boundingBox[0][1]],
-                [boundingBox[1][0],boundingBox[0][1]],
-                [boundingBox[1][0],boundingBox[1][1]],
-                [boundingBox[0][0],boundingBox[1][1]]];
-      bigBox.push(bigBox[0]); // close Polygon
+      bigBox = boundingBox(distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance));
+      showBox = [[bigBox[0][0],bigBox[0][1]],
+                 [bigBox[1][0],bigBox[0][1]],
+                 [bigBox[1][0],bigBox[1][1]],
+                 [bigBox[0][0],bigBox[1][1]]];
+      showBox.push(showBox[0]); // close Polygon
 console.log(bigBox);
+console.log(showBox);
       // console.log(lineBox);
       newList.features.push({
         "id": "0",
@@ -1280,7 +1281,7 @@ console.log(bigBox);
         "properties": {},
         "geometry": {
           "type": "Polygon",
-          "coordinates": [bigBox]
+          "coordinates": [showBox]
         }
       });
 
