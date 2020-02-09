@@ -453,7 +453,7 @@
     };
     zoomToPower(teslaPosition.zoom);
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazBlYWc5OTMwOGhrM2tsY2pxcmgyYzVtIn0.0novoDiTaGPwZ5tPMDDl1A';
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazZmYjlzMzcwYXYwM2xscmY3cHhvb2RzIn0.xeNX7w2LYyVJgnZN3tewrA';
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: mapStyle,
@@ -483,7 +483,7 @@
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
       updateRouteChargerList(true);
       console.log ('Starting continuous list update');
-      updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
+      updateListInterval = setInterval(updateRouteChargerList, updateListTime);
 
     });
     map.addControl(geocoderControl,'top-left');
@@ -665,7 +665,7 @@
         gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
         updateRouteChargerList(true);
         console.log ('Recovering continuous list update');
-        updateListInterval = setInterval(function() {updateRouteChargerList();}, updateListTime);
+        updateListInterval = setInterval(updateRouteChargerList, updateListTime);
       };
 
     });
@@ -1272,9 +1272,6 @@
                  [bigBox[1][0],bigBox[1][1]],
                  [bigBox[0][0],bigBox[1][1]]];
       showBox.push(showBox[0]); // close Polygon
-console.log(bigBox);
-console.log(showBox);
-      // console.log(lineBox);
       newList.features.push({
         "id": "0",
         "type": "Feature",
