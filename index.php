@@ -353,7 +353,7 @@
   <div id='info' class='info-container'></div>
   <div id='route' class='route-container'></div>
   <script>
-    if (location.hostname == 'goingtesla.herokuapp.com' && location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
+    if (location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
     if (!mapboxgl.supported()) {
       gtag('event', 'No Mapbox GL', {'event_category': 'Connect'});
       alert('Diese Anwendung läuft leider nicht auf MCU1');
@@ -364,7 +364,7 @@
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
 
-    const goingelectricToken = '5471b3bae96a68bbf90cad00834fb10e';
+    const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
@@ -459,7 +459,7 @@
     };
     zoomToPower(teslaPosition.zoom);
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia3JpbGxsZSIsImEiOiJjazZmYnRwbWYyMDkxM2xwazloYTF5aGx0In0.m3-Hna4DaMltJ6_UZ5I-mg';
+    mapboxgl.accessToken = '<? echo $_SERVER["goingelectric"] ?>';
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: mapStyle,
