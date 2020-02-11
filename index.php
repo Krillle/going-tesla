@@ -1473,7 +1473,7 @@
         setRouteChargerList(initial);
         updateRouteChargerEmergencyStop(initial);
       } else {
-        console.log('Positon unchaged. Skipping List Update.');
+        console.log('Positon unchaged. Skipping list update.');
       };
     };
 
