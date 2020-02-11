@@ -417,9 +417,18 @@
 
     const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
 
+    var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
+    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
+    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
+
+    var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
+    var currentRoute = false;
+
     const updatePositionTime = 20000;
     const updateListTime = 120000;
+    const updateListDistance = 1000;
     var updateListInterval;
+    var updateListPosition = teslaPosition;
 
     var zoomToogle = [
       {name:'AutoZoom', zoom:null, autoZoom:true, autoFollow:true, headUp:true, icon:'url("https://img.icons8.com/small/40/333333/gps-device.png"'},
@@ -427,13 +436,6 @@
       {name:'SuperCharger', zoom:highSpeedZoom, autoZoom:false, autoFollow:true, headUp:false, icon:'url("https://img.icons8.com/material-sharp/40/333333/tesla-supercharger-pin--v1.png"'}
     ];
     var zoomToggleState = 0;
-
-    var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
-    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
-    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
-
-    var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
-    var currentRoute = false;
 
     const positionSize = '44';
     var positionColor = 'ff514a';
@@ -962,7 +964,7 @@
       setTeslaPosition(getTeslaCarData().response);
 
       if (positionIcon.geometry.coordinates != [teslaPosition.longitude,teslaPosition.latitude]
-          && positionIcon.properties.bearing != teslaPosition.heading) {
+          || positionIcon.properties.bearing != teslaPosition.heading) {
 
         positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
         positionIcon.properties.bearing = teslaPosition.heading;
@@ -1453,18 +1455,26 @@
       });
     };
 
-    var numUpdates, maxUpdates = 2;
-
-    function updateRouteChargerList(showWait) {
-      if (showWait) { numUpdates = 0 };
+    var numUpdates, maxUpdates = 30;
+    function updateRouteChargerEmergencyStop(initial) {
+      if (initial) { numUpdates = 0 };
       numUpdates++;
       if (numUpdates >= maxUpdates) {
-        clearInterval(updateListInterval);
-        console.log('Max List updates reached. Updates stopped.');
+        // clearInterval(updateListInterval);
+        cancelRouteChargerList();
+        console.log('Maximum List updates reached. Updates force stopped.');
       };
+    };
 
-      setRouteLine();
-      setRouteChargerList(showWait);
+    function updateRouteChargerList(initial) {
+      if (initial || lineDistance([[teslaPosition.longitude,teslaPosition.latitude],[updateListPosition.longitude,updateListPosition.latitude]]) > updateListDistance) {
+        updateListPosition = teslaPosition;
+        setRouteLine();
+        setRouteChargerList(initial);
+        updateRouteChargerEmergencyStop(initial);
+      } else {
+        console.log('Positon unchaged. Skipping list update.');
+      };
     };
 
     function processRouteResults(result) {
