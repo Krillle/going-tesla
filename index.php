@@ -1467,15 +1467,14 @@
     };
 
     function updateRouteChargerList(initial) {
-
       if (initial || lineDistance([[teslaPosition.longitude,teslaPosition.latitude],[updateListPosition.longitude,updateListPosition.latitude]]) > updateListDistance) {
         updateListPosition = teslaPosition;
         setRouteLine();
         setRouteChargerList(initial);
         updateRouteChargerEmergencyStop(initial);
+      } else {
+        console.log('Positon unchaged. Skipping List Update.');
       };
-
-
     };
 
     function processRouteResults(result) {
