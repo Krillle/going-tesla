@@ -405,7 +405,7 @@
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
-    const destinationCharger = {'minPower':'11', 'minZoom':14, 'toggle':1}
+    const destinationCharger = {'minPower':'3', 'minZoom':14, 'toggle':1}
 
     var minPower = superCharger.minPower;
     var minPowerList = superCharger.minPower;
