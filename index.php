@@ -967,6 +967,7 @@
               || positionIcon.properties.bearing != teslaPosition.heading) {
 
 console.log('Delta:', positionIcon.geometry.coordinates,[teslaPosition.longitude,teslaPosition.latitude]);
+console.log('Bearing:', positionIcon.properties.bearing, teslaPosition.heading);
             positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
             positionIcon.properties.bearing = teslaPosition.heading;
 
