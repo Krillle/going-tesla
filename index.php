@@ -449,9 +449,6 @@
     var infoContainer = document.getElementById('info');
     var routeContainer = document.getElementById('route');
 
-    console.log('Establish Connection to Tesla');
-    connectTesla ();
-
     var positionIcon = {
       type: 'Feature',
       properties: {'bearing': teslaPosition.heading},
@@ -666,6 +663,9 @@
           // "text-justify": "auto",
         }
       });
+
+      console.log('Establish Connection to Tesla');
+      connectTesla ();
 
       console.log("Initalize Chargers");
       updateChargers();
