@@ -450,8 +450,7 @@
     var routeContainer = document.getElementById('route');
 
     console.log('Establish Connection to Tesla');
-    try {connectTesla ()}
-    catch {console.log('Tesla not reachable')};
+    connectTesla ();
 
     var positionIcon = {
       type: 'Feature',
