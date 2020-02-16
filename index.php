@@ -966,6 +966,7 @@
           if (positionIcon.geometry.coordinates != [teslaPosition.longitude,teslaPosition.latitude]
               || positionIcon.properties.bearing != teslaPosition.heading) {
 
+console.log(positionIcon.geometry.coordinates,[teslaPosition.longitude,teslaPosition.latitude]);
             positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
             positionIcon.properties.bearing = teslaPosition.heading;
 
