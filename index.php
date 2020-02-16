@@ -424,7 +424,7 @@
     var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
     var currentRoute = false;
 
-    const updatePositionTime = 20000;
+    const updatePositionTime = 10000;
     const updateListTime = 120000;
     const updateListDistance = 1000;
     var updateListInterval;
@@ -664,10 +664,10 @@
         }
       });
 
-      console.log('Establish Connection to Tesla');
+      console.log('Establishing Connection to Tesla');
       connectTesla ();
 
-      console.log("Initalize Chargers");
+      console.log("Initalizing Chargers");
       updateChargers();
 
       if (currentDestination) {
@@ -935,7 +935,7 @@
           var vehicleData = JSON.parse(this.responseText);
 
           if (initial) {
-            console.log(vehicleData);
+            console.log('Vehicle Data:',vehicleData);
             if (vehicleData == null) {
               teslaConnection.status = 'Ungültiges Token';
               console.log(teslaConnection.status);
