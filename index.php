@@ -418,8 +418,8 @@
     const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
-    // var teslaPosition = {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
-    var teslaPosition = {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
+    // var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
+    var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
 
     var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
     var currentRoute = false;
@@ -448,10 +448,6 @@
 
     var infoContainer = document.getElementById('info');
     var routeContainer = document.getElementById('route');
-
-    console.log('Establish Connection to Tesla');
-    try {connectTesla ()}
-    catch {console.log('Tesla not reachable')};
 
     var positionIcon = {
       type: 'Feature',
@@ -668,6 +664,9 @@
         }
       });
 
+      console.log('Establish Connection to Tesla');
+      connectTesla ();
+
       console.log("Initalize Chargers");
       updateChargers();
 
@@ -795,7 +794,6 @@
       if (headUp) {jumpTarget.bearing = teslaPosition.heading};
       if (autoFollow || autoZoom || headUp) {
         map.jumpTo(jumpTarget);
-        // map.jumpTo({ 'center': [teslaPosition.longitude,teslaPosition.latitude], 'zoom': teslaPosition.zoom, 'bearing': teslaPosition.heading });
       };
     };
 
@@ -913,36 +911,7 @@
         return;
       };
 
-      var vehicleData = getTeslaCarData();
-      console.log(vehicleData);
-      if (vehicleData == null) {
-        teslaConnection.status = 'Ungültiges Token';
-        console.log(teslaConnection.status);
-        infoMessage(teslaConnection.status);
-        gtag('event', 'Invalid Token', {'event_category': 'Connect'});
-        settingsPopup ();
-        return;
-
-      } else if (vehicleData.response == null) {
-        // Car sleeps
-        teslaConnection.status = 'Fahrzeug nicht erreichbar';
-        console.log(teslaConnection.status);
-        infoMessage(teslaConnection.status);
-        gtag('event', 'Not reachable', {'event_category': 'Connect'});
-
-        teslaPosition = JSON.parse(decodeURIComponent(getCookie('location')));
-
-        return;
-      }
-      else {
-        teslaConnection.status = 'Verbunden mit ' + vehicleData.response.vehicle_state.vehicle_name;
-        console.log(teslaConnection.status);
-        infoMessage(teslaConnection.status);
-        gtag('event', 'Connected', {'event_category': 'Connect', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
-        setTeslaPosition(vehicleData.response);
-        console.log ('Starting continuous position update');
-        setInterval(updatePosition, updatePositionTime);
-      };
+      updatePosition(true);
     };
 
     function setTeslaPosition(vehicleData) {
@@ -960,20 +929,53 @@
       document.cookie = 'location=' + encodeURIComponent(JSON.stringify(teslaPosition)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
     };
 
-    function updatePosition() {
-      setTeslaPosition(getTeslaCarData().response);
+    function updatePosition(initial) {
+      getTeslaCarData(function () {
+        if (this.readyState === 4) {
+          var vehicleData = JSON.parse(this.responseText);
 
-      if (positionIcon.geometry.coordinates != [teslaPosition.longitude,teslaPosition.latitude]
-          || positionIcon.properties.bearing != teslaPosition.heading) {
+          if (initial) {
+            console.log(vehicleData);
+            if (vehicleData == null) {
+              teslaConnection.status = 'Ungültiges Token';
+              console.log(teslaConnection.status);
+              infoMessage(teslaConnection.status);
+              gtag('event', 'Invalid Token', {'event_category': 'Connect'});
+              settingsPopup ();
+              return;
 
-        positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
-        positionIcon.properties.bearing = teslaPosition.heading;
+            } else if (vehicleData.response == null) {
+              // Car sleeps
+              teslaConnection.status = 'Fahrzeug nicht erreichbar';
+              console.log(teslaConnection.status);
+              infoMessage(teslaConnection.status);
+              gtag('event', 'Not reachable', {'event_category': 'Connect'});
+              return;
+            }
+            else {
+              teslaConnection.status = 'Verbunden mit ' + vehicleData.response.vehicle_state.vehicle_name;
+              console.log(teslaConnection.status);
+              infoMessage(teslaConnection.status);
+              gtag('event', 'Connected', {'event_category': 'Connect', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
+              console.log ('Starting continuous position update');
+              setInterval(updatePosition, updatePositionTime);
+            };
+          };
 
-        map.getSource('positionIcon').setData(positionIcon);
-        updateMapFocus ();
+          setTeslaPosition(vehicleData.response);
+          if (positionIcon.geometry.coordinates != [teslaPosition.longitude,teslaPosition.latitude]
+              || positionIcon.properties.bearing != teslaPosition.heading) {
 
-        if (currentDestination && lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
-      };
+            positionIcon.geometry.coordinates = [teslaPosition.longitude,teslaPosition.latitude];
+            positionIcon.properties.bearing = teslaPosition.heading;
+
+            map.getSource('positionIcon').setData(positionIcon);
+            updateMapFocus ();
+
+            if (currentDestination && lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
+          };
+        }
+      })
     };
 
     // - - - - - - - - Tesla requests - - - - - - - - -
@@ -992,11 +994,11 @@
       return JSON.parse(httpGet(teslaUrl,true));
     };
 
-    function getTeslaCarData() {
+    function getTeslaCarData(f) {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
 
-      return JSON.parse(httpGet(teslaUrl,true));
+      httpGet(teslaUrl,true,f);
     };
 
     function getTeslaVehicles() {
