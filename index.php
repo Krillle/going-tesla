@@ -405,7 +405,7 @@
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
-    const destinationCharger = {'minPower':'11', 'minZoom':14, 'toggle':1}
+    const destinationCharger = {'minPower':'3', 'minZoom':14, 'toggle':1}
 
     var minPower = superCharger.minPower;
     var minPowerList = superCharger.minPower;
@@ -981,19 +981,19 @@
 
     // - - - - - - - - Tesla requests - - - - - - - - -
 
-    function getTeslaChargeStatus() {
-      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
-          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/charge_state';
-
-      return JSON.parse(httpGet(teslaUrl,true));
-    };
-
-    function getTeslaDriveStatus() {
-      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
-          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
-
-      return JSON.parse(httpGet(teslaUrl,true));
-    };
+    // function getTeslaChargeStatus() {
+    //   var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+    //       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/charge_state';
+    //
+    //   return JSON.parse(httpGet(teslaUrl,true));
+    // };
+    //
+    // function getTeslaDriveStatus() {
+    //   var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+    //       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
+    //
+    //   return JSON.parse(httpGet(teslaUrl,true));
+    // };
 
     function getTeslaCarData(f) {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
@@ -1002,11 +1002,11 @@
       httpGet(teslaUrl,true,f);
     };
 
-    function getTeslaVehicles() {
+    function getTeslaVehicles(f) {
       var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles';
 
-      return JSON.parse(httpGet(teslaUrl,true));
+      httpGet(teslaUrl,true,f);
     };
 
     function createTeslaToken (email, password) {
@@ -1033,17 +1033,23 @@
           // result.expires_in
           // result.created_at
 
+          document.cookie = 'access=' + teslaConnection.accessToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+          document.cookie = 'refresh=' + teslaConnection.refreshToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+
           console.log("Access: " + teslaConnection.accessToken);
           console.log("Refresh: " + teslaConnection.refreshToken);
 
-          teslaConnection.vehicle = getTeslaVehicles().response[0].id_s;
-          console.log("Vehicle: " + teslaConnection.vehicle);
+          getTeslaVehicles (function () {
+            if (this.readyState === 4) {
+              var result = JSON.parse(this.responseText);
+              teslaConnection.vehicle = result.response[0].id_s;
 
-          document.cookie = 'access=' + teslaConnection.accessToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
-          document.cookie = 'refresh=' + teslaConnection.refreshToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
-          document.cookie = 'vehicle=' + teslaConnection.vehicle + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+              document.cookie = 'vehicle=' + teslaConnection.vehicle + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+              console.log("Vehicle: " + teslaConnection.vehicle);
 
-          connectTesla();
+              connectTesla();
+            }
+          });
         }
       });
 
