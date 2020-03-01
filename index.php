@@ -492,7 +492,7 @@
       updateListInterval = setInterval(updateRouteChargerList, updateListTime);
 
     });
-    geocoderControl.container.addEventListener('mouseenter', () => {infoMessage('Hello World'); stopHeadUp()});
+    geocoderControl.addEventListener('mouseenter', () => {infoMessage('Hello World'); stopHeadUp()});
     map.addControl(geocoderControl,'top-left');
 
     // Add zoom and rotation controls to the map.
