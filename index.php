@@ -417,7 +417,7 @@
 
     const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
 
-    var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'), 'status': 'undefined' };
+    var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'),'connected' : false ,'status': 'undefined' };
     // var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
     var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
 
@@ -581,28 +581,6 @@
         }
       });
 
-      // Create Position Image
-      map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
-
-      map.loadImage(`https://img.icons8.com/small/${positionSize}/${positionColor}/gps-device.png`, function(error, image) {
-        if (error) throw error;
-        map.addImage('position', image);
-
-        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
-        map.addLayer({
-          id: "position",
-          type: "symbol",
-          source: 'positionIcon',
-          layout: {
-            "icon-image": "position",
-            "icon-rotate": ["get", "bearing"],
-            "icon-rotation-alignment": "map",
-            "icon-allow-overlap": true,
-            "icon-ignore-placement": true
-          }
-        });
-      });
-
       // Create Tesla Supercharger Image
       map.loadImage(teslaSuperChargerImage, function(error, image) {
         if (error) throw error;
@@ -751,6 +729,30 @@
     map.on('mouseleave', 'chargers', function () {
       map.getCanvas().style.cursor = '';
     });
+
+    function createPositionImage() {
+      // Create Position Image
+      map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
+
+      map.loadImage(`https://img.icons8.com/small/${positionSize}/${positionColor}/gps-device.png`, function(error, image) {
+        if (error) throw error;
+        map.addImage('position', image);
+
+        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+        map.addLayer({
+          id: "position",
+          type: "symbol",
+          source: 'positionIcon',
+          layout: {
+            "icon-image": "position",
+            "icon-rotate": ["get", "bearing"],
+            "icon-rotation-alignment": "map",
+            "icon-allow-overlap": true,
+            "icon-ignore-placement": true
+          }
+        });
+      });
+    };
 
     function toggleAutoZoom() {
       zoomToggleState = zoomToggleState < 2 ? ++zoomToggleState : 0;
@@ -955,10 +957,12 @@
             }
             else {
               teslaConnection.status = 'Verbunden mit ' + vehicleData.response.vehicle_state.vehicle_name;
+              teslaConnection.connected = true;
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
               gtag('event', 'Connected', {'event_category': 'Connect', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
               console.log ('Starting continuous position update');
+              createPositionImage();
               setInterval(updatePosition, updatePositionTime);
             };
           };
