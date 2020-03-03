@@ -353,6 +353,7 @@
 <body>
   <div id='map'></div>
   <div id='info' class='info-container'></div>
+  <div id='range' class='info-container'></div>
   <div id='route' class='route-container'></div>
   <script>
     if (location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
@@ -447,6 +448,7 @@
     const b = slowSpeedZoom - m * slowSpeed;
 
     var infoContainer = document.getElementById('info');
+    var rangeContainer = document.getElementById('info');
     var routeContainer = document.getElementById('route');
 
     var positionIcon = {
@@ -887,6 +889,16 @@
       setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
     };
 
+    function rangeDisplay(message) {
+      // if (rangeContainer.innerHTML) {rangeContainer.innerHTML = null;};
+      // var pre = document.createElement('pre');
+      // pre.textContent = message;
+      // infoContainer.appendChild(pre);
+      rangeContainer.innerHTML = message;
+      rangeContainer.style.visibility = 'visible';
+      // setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
+    };
+
     function routeList(message) {
       if (routeContainer.innerHTML) {routeContainer.innerHTML = '';};
       routeContainer.innerHTML = message;
@@ -968,6 +980,7 @@
           };
 
           setTeslaPosition(vehicleData.response);
+          rangeDisplay('Reichweite ' + teslaPosition.range + ' km')
           if (positionIcon.geometry.coordinates[0] != teslaPosition.longitude ||
               positionIcon.geometry.coordinates[1] != teslaPosition.latitude ||
               positionIcon.properties.bearing != teslaPosition.heading) {
