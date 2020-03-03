@@ -90,6 +90,7 @@
     .mapboxgl-ctrl-geocoder .suggestions > li > a:hover,
     .mapboxgl-popup-content,
     .info-container,
+    .range-container,
     .route-container {
       background:#ffffff; /* light theme  */
       <? if ($darkmode) {echo "background:#000000; /* dark theme */";} ?>
@@ -103,6 +104,7 @@
     .mapboxgl-popup-content,
     .mapboxgl-popup-content a,
     .info-container,
+    .range-container,
     .route-container,
     .route-container a {
       color:#8F8F8F; /* light theme  */
@@ -112,6 +114,7 @@
     .mapboxgl-ctrl-geocoder,
     .mapboxgl-popup-content,
     .info-container,
+    .range-container,
     .route-container {
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     }
@@ -331,7 +334,7 @@
 
     .range-container {
       position: absolute;
-      bottom: : 25px;
+      bottom: 25px;
       left: 10px;
       z-index: 1;
 
