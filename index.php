@@ -745,7 +745,7 @@
       map.getCanvas().style.cursor = '';
     });
 
-    rangeDisplay('Reichweite ' + teslaPosition.range + ' km')
+    rangeDisplay('Reichweite ' + teslaPosition.range + ' km');
 
 
     function createPositionImage() {
@@ -910,6 +910,7 @@
       // var pre = document.createElement('pre');
       // pre.textContent = message;
       // infoContainer.appendChild(pre);
+      console.log('Rangemessage',message);
       rangeContainer.innerHTML = message;
       rangeContainer.style.visibility = 'visible';
       // setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
@@ -996,7 +997,7 @@
           };
 
           setTeslaPosition(vehicleData.response);
-          rangeDisplay('Reichweite ' + teslaPosition.range + ' km')
+          rangeDisplay('Reichweite ' + teslaPosition.range + ' km');
           if (positionIcon.geometry.coordinates[0] != teslaPosition.longitude ||
               positionIcon.geometry.coordinates[1] != teslaPosition.latitude ||
               positionIcon.properties.bearing != teslaPosition.heading) {
