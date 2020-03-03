@@ -461,7 +461,7 @@
     const b = slowSpeedZoom - m * slowSpeed;
 
     var infoContainer = document.getElementById('info');
-    var rangeContainer = document.getElementById('info');
+    var rangeContainer = document.getElementById('range');
     var routeContainer = document.getElementById('route');
 
     var positionIcon = {
