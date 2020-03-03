@@ -334,7 +334,7 @@
 
     .range-container {
       position: absolute;
-      bottom: 25px;
+      bottom: 30px;
       left: 10px;
       z-index: 1;
 
