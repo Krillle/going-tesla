@@ -309,6 +309,7 @@
     }
 
     .info-container,
+    .range-container,
     .route-container {
       visibility: hidden;
       box-shadow: 0 0 10px 2px rgba(0,0,0,.1);
@@ -320,6 +321,18 @@
       position: absolute;
       top: 25px;
       right: 100px;
+      z-index: 1;
+
+      opacity: 0.7;
+      font-weight: 700;
+      display: block;
+      padding: 10px 20px;
+    }
+
+    .range-container {
+      position: absolute;
+      bottom: : 25px;
+      left: 10px;
       z-index: 1;
 
       opacity: 0.7;
@@ -353,7 +366,7 @@
 <body>
   <div id='map'></div>
   <div id='info' class='info-container'></div>
-  <div id='range' class='info-container'></div>
+  <div id='range' class='range-container'></div>
   <div id='route' class='route-container'></div>
   <script>
     if (location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
