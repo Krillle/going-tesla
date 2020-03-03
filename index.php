@@ -732,6 +732,9 @@
       map.getCanvas().style.cursor = '';
     });
 
+    rangeDisplay('Reichweite ' + teslaPosition.range + ' km')
+
+
     function createPositionImage() {
       // Create Position Image
       map.addSource('positionIcon', { 'type': 'geojson', 'data': positionIcon });
