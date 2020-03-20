@@ -993,6 +993,10 @@
               console.log ('Starting continuous position update');
               createPositionImage();
               setInterval(updatePosition, updatePositionTime);
+              
+              if (currentDestination) {
+                updateRouteChargerList();
+              };
             };
           };
 
