@@ -436,7 +436,7 @@
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'),'connected' : false ,'status': 'undefined' };
     // var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
-    var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
+    var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 350};
 
     var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
     var currentRoute = false;
@@ -993,7 +993,7 @@
               console.log ('Starting continuous position update');
               createPositionImage();
               setInterval(updatePosition, updatePositionTime);
-              
+
               if (currentDestination) {
                 updateRouteChargerList();
               };
@@ -1378,22 +1378,22 @@
       return JSON.parse(httpGet(geUrl));
     };
 
-    function getChargersInBoundingBox(boundingBox, minPower) {
+    function getChargersInBoundingBox(boundingBox, minPower, f) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `sw_lat=${boundingBox[0][1]}&sw_lng=${boundingBox[0][0]}&`+
         `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
-      return JSON.parse(httpGet(geUrl));
+      httpGet(geUrl,true,f);
     };
 
-    function getChargersInBounds(searchField) {
+    function getChargersInBounds(searchField, f) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
-      return JSON.parse(httpGet(geUrl));
+      httpGet(geUrl,true,f);
     };
 
     function getMaxChargePoint (chargePoints) {
@@ -1615,11 +1615,15 @@
       var routeBox;
       routeBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
 
-      chargerList = getChargersInBoundingBox(boundingBox(routeBox), minPowerList);
-      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-      console.log('Charger List:', chargerList);
-      processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination !== false});
+      getChargersInBoundingBox(boundingBox(routeBox), minPowerList, function () {
+        if (this.readyState === 4) {
+          chargerList = JSON.parse(this.responseText);
+          if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+          if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+          console.log('Charger List:', chargerList);
+          processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination !== false});
+        }
+      });
     };
 
     function setRouteChargerList(showWait) {
@@ -1654,19 +1658,23 @@
     };
 
     function updateChargers() {
-      var chargerList = getChargersInBounds(map.getBounds())
-      console.log("Update Chargers: ", chargerList);
-      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+      getChargersInBounds(map.getBounds(), function () {
+        if (this.readyState === 4) {
+          var chargerList = JSON.parse(this.responseText);
+          if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+          if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+          console.log("Update Chargers: ", chargerList);
 
-      var newList = {
-          "type": "FeatureCollection",
-          "features": []
-      };
-      chargerList.chargelocations.forEach(chargeLocation => {
-        newList.features.push(chargeLocationDetails(chargeLocation));
-      });
-      map.getSource('chargers').setData(newList);
+          var newList = {
+              "type": "FeatureCollection",
+              "features": []
+          };
+          chargerList.chargelocations.forEach(chargeLocation => {
+            newList.features.push(chargeLocationDetails(chargeLocation));
+          });
+          map.getSource('chargers').setData(newList);
+        }
+      })
     };
 
     function chargerShortDescription (id, chargeLocation) {
