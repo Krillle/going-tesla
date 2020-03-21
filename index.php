@@ -436,7 +436,7 @@
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'),'connected' : false ,'status': 'undefined' };
     // var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
-    var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 99};
+    var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 350};
 
     var currentDestination = JSON.parse(decodeURIComponent(getCookie('destination')));
     var currentRoute = false;
