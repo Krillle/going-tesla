@@ -993,7 +993,7 @@
               console.log ('Starting continuous position update');
               createPositionImage();
               setInterval(updatePosition, updatePositionTime);
-              
+
               if (currentDestination) {
                 updateRouteChargerList();
               };
@@ -1378,13 +1378,13 @@
       return JSON.parse(httpGet(geUrl));
     };
 
-    function getChargersInBoundingBox(boundingBox, minPower) {
+    function getChargersInBoundingBox(boundingBox, minPower, f) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `sw_lat=${boundingBox[0][1]}&sw_lng=${boundingBox[0][0]}&`+
         `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
-      return JSON.parse(httpGet(geUrl));
+      httpGet(geUrl,true,f);
     };
 
     function getChargersInBounds(searchField) {
@@ -1615,11 +1615,15 @@
       var routeBox;
       routeBox = distantLineBox(boundingBox(currentRoute.coordinates),maxChargerDistance);
 
-      chargerList = getChargersInBoundingBox(boundingBox(routeBox), minPowerList);
-      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
-      console.log('Charger List:', chargerList);
-      processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination !== false});
+      getChargersInBoundingBox(boundingBox(routeBox), minPowerList, function () {
+        if (this.readyState === 4) {
+          chargerList = JSON.parse(this.responseText);
+          if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+          if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+          console.log('Charger List:', chargerList);
+          processLoop(processRouteSegments, currentRoute.coordinates.length-1, postProcessSegments, () => {return currentDestination !== false});
+        }
+      });
     };
 
     function setRouteChargerList(showWait) {
