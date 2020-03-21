@@ -1387,13 +1387,13 @@
       httpGet(geUrl,true,f);
     };
 
-    function getChargersInBounds(searchField) {
+    function getChargersInBounds(searchField, f) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
-      return JSON.parse(httpGet(geUrl));
+      httpGet(geUrl,true,f);
     };
 
     function getMaxChargePoint (chargePoints) {
@@ -1658,19 +1658,23 @@
     };
 
     function updateChargers() {
-      var chargerList = getChargersInBounds(map.getBounds())
-      console.log("Update Chargers: ", chargerList);
-      if (chargerList.status != "ok") {throw "GoingElectric request failed"};
-      if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+      getChargersInBounds(map.getBounds(), function () {
+        if (this.readyState === 4) {
+          var chargerList = JSON.parse(this.responseText);
+          if (chargerList.status != "ok") {throw "GoingElectric request failed"};
+          if (chargerList.startkey == 500) {console.log("More than 500 chargers in area");}
+          console.log("Update Chargers: ", chargerList);
 
-      var newList = {
-          "type": "FeatureCollection",
-          "features": []
-      };
-      chargerList.chargelocations.forEach(chargeLocation => {
-        newList.features.push(chargeLocationDetails(chargeLocation));
-      });
-      map.getSource('chargers').setData(newList);
+          var newList = {
+              "type": "FeatureCollection",
+              "features": []
+          };
+          chargerList.chargelocations.forEach(chargeLocation => {
+            newList.features.push(chargeLocationDetails(chargeLocation));
+          });
+          map.getSource('chargers').setData(newList);
+        }
+      })
     };
 
     function chargerShortDescription (id, chargeLocation) {
