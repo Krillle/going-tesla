@@ -667,12 +667,12 @@
       console.log("Initalizing Chargers");
       updateChargers();
 
-      if (currentDestination) {
-        gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-        updateRouteChargerList(true);
-        console.log ('Recovering continuous list update');
-        updateListInterval = setInterval(updateRouteChargerList, updateListTime);
-      };
+      // if (currentDestination) {
+      //   gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
+      //   updateRouteChargerList(true);
+      //   console.log ('Recovering continuous list update');
+      //   updateListInterval = setInterval(updateRouteChargerList, updateListTime);
+      // };
 
     });
 
@@ -995,7 +995,10 @@
               setInterval(updatePosition, updatePositionTime);
 
               if (currentDestination) {
-                updateRouteChargerList();
+                gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
+                updateRouteChargerList(true);
+                console.log ('Recovering continuous list update');
+                updateListInterval = setInterval(updateRouteChargerList, updateListTime);
               };
             };
           };
