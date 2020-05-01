@@ -939,11 +939,10 @@
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
         gtag('event', 'No Token', {'event_category': 'Connect'});
-        settingsPopup ();
-        return;
+        settingsPopup ();   // Connection is done after popup by recursive call in getTeslaVehicles callback
+      } else {
+        updatePosition(true);
       };
-
-      updatePosition(true);
     };
 
     function setTeslaPosition(vehicleData) {
@@ -993,13 +992,6 @@
               console.log ('Starting continuous position update');
               createPositionImage();
               setInterval(updatePosition, updatePositionTime);
-
-              if (currentDestination) {
-                gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
-                updateRouteChargerList(true);
-                console.log ('Recovering continuous list update');
-                updateListInterval = setInterval(updateRouteChargerList, updateListTime);
-              };
             };
           };
 
@@ -1017,6 +1009,14 @@
 
             if (currentDestination && lineDistance([[teslaPosition.longitude,teslaPosition.latitude],currentDestination.center]) < 250) {cancelRouteChargerList()};
           };
+
+          if (initial && currentDestination) {
+            gtag('event', 'Route Chargers Recover', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
+            updateRouteChargerList(true);
+            console.log ('Recovering continuous list update');
+            updateListInterval = setInterval(updateRouteChargerList, updateListTime);
+          };
+
         }
       })
     };
