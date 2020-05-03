@@ -1474,7 +1474,7 @@
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${currentRoute.range ? currentRoute.range : ""}</xstrong></td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="padding-right: 4px;" src="media/battery-8F8F8F-25.png">${currentRoute.range ? currentRoute.range : ""}</td>`;
       routeChargerList += `</tr></tbody></table>`;
       routeChargerList += `${currentDestination.name}</p>`;
       routeChargerList += `</div></a>`;
