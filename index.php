@@ -392,6 +392,7 @@
     const socketChargerSize = '24';
     const chargerFaultSize = '24';
     const destinationSize = '39';
+    const batterySize = '25';
 
     const iconColumnWidth = Number(chargerBigSize)+10;
 
@@ -401,6 +402,7 @@
     var chargerThirdColor = "4b535a"; // dark marker for light map
     var chargerParkColor = "5a5a5a"; // dark marker for light map
     const chargerFaultColor = "ffb800";
+    const batteryColor = "8F8F8F";
 
     var routeColor = "4d69ea";
 
@@ -409,6 +411,7 @@
       mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
       chargerThirdColor = "787878"; // light marker for dark map
       chargerParkColor = "e6e6e6"; // light marker for dark map
+      const batteryColor = "9c9c9c";
     };
 
     const teslaSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`;
@@ -419,6 +422,7 @@
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
     const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
     const waitImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/hourglass.png`;
+    const batteryImage = `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/medium-battery.png`;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
@@ -1474,7 +1478,7 @@
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="padding-right: 4px;" src="media/battery-8F8F8F-25.png">${currentRoute.range ? currentRoute.range : ""}</td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage}">${currentRoute.range ? currentRoute.range : ""}</td>`;
       routeChargerList += `</tr></tbody></table>`;
       routeChargerList += `${currentDestination.name}</p>`;
       routeChargerList += `</div></a>`;
@@ -1597,7 +1601,7 @@
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="padding-right: 4px;" src="media/battery-8F8F8F-25.png">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.network && !chargeLocation.properties.name.includes(chargeLocation.properties.network) ? chargeLocation.properties.network : ''} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
@@ -1739,7 +1743,8 @@
             var route = processRouteResults(result);
             distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
-            distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+            // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+            distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
             distance.innerHTML += '<p>'
           };
         }
