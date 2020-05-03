@@ -423,15 +423,15 @@
     const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
     const waitImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/hourglass.png`;
 
-    const batteryImage = `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/no-battery.png`;
-    // [
-    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/no-battery.png`,
-    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/empty-battery.png`,
-    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/low-battery.png`,
-    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/medium-battery.png`,
-    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/high-battery.png`,
-    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/full-battery.png`
-    // ];
+    const batteryImageSet = [
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/no-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/empty-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/low-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/medium-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/high-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/full-battery.png`
+    ];
+    var fullBatteryRange = 350;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
@@ -854,6 +854,12 @@
       }
       if (!autoZoom) {nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon};
     };
+
+    function batteryImage(range) {
+      if (range > fullBatteryRange) {return batteryImageSet[6]}
+      else if (range < 1) then {return batteryImageSet[0]}
+      else {return batteryImageSet[math.round(range/fullBatteryRange * 5)+1]};
+    }
 
     function milesToKm(miles) {
         var km = parseFloat(miles) * 1.61;
@@ -1487,7 +1493,7 @@
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage}">${currentRoute.range ? currentRoute.range : ""}</td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(currentRoute.range)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
       routeChargerList += `</tr></tbody></table>`;
       routeChargerList += `${currentDestination.name}</p>`;
       routeChargerList += `</div></a>`;
@@ -1610,7 +1616,7 @@
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(chargeLocation.properties.range)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.network && !chargeLocation.properties.name.includes(chargeLocation.properties.network) ? chargeLocation.properties.network : ''} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
@@ -1753,7 +1759,7 @@
             distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
             // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
-            distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+            distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
             distance.innerHTML += '<p>'
           };
         }
