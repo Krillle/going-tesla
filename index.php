@@ -422,7 +422,16 @@
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
     const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
     const waitImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/hourglass.png`;
-    const batteryImage = `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/medium-battery.png`;
+
+    const batteryImage = `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/full-battery.png`;
+    // [
+    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/no-battery.png`,
+    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/empty-battery.png`,
+    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/low-battery.png`,
+    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/medium-battery.png`,
+    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/high-battery.png`,
+    //   `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/full-battery.png`
+    // ];
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
