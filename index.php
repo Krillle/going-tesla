@@ -1757,10 +1757,19 @@
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
             var route = processRouteResults(result);
-            distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
+
+            // distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
-            distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+
+            // distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+            // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+
+            distance.innerHTML += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+            distance.innerHTML += `<td align="left" style="padding: 0px;margin: 0px;">'<strong>' + route.distance + ', ' + route.duration + '</strong>'</td>`;
+            distance.innerHTML += `<td align="right" style="padding: 0px;margin: 0px;">${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}</td>`;
+            distance.innerHTML += `</tr></tbody></table>`;
+
             distance.innerHTML += '<p>'
           };
         }
