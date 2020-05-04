@@ -1494,7 +1494,7 @@
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(currentRoute.range)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(currentRoute.rangeRaw)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
       routeChargerList += `</tr></tbody></table>`;
       routeChargerList += `${currentDestination.name}</p>`;
       routeChargerList += `</div></a>`;
@@ -1617,7 +1617,7 @@
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(chargeLocation.properties.range)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(chargeLocation.properties.rangeRaw)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.network && !chargeLocation.properties.name.includes(chargeLocation.properties.network) ? chargeLocation.properties.network : ''} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
