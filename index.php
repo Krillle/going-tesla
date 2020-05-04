@@ -856,9 +856,10 @@
     };
 
     function batteryImage(range) {
-      if (range > fullBatteryRange) {return batteryImageSet[6]}
+      console.log("Range Image #",Math.round(range/fullBatteryRange * 4)+1);
+      if (range > fullBatteryRange) {return batteryImageSet[5]}
       else if (range < 1) {return batteryImageSet[0]}
-      else {return batteryImageSet[Math.round(range/fullBatteryRange * 5)+1]};
+      else {return batteryImageSet[Math.round(range/fullBatteryRange * 4)+1]};
     };
 
     function milesToKm(miles) {
