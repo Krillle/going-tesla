@@ -857,9 +857,9 @@
 
     function batteryImage(range) {
       if (range > fullBatteryRange) {return batteryImageSet[6]}
-      else if (range < 1) then {return batteryImageSet[0]}
+      else if (range < 1) {return batteryImageSet[0]}
       else {return batteryImageSet[math.round(range/fullBatteryRange * 5)+1]};
-    }
+    };
 
     function milesToKm(miles) {
         var km = parseFloat(miles) * 1.61;
