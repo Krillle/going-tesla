@@ -362,8 +362,9 @@
 
     .route-container a {
       text-decoration: none;
+    }
 
-    .battery-icon {
+    battery-icon {
       margin-left: 4px;
       margin-right: 4px;
       margin-bottom: -6px;
