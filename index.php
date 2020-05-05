@@ -364,7 +364,7 @@
       text-decoration: none;
     }
 
-    battery-icon {
+    img.battery-icon {
       margin-left: 4px;
       margin-right: 4px;
       margin-bottom: -6px;
