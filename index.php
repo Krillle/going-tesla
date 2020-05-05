@@ -874,7 +874,7 @@
       totalSeconds %= 3600;
       var minutes = Math.floor(totalSeconds / 60);
       // return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
-      return (hours + ':') + (minutes > 9 ? minutes : '0' + minutes + ' h';
+      return (hours + ':') + (minutes > 9 ? minutes : '0' + minutes) + ' h';
     };
 
     function httpGet(url, token, f) {
@@ -1494,7 +1494,7 @@
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-left: 4px; margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(currentRoute.rangeRaw)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-left: 4px; minutes;" src="${batteryImage(currentRoute.rangeRaw)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
       routeChargerList += `</tr></tbody></table>`;
       routeChargerList += `${currentDestination.name}</p>`;
       routeChargerList += `</div></a>`;
