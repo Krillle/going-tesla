@@ -1023,7 +1023,8 @@
           };
 
           setTeslaPosition(vehicleData.response);
-          rangeDisplay('Reichweite ' + teslaPosition.range.toFixed(0).toString() + ' km');
+          // rangeDisplay('Reichweite ' + teslaPosition.range.toFixed(0).toString() + ' km');
+          rangeDisplay(`<img class="battery-icon" src="${batteryImage(teslaPosition.range)}">${teslaPosition.range.toFixed(0).toString()} km`);
           if (positionIcon.geometry.coordinates[0] != teslaPosition.longitude ||
               positionIcon.geometry.coordinates[1] != teslaPosition.latitude ||
               positionIcon.properties.bearing != teslaPosition.heading) {
