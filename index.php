@@ -364,6 +364,13 @@
       text-decoration: none;
     }
 
+    img.battery-icon {
+      margin-left: 4px;
+      margin-right: 4px;
+      margin-bottom: -6px;
+      margin-top: -4px;
+    }
+
   </style>
 </head>
 <body>
@@ -392,6 +399,7 @@
     const socketChargerSize = '24';
     const chargerFaultSize = '24';
     const destinationSize = '39';
+    const batterySize = '25';
 
     const iconColumnWidth = Number(chargerBigSize)+10;
 
@@ -401,6 +409,7 @@
     var chargerThirdColor = "4b535a"; // dark marker for light map
     var chargerParkColor = "5a5a5a"; // dark marker for light map
     const chargerFaultColor = "ffb800";
+    const batteryColor = "8F8F8F";
 
     var routeColor = "4d69ea";
 
@@ -409,6 +418,7 @@
       mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
       chargerThirdColor = "787878"; // light marker for dark map
       chargerParkColor = "e6e6e6"; // light marker for dark map
+      const batteryColor = "9c9c9c";
     };
 
     const teslaSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`;
@@ -419,6 +429,16 @@
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
     const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
     const waitImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/hourglass.png`;
+
+    const batteryImageSet = [
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/no-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/empty-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/low-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/medium-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/high-battery.png`,
+      `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/full-battery.png`
+    ];
+    var fullBatteryRange = 350;
 
     const superCharger = {'minPower':'100', 'minZoom':null, 'toggle':2}
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
@@ -842,6 +862,12 @@
       if (!autoZoom) {nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon};
     };
 
+    function batteryImage(range) {
+      if (range > fullBatteryRange) {return batteryImageSet[5]}
+      else if (range < 1) {return batteryImageSet[0]}
+      else {return batteryImageSet[Math.round(range/fullBatteryRange * 4)+1]};
+    };
+
     function milesToKm(miles) {
         var km = parseFloat(miles) * 1.61;
         return {
@@ -854,7 +880,8 @@
       var hours = Math.floor(totalSeconds / 3600);
       totalSeconds %= 3600;
       var minutes = Math.floor(totalSeconds / 60);
-      return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
+      // return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
+      return (hours + ':') + (minutes > 9 ? minutes : '0' + minutes) + ' h';
     };
 
     function httpGet(url, token, f) {
@@ -1474,7 +1501,7 @@
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><xstrong>${currentRoute.range ? currentRoute.range : ""}</xstrong></td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img class="battery-icon" src="${batteryImage(currentRoute.rangeRaw)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
       routeChargerList += `</tr></tbody></table>`;
       routeChargerList += `${currentDestination.name}</p>`;
       routeChargerList += `</div></a>`;
@@ -1597,7 +1624,7 @@
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img class="battery-icon" src="${batteryImage(chargeLocation.properties.rangeRaw)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.network && !chargeLocation.properties.name.includes(chargeLocation.properties.network) ? chargeLocation.properties.network : ''} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
@@ -1737,10 +1764,26 @@
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
             var route = processRouteResults(result);
-            distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
-            distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
-            distance.innerHTML += '<p>'
+
+            var rangeBlock = '';
+
+            // distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+            // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+
+            // distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
+            // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img class="battery-icon" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+
+            rangeBlock += `<table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+            rangeBlock += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
+            rangeBlock += `<td align="right" style="padding: 0px;margin: 0px;">${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img class="battery-icon" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span>':''}</td>`;
+            rangeBlock += `</tr></tbody></table>`;
+
+            rangeBlock += '<p>'
+
+            distance.innerHTML = rangeBlock;
+
+            console.log(distance.innerHTML);
           };
         }
       });
