@@ -1766,18 +1766,22 @@
             var route = processRouteResults(result);
             var rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
 
+            var rangeBlock = '';
+
             // distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
 
             // distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
             // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img class="battery-icon" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
 
-            distance.innerHTML += `<table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
-            distance.innerHTML += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
-            distance.innerHTML += `<td align="right" style="padding: 0px;margin: 0px;">${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img class="battery-icon" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}</td>`;
-            distance.innerHTML += `</tr></tbody></table>`;
+            rangeBlock += `<table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
+            rangeBlock += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
+            rangeBlock += `<td align="right" style="padding: 0px;margin: 0px;">${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img class="battery-icon" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span>':''}</td>`;
+            rangeBlock += `</tr></tbody></table>`;
 
-            distance.innerHTML += '<p>'
+            rangeBlock += '<p>'
+
+            distance.innerHTML = rangeBlock;
 
             console.log(distance.innerHTML);
           };
