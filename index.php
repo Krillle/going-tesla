@@ -856,7 +856,6 @@
     };
 
     function batteryImage(range) {
-      console.log("Range Image #",Math.round(range/fullBatteryRange * 4)+1);
       if (range > fullBatteryRange) {return batteryImageSet[5]}
       else if (range < 1) {return batteryImageSet[0]}
       else {return batteryImageSet[Math.round(range/fullBatteryRange * 4)+1]};
@@ -874,7 +873,8 @@
       var hours = Math.floor(totalSeconds / 3600);
       totalSeconds %= 3600;
       var minutes = Math.floor(totalSeconds / 60);
-      return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
+      // return ((hours > 0) ? hours + '   Std ' : '') + minutes + ' Min';
+      return (hours + ':') + (minutes > 9 ? minutes : '0' + minutes + ' h';
     };
 
     function httpGet(url, token, f) {
@@ -1494,7 +1494,7 @@
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(currentRoute.rangeRaw)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-left: 4px; margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(currentRoute.rangeRaw)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
       routeChargerList += `</tr></tbody></table>`;
       routeChargerList += `${currentDestination.name}</p>`;
       routeChargerList += `</div></a>`;
@@ -1617,7 +1617,7 @@
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(chargeLocation.properties.rangeRaw)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-left: 4px; margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(chargeLocation.properties.rangeRaw)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.network && !chargeLocation.properties.name.includes(chargeLocation.properties.network) ? chargeLocation.properties.network : ''} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
@@ -1763,11 +1763,11 @@
             // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
 
             // distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
-            // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+            // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-left: 4px; margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
 
             distance.innerHTML += `<table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
             distance.innerHTML += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
-            distance.innerHTML += `<td align="right" style="padding: 0px;margin: 0px;">${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}</td>`;
+            distance.innerHTML += `<td align="right" style="padding: 0px;margin: 0px;">${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-left: 4px; margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}</td>`;
             distance.innerHTML += `</tr></tbody></table>`;
 
             distance.innerHTML += '<p>'
