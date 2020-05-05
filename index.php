@@ -362,6 +362,12 @@
 
     .route-container a {
       text-decoration: none;
+
+    .battery-icon {
+      margin-left: 4px;
+      margin-right: 4px;
+      margin-bottom: -6px;
+      margin-top: -4px;
     }
 
   </style>
@@ -1494,7 +1500,7 @@
       routeChargerList += `</div>`;
       routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
       routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${currentRoute.distance}, ${currentRoute.duration}</strong></td>`;
-      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-left: 4px; minutes;" src="${batteryImage(currentRoute.rangeRaw)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
+      routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img class="battery-icon" src="${batteryImage(currentRoute.rangeRaw)}">${currentRoute.range ? currentRoute.range : ""}</td>`;
       routeChargerList += `</tr></tbody></table>`;
       routeChargerList += `${currentDestination.name}</p>`;
       routeChargerList += `</div></a>`;
@@ -1617,7 +1623,7 @@
         routeChargerList += `</div>`;
         routeChargerList += `<p><table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
         routeChargerList += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${chargeLocation.properties.distance}, ${chargeLocation.properties.duration}</strong></td>`;
-        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img style="margin-left: 4px; margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(chargeLocation.properties.rangeRaw)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
+        routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img class="battery-icon" src="${batteryImage(chargeLocation.properties.rangeRaw)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.network && !chargeLocation.properties.name.includes(chargeLocation.properties.network) ? chargeLocation.properties.network : ''} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
         routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
@@ -1763,11 +1769,11 @@
             // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
 
             // distance.innerHTML += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
-            // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-left: 4px; margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
+            // distance.innerHTML += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img class="battery-icon" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
 
             distance.innerHTML += `<table border="0" width="100%" style="border-collapse: collapse;"><tbody><tr>`;
             distance.innerHTML += `<td align="left" style="padding: 0px;margin: 0px;"><strong>${route.distance}, ${route.duration}</strong></td>`;
-            distance.innerHTML += `<td align="right" style="padding: 0px;margin: 0px;">${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img style="margin-left: 4px; margin-right: 4px;margin-bottom: -6px;margin-top: -4px;" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}</td>`;
+            distance.innerHTML += `<td align="right" style="padding: 0px;margin: 0px;">${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}<img class="battery-icon" src="${batteryImage(rangeAtArrival)}">${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}</td>`;
             distance.innerHTML += `</tr></tbody></table>`;
 
             distance.innerHTML += '<p>'
