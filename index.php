@@ -25,9 +25,6 @@
     $lon = $location->longitude;
 
     console_log("Location Cookie found. Using individual daylight times.",true);
-    // console_log($location,true);
-    console_log($lat,true);
-    console_log($lon,true);
   } else {
     console_log("No location Cookie found. Using default daylight times.",true);
     // Sunset defalut location Berlin
@@ -957,10 +954,6 @@
     // Tesla connection - - - - - -
 
     function connectTesla () {
-      // document.cookie = "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; //  Cookie löschen
-      console.log ('Access cookie: ' + getCookie('access'));
-      console.log ('Access data: ' + teslaConnection.accessToken);
-
       if (!teslaConnection.accessToken) {
         teslaConnection.status = 'Kein Token';
         console.log(teslaConnection.status);
