@@ -451,6 +451,14 @@
 
     const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
 
+    const connectionState = [
+      'Connection State: UNSENT',
+      'Connection State: OPENED',
+      'Connection State: HEADERS RECEIVED',
+      'Connection State: LOADING',
+      'Connection State: DONE'
+    ];
+
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'),'connected' : false ,'status': 'undefined' };
     // var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 10.416667, 'latitude' : 51.133333, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': false};
     var teslaPosition = JSON.parse(decodeURIComponent(getCookie('location'))) || {'longitude' : 13.48, 'latitude' : 52.49, 'heading': 0, 'speed' : 100, 'zoom': 9, 'range': 350};
@@ -934,7 +942,6 @@
       // var pre = document.createElement('pre');
       // pre.textContent = message;
       // infoContainer.appendChild(pre);
-      console.log('Rangemessage',message);
       rangeContainer.innerHTML = message;
       rangeContainer.style.visibility = 'visible';
       // setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
@@ -982,6 +989,8 @@
 
     function updatePosition(initial) {
       getTeslaCarData(function () {
+        <? if (isset($_GET["debug"])) {echo "console.log(connectionState[this.readyState]);";} ?>
+        <? if (isset($_GET["debug"])) {echo "infoMessage(connectionState[this.readyState]);";} ?>
         if (this.readyState === 4) {
           var vehicleData = JSON.parse(this.responseText);
 
