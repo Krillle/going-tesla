@@ -386,6 +386,7 @@
     console.log("App started");
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
+    <? if (isset($_GET["debug"])) {echo "const debug = true;";} else {echo "const debug = false;";} ?>
 
     const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
@@ -451,7 +452,7 @@
 
     const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
 
-    const connectionState = [
+    const connectionState = [ // Used for debug message
       'Verbindungsstatus: UNSENT',
       'Verbindungsstatus: OPENED',
       'Verbindungsstatus: HEADERS RECEIVED',
@@ -535,7 +536,6 @@
       updateListInterval = setInterval(updateRouteChargerList, updateListTime);
 
     });
-    // geocoderControl.addEventListener('mouseenter', () => {infoMessage('Hello World'); stopHeadUp()});
     map.addControl(geocoderControl,'top-left');
 
     // Add zoom and rotation controls to the map.
@@ -989,12 +989,13 @@
 
     function updatePosition(initial) {
       getTeslaCarData(function () {
-        <? if (isset($_GET["debug"])) {echo "console.log(connectionState[this.readyState]);";} ?>
-        <? if (isset($_GET["debug"])) {echo "infoMessage(connectionState[this.readyState]);";} ?>
         if (this.readyState === 4) {
+          <? if (isset($_GET["debug"])) {echo "rangeDisplay(this.responseText);";} ?>
           var vehicleData = JSON.parse(this.responseText);
 
           if (initial) {
+            <? if (isset($_GET["debug"])) {echo "console.log('Checking Vehicle Data');";} ?>
+            <? if (isset($_GET["debug"])) {echo "infoMessage('Checking Vehicle Data');";} ?>
             console.log('Vehicle Data:',vehicleData);
             if (vehicleData == null) {
               teslaConnection.status = 'Ungültiges Token';
