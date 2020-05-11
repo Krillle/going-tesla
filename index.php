@@ -88,6 +88,7 @@
     .mapboxgl-popup-content,
     .info-container,
     .range-container,
+    .log-container,
     .route-container {
       background:#ffffff; /* light theme  */
       <? if ($darkmode) {echo "background:#000000; /* dark theme */";} ?>
@@ -102,6 +103,7 @@
     .mapboxgl-popup-content a,
     .info-container,
     .range-container,
+    .log-container,
     .route-container,
     .route-container a {
       color:#8F8F8F; /* light theme  */
@@ -112,6 +114,7 @@
     .mapboxgl-popup-content,
     .info-container,
     .range-container,
+    .log-container,
     .route-container {
       font:400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     }
@@ -310,6 +313,7 @@
 
     .info-container,
     .range-container,
+    .log-container,
     .route-container {
       visibility: hidden;
       box-shadow: 0 0 10px 2px rgba(0,0,0,.1);
@@ -332,6 +336,18 @@
     .range-container {
       position: absolute;
       bottom: 30px;
+      left: 10px;
+      z-index: 1;
+
+      opacity: 0.7;
+      font-weight: 700;
+      display: block;
+      padding: 10px 20px;
+    }
+
+    .log-container {
+      position: absolute;
+      top: 25px;
       left: 10px;
       z-index: 1;
 
@@ -374,6 +390,7 @@
   <div id='map'></div>
   <div id='info' class='info-container'></div>
   <div id='range' class='range-container'></div>
+  <div id='log' class='log-container'></div>
   <div id='route' class='route-container'></div>
   <script>
     if (location.protocol !== 'https:') {location.protocol = 'https:'; throw new Error('Changing to secure connection');};
@@ -491,6 +508,7 @@
 
     var infoContainer = document.getElementById('info');
     var rangeContainer = document.getElementById('range');
+    var logContainer = document.getElementById('log');
     var routeContainer = document.getElementById('route');
 
     var positionIcon = {
@@ -947,6 +965,11 @@
       // setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
     };
 
+    function logMessage(message) {
+      logContainer.innerHTML += '<br>' + message;
+      logContainer.style.visibility = 'visible';
+    };
+
     function routeList(message) {
       if (routeContainer.innerHTML) {routeContainer.innerHTML = '';};
       routeContainer.innerHTML = message;
@@ -990,12 +1013,12 @@
     function updatePosition(initial) {
       getTeslaCarData(function () {
         if (this.readyState === 4) {
-          <? if (isset($_GET["debug"])) {echo "rangeDisplay(this.responseText);";} ?>
+          <? if (isset($_GET["debug"])) {echo "logMessage(this.responseText);";} ?>
           var vehicleData = JSON.parse(this.responseText);
 
           if (initial) {
             <? if (isset($_GET["debug"])) {echo "console.log('Checking Vehicle Data');";} ?>
-            <? if (isset($_GET["debug"])) {echo "infoMessage('Checking Vehicle Data');";} ?>
+            <? if (isset($_GET["debug"])) {echo "logMessage('Checking Vehicle Data');";} ?>
             console.log('Vehicle Data:',vehicleData);
             if (vehicleData == null) {
               teslaConnection.status = 'Ungültiges Token';
