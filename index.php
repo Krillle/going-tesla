@@ -470,11 +470,11 @@
     const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
 
     const connectionState = [ // Used for debug message
-      'Verbindungsstatus: UNSENT',
-      'Verbindungsstatus: OPENED',
-      'Verbindungsstatus: HEADERS RECEIVED',
-      'Verbindungsstatus: LOADING',
-      'Verbindungsstatus: DONE'
+      'UNSENT',
+      'OPENED',
+      'HEADERS RECEIVED',
+      'LOADING',
+      'DONE'
     ];
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'),'connected' : false ,'status': 'undefined' };
