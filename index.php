@@ -347,9 +347,9 @@
 
     .log-container {
       position: absolute;
-      top: 25px;
+      top: 75px;
       left: 10px;
-      z-index: 1;
+      z-index: 2;
 
       opacity: 0.7;
       font-weight: 700;
@@ -401,6 +401,7 @@
     };
 
     console.log("App started");
+    if (debugLog) {logMessage('App started')};
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
@@ -1012,6 +1013,7 @@
 
     function updatePosition(initial) {
       getTeslaCarData(function () {
+        if (debugLog) {logMessage('Verbindungsstatus: ' + connectionState[this.readyState])};
         if (this.readyState === 4) {
           if (debugLog) {logMessage(this.responseText)};
           var vehicleData = JSON.parse(this.responseText);
