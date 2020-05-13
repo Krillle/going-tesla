@@ -404,7 +404,6 @@
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
-    if (debugLog) {logMessage('Debug started')};
 
     const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
@@ -521,6 +520,8 @@
       }
     };
     zoomToPower(teslaPosition.zoom);
+
+    if (debugLog) {logMessage('Debug started')};
 
     mapboxgl.accessToken = '<? echo $_SERVER["mapbox"] ?>';
     var map = new mapboxgl.Map({
