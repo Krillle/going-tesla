@@ -968,7 +968,7 @@
     };
 
     function logMessage(message) {
-      logContainer.innerHTML += '<br>' + message;
+      logContainer.innerHTML += message + '<br>';
       logContainer.style.visibility = 'visible';
     };
 
@@ -1016,11 +1016,11 @@
       getTeslaCarData(function () {
         if (debugLog) {logMessage('Verbindungsstatus: ' + connectionState[this.readyState])};
         if (this.readyState === 4) {
-          if (debugLog) {logMessage(this.responseText)};
+          if (debugLog) {logMessage('Response:' + this.responseText)};
           var vehicleData = JSON.parse(this.responseText);
 
           if (initial) {
-            if (debugLog) {logMessage('Checking Vehicle Data')};
+            if (debugLog) {logMessage('Initial: Checking Vehicle Data')};
             console.log('Vehicle Data:',vehicleData);
             if (vehicleData == null) {
               teslaConnection.status = 'Ungültiges Token';
