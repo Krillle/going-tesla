@@ -401,10 +401,10 @@
     };
 
     console.log("App started");
-    if (debugLog) {logMessage('App started')};
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
+    if (debugLog) {logMessage('Debug started')};
 
     const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
@@ -1019,7 +1019,7 @@
           var vehicleData = JSON.parse(this.responseText);
 
           if (initial) {
-            if (debugLog) {logMessage(('Checking Vehicle Data')};
+            if (debugLog) {logMessage('Checking Vehicle Data')};
             console.log('Vehicle Data:',vehicleData);
             if (vehicleData == null) {
               teslaConnection.status = 'Ungültiges Token';
@@ -1034,6 +1034,7 @@
               teslaConnection.status = 'Fahrzeug nicht erreichbar';
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
+              if (debugLog) {logMessage(teslaConnection.status)};
               gtag('event', 'Not reachable', {'event_category': 'Connect'});
               return;
             }
@@ -1042,6 +1043,7 @@
               teslaConnection.connected = true;
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
+              if (debugLog) {logMessage(teslaConnection.status)};
               gtag('event', 'Connected', {'event_category': 'Connect', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
               console.log ('Starting continuous position update');
               createPositionImage();
