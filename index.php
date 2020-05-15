@@ -949,15 +949,13 @@
 
       console.log('Hash:' + ' longitude ' + payload[0]+ ', latitude ' + payload[1]+ ', zoom ' + payload[2] +', heading '+ payload[3]);
 
-      if (payload.length > 1) {
-        var returnObject = {'longitude' : Number(payload[0]), 'latitude' :  Number(payload[1])};
-        if (payload[2]) (returnObject.zoom =  Number(payload[2]);
-        if (payload[3]) (returnObject.heading =  Number(payload[3]);
+      var returnObject = {};
+      if (payload[0]) (returnObject.longitude =  Number(payload[0]));
+      if (payload[1]) (returnObject.latitude =  Number(payload[1]));
+      if (payload[2]) (returnObject.zoom =  Number(payload[2]));
+      if (payload[3]) (returnObject.heading =  Number(payload[3]));
 
-        return returnObject;
-      } else {
-        return false;
-      };
+      return returnObject;
     };
 
     function settingsPopup () {
