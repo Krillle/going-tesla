@@ -941,11 +941,13 @@
 
     function encodeHash() {
       var center = map.getCenter();
-      return center.lng + ',' + center.lat + ',' + map.getZoom() + ',' + map.getBearing();
+      return map.getZoom() + ',' + map.getBearing();
+      // return center.lng + ',' + center.lat + ',' + map.getZoom() + ',' + map.getBearing();
     };
 
     function decodeHash(hash) {
       var payload = hash.split(',');
+      console.log('Hash:' + payload);
       if (payload.length > 1) {
         return {'longitude' : payload[0], 'latitude' : payload[1], 'zoom': payload[2], 'heading': payload[3]}
       } else {
