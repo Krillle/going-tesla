@@ -401,7 +401,6 @@
     };
 
     console.log("App started");
-    if (debugLog) {logMessage('App started')};
 
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
@@ -471,11 +470,11 @@
     const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
 
     const connectionState = [ // Used for debug message
-      'Verbindungsstatus: UNSENT',
-      'Verbindungsstatus: OPENED',
-      'Verbindungsstatus: HEADERS RECEIVED',
-      'Verbindungsstatus: LOADING',
-      'Verbindungsstatus: DONE'
+      'UNSENT',
+      'OPENED',
+      'HEADERS RECEIVED',
+      'LOADING',
+      'DONE'
     ];
 
     var teslaConnection = {'accessToken': getCookie('access'),'refreshToken': getCookie('refresh'), 'vehicle': getCookie('vehicle'),'connected' : false ,'status': 'undefined' };
@@ -530,6 +529,8 @@
       }
     };
     zoomToPower(teslaPosition.zoom);
+
+    if (debugLog) {logMessage('Debug started')};
 
     mapboxgl.accessToken = '<? echo $_SERVER["mapbox"] ?>';
     var map = new mapboxgl.Map({
@@ -991,7 +992,7 @@
     };
 
     function logMessage(message) {
-      logContainer.innerHTML += '<br>' + message;
+      logContainer.innerHTML += message + '<br>';
       logContainer.style.visibility = 'visible';
     };
 
@@ -1039,11 +1040,11 @@
       getTeslaCarData(function () {
         if (debugLog) {logMessage('Verbindungsstatus: ' + connectionState[this.readyState])};
         if (this.readyState === 4) {
-          if (debugLog) {logMessage(this.responseText)};
+          if (debugLog) {logMessage('Response:' + this.responseText)};
           var vehicleData = JSON.parse(this.responseText);
 
           if (initial) {
-            if (debugLog) {logMessage(('Checking Vehicle Data')};
+            if (debugLog) {logMessage('Initial: Checking Vehicle Data')};
             console.log('Vehicle Data:',vehicleData);
             if (vehicleData == null) {
               teslaConnection.status = 'Ungültiges Token';
@@ -1058,6 +1059,7 @@
               teslaConnection.status = 'Fahrzeug nicht erreichbar';
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
+              if (debugLog) {logMessage(teslaConnection.status)};
               gtag('event', 'Not reachable', {'event_category': 'Connect'});
               return;
             }
@@ -1066,6 +1068,7 @@
               teslaConnection.connected = true;
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
+              if (debugLog) {logMessage(teslaConnection.status)};
               gtag('event', 'Connected', {'event_category': 'Connect', 'event_label': vehicleData.response.vehicle_state.vehicle_name});
               console.log ('Starting continuous position update');
               createPositionImage();
