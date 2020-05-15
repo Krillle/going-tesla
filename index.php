@@ -948,7 +948,7 @@
       var payload = hash.substring(1).split(',');
       console.log('Hash:' + ' longitude' + payload[0]+ ' latitude' + payload[1]+ ' zoom'+ payload[2] +' heading'+ payload[3]);
       if (payload.length > 1) {
-        return {'longitude' : Number(payload[0]), 'latitude' :  Number(payload[1]), 'zoom':  Number(payload[2]),  Number('heading': payload[3])};
+        return {'longitude' : Number(payload[0]), 'latitude' :  Number(payload[1]), 'zoom':  Number(payload[2]), 'heading': Number(payload[3])};
       } else {
         return false;
       };
