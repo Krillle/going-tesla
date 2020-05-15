@@ -946,9 +946,15 @@
 
     function decodeHash(hash) {
       var payload = hash.substring(1).split(',');
-      console.log('Hash:' + ' longitude' + payload[0]+ ' latitude' + payload[1]+ ' zoom'+ payload[2] +' heading'+ payload[3]);
+
+      console.log('Hash:' + ' longitude ' + payload[0]+ ', latitude ' + payload[1]+ ', zoom ' + payload[2] +', heading '+ payload[3]);
+
       if (payload.length > 1) {
-        return {'longitude' : Number(payload[0]), 'latitude' :  Number(payload[1]), 'zoom':  Number(payload[2]), 'heading': Number(payload[3])};
+        var returnObject = {'longitude' : Number(payload[0]), 'latitude' :  Number(payload[1])};
+        if (payload[2]) (returnObject.zoom =  Number(payload[2]);
+        if (payload[3]) (returnObject.heading =  Number(payload[3]);
+
+        return returnObject;
       } else {
         return false;
       };
