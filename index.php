@@ -507,6 +507,15 @@
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
 
+    if (location.hash) {
+      autoZoom = false;
+      autoFollow = false;
+      headUp = false;
+
+      teslaPosition = decodeHash(location.hash);
+
+    };
+
     var infoContainer = document.getElementById('info');
     var rangeContainer = document.getElementById('range');
     var logContainer = document.getElementById('log');
@@ -742,6 +751,7 @@
     map.on('moveend', function() {
       console.log("Move End: Invoke Update");
       updateChargers();
+      location.hash = encodeHash();
     });
 
     map.on('zoomend', function() {
@@ -926,6 +936,20 @@
       } else {
         return false
       };
+    };
+
+    function encodeHash() {
+      var center = map.getCenter();
+      return center.lng + ',' + center.lat + ',' + map.getZoom() + ',' + map.getBearing();
+    };
+
+    function decodeHash(hash) {
+      var payload = hash.split(',');
+      if (payload.length > 1) {
+        return {'longitude' : payload[0], 'latitude' : payload[1], 'zoom': payload[2], 'heading': payload[3]}
+      } else {
+        return false;
+      };
     };
 
     function settingsPopup () {
