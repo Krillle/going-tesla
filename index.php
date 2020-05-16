@@ -506,6 +506,15 @@
     const m = (highSpeedZoom - slowSpeedZoom) / (highSpeed - slowSpeed);
     const b = slowSpeedZoom - m * slowSpeed;
 
+    if (location.hash) {
+      autoZoom = false;
+      autoFollow = false;
+      headUp = false;
+
+      decodeHash(location.hash);
+
+    };
+
     var infoContainer = document.getElementById('info');
     var rangeContainer = document.getElementById('range');
     var logContainer = document.getElementById('log');
@@ -519,7 +528,6 @@
         coordinates: [teslaPosition.longitude,teslaPosition.latitude]
       }
     };
-    zoomToPower(teslaPosition.zoom);
 
     if (debugLog) {logMessage('Debug started')};
 
@@ -586,6 +594,8 @@
     el.className = 'mapboxgl-ctrl-autozoom-icon';
     nav._icon = nav._toggle.appendChild(el);
     map.addControl(nav, 'bottom-right');
+
+    zoomToPower(teslaPosition.zoom);
 
     // Add geolocate control to the map.
     const geolocate = new mapboxgl.GeolocateControl({
@@ -743,6 +753,7 @@
     map.on('moveend', function() {
       console.log("Move End: Invoke Update");
       updateChargers();
+      location.hash = encodeHash();
     });
 
     map.on('zoomend', function() {
@@ -927,6 +938,23 @@
       } else {
         return false
       };
+    };
+
+    function encodeHash() {
+      var center = map.getCenter();
+      return center.lat + ',' + center.lng + ',' + map.getZoom() + ',' + map.getBearing();
+    };
+
+    function decodeHash(hash) {
+      var payload = hash.substring(1).split(',');
+
+      console.log('Hash:' + ' latitude ' + payload[0]+ ', longitude ' + payload[1]+ ', zoom ' + payload[2] +', heading '+ payload[3]);
+
+      if (payload[0]) {teslaPosition.latitude =  Number(payload[0]);console.log('longitude'+ Number(payload[0]));};
+      if (payload[1]) {teslaPosition.longitude =  Number(payload[1]);console.log('latitude'+ Number(payload[1]));};
+      if (payload[2]) {teslaPosition.zoom =  Number(payload[2]);console.log('zoom'+ Number(payload[2]));};
+      if (payload[3]) {teslaPosition.heading =  Number(payload[3]);console.log('heading' + Number(payload[3]));};
+
     };
 
     function settingsPopup () {
