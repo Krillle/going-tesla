@@ -511,7 +511,7 @@
       autoFollow = false;
       headUp = false;
 
-      teslaPosition = decodeHash(location.hash);
+      decodeHash(location.hash);
 
     };
 
@@ -950,13 +950,11 @@
 
       console.log('Hash:' + ' longitude ' + payload[0]+ ', latitude ' + payload[1]+ ', zoom ' + payload[2] +', heading '+ payload[3]);
 
-      var returnObject = {};
-      if (payload[0]) {returnObject.longitude =  Number(payload[0]);console.log('longitude'+ Number(payload[0]));};
-      if (payload[1]) {returnObject.latitude =  Number(payload[1]);console.log('latitude'+ Number(payload[1]));};
-      if (payload[2]) {returnObject.zoom =  Number(payload[2]);console.log('zoom'+ Number(payload[2]));};
-      if (payload[3]) {returnObject.heading =  Number(payload[3]);console.log('heading' + Number(payload[3]));};
+      if (payload[0]) {teslaPosition.longitude =  Number(payload[0]);console.log('longitude'+ Number(payload[0]));};
+      if (payload[1]) {teslaPosition.latitude =  Number(payload[1]);console.log('latitude'+ Number(payload[1]));};
+      if (payload[2]) {teslaPosition.zoom =  Number(payload[2]);console.log('zoom'+ Number(payload[2]));};
+      if (payload[3]) {teslaPosition.heading =  Number(payload[3]);console.log('heading' + Number(payload[3]));};
 
-      return returnObject;
     };
 
     function settingsPopup () {
