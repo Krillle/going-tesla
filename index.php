@@ -528,7 +528,6 @@
         coordinates: [teslaPosition.longitude,teslaPosition.latitude]
       }
     };
-    zoomToPower(teslaPosition.zoom);
 
     if (debugLog) {logMessage('Debug started')};
 
@@ -596,6 +595,8 @@
     nav._icon = nav._toggle.appendChild(el);
     map.addControl(nav, 'bottom-right');
 
+    zoomToPower(teslaPosition.zoom);
+    
     // Add geolocate control to the map.
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
