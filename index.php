@@ -1521,7 +1521,7 @@
 
           "coordinates": chargeLocation.coordinates,
           "chargepoints": chargeLocation.chargepoints,
-          "name": chargeLocation.name,
+          "name": chargeLocation.name.replace("\'","’"),
           "street": chargeLocation.address.street,
           "city": chargeLocation.address.city,
           "country": chargeLocation.address.country,
@@ -1806,10 +1806,10 @@
           if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
           var chargeLocation = chargerDetails.chargelocations[0];
 
-          locationDescription.innerHTML = (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}`) : '';
-          faultReport.innerHTML = (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
+          locationDescription.innerHTML = (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description.replace("\'","’")}`) : '';
+          faultReport.innerHTML = (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description.replace("\'","’")}<p>`) : '';
 
-          ladeweile.innerHTML = (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
+          ladeweile.innerHTML = (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile.replace("\'","’")}<p>`) : '';
         }
       });
     };
