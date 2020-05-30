@@ -1499,9 +1499,7 @@
       var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
 
       if (includeDistance) {
-        if (debugLog) {logMessage('Wating to get route')};
         var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
-        if (debugLog) {logMessage('Done')};
       };
       return {
         "id": chargeLocation.ge_id.toString(),
