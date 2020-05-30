@@ -1459,13 +1459,6 @@
     };
 
     // - - - - - - - - GoingElectric requests - - - - - - - -
-    function getChargerDetails(id) {
-      var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
-        `key=${goingelectricToken}&`+
-        `ge_id=${id}`;
-      return JSON.parse(httpGet(geUrl));
-    };
-
     function getChargersInBoundingBox(boundingBox, minPower, f) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
         `key=${goingelectricToken}&`+
@@ -1836,46 +1829,6 @@
         }
       });
     };
-
-    // function chargerDescription(id) {
-    //   var chargerDetails = getChargerDetails(id);
-    //   if (chargerDetails.status != "ok") {throw "GoingElectric request failed"};
-    //   var chargeLocation = chargerDetails.chargelocations[0];
-    //
-    //   var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
-    //   var address = `${chargeLocation.address.street}, ${chargeLocation.address.city}, ${chargeLocation.address.country}`;
-    //
-    //   var description = '';
-    //   description = `<strong>${chargeLocation.name} ${chargeLocation.name.includes(chargeLocation.address.city) ? '' : chargeLocation.address.city}</strong>`;
-    //
-    //   description += (chargeLocation.network && !chargeLocation.name.includes(chargeLocation.network)) ?
-    //                  (`<br>${chargeLocation.network}<p>`) :
-    //                  // (chargeLocation.operator && !chargeLocation.name.includes(chargeLocation.operator)) ?
-    //                  // `<br>${chargeLocation.operator}<p>` :
-    //                  '<p>';
-    //
-    //   var maxChargePoint = getMaxChargePoint(chargeLocation.chargepoints);
-    //   description += `${maxChargePoint.count}x ${maxChargePoint.power} kW ${maxChargePoint.type}`;
-    //   // description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
-    //   description += (chargeLocation.location_description) ? (`<br>${chargeLocation.location_description}<p>`) : '<p>';
-    //   description += (chargeLocation.fault_report) ? (`<strong>Störung:</strong> ${chargeLocation.fault_report.description}<p>`) : '';
-    //   description += '<hr>';
-    //   // description += (chargeLocation.general_information) ? (`Hinweis: ${chargeLocation.general_information}<br>`) : '';
-    //
-    //   description += (chargeLocation.ladeweile) ? (`Ladeweile: ${chargeLocation.ladeweile}<p>`) : '';
-    //   description += `${chargeLocation.address.street}<br>${chargeLocation.address.city}<p>`;
-    //
-    //   if (route) {
-    //     description += '<strong>' + route.distance + ', ' + route.duration + '</strong>';
-    //     rangeAtArrival = (teslaPosition.range - route.distanceRaw).toFixed()
-    //     description += `<br>${rangeAtArrival<10?'<span class="mapboxgl-popup-content-warning">':''}Reichweite bei Ankunft ${rangeAtArrival} km${rangeAtArrival<10?'</span">':''}`;
-    //     description += '<p>'
-    //   };
-    //
-    //   description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
-    //
-    //   return {'text': description, 'address': address};
-    // };
 
     // function settingsContent(){
     //   var content = '';
