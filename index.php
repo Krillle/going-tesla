@@ -732,13 +732,15 @@
     });
 
     // Events to disable AutoZoom
-    map.on('touchstart', function() {
-    });
+    map.on('touchstart', touchStart);
+    map.on('touchend', touchStop);
+    map.on('touchcancel', touchStop);
 
-    map.on('mousedown', function() {
-    });
+    map.on('mousedown', touchStart);
+    map.on('mouseup', touchStop);
 
     map.on('dragstart', function() {
+      touchStop();
       stopHeadUp();
       stopAutoZoom();
       console.log("AutoFollow stopped");
@@ -859,6 +861,28 @@
       console.log("HeadUp stopped");
       headUp = false;
     };
+
+
+    var touchLong;
+    var function touchStart(e) {
+      console.log('A click event has occurred at ' + e.lngLat);
+      clearTimeout(touchLong);
+      touchLong = setTimeout(function() {
+        console.log('again: ' + e.lngLat);
+        onLongTouch(e)
+      }, 500);
+    });
+
+    function touchStop() {
+      clearTimeout(touchLong);
+      console.log('Long Touch cancelled');
+
+    };
+
+    function onLongTouch(e) {
+      console.log("Hello World: " + e.lngLat);
+    };
+
 
     function updateZoomIcon() {
       nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon;
