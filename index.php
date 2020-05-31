@@ -731,33 +731,6 @@
 
     });
 
-    var touchLong;
-    var touchStart = function (e) {
-      console.log('A click event has occurred at ' + e.lngLat);
-      clearTimeout(touchLong);
-      touchLong = setTimeout(function() {
-        console.log('again: ' + e.lngLat);
-        onLongTouch(e)
-      }, 500);
-    };
-
-    var touchStop = function () {
-      clearTimeout(touchLong);
-      console.log('Long Touch cancelled');
-    };
-
-    function onLongTouch(e) {
-      console.log("Hello World: " + e.lngLat);
-    };
-
-    // Events to listen to long touch
-    map.on('touchstart', touchStart);
-    map.on('touchend', touchStop);
-    map.on('touchcancel', touchStop);
-
-    map.on('mousedown', touchStart);
-    map.on('mouseup', touchStop);
-
     // Events to disable AutoZoom
     map.on('dragstart', function() {
       touchStop();
@@ -801,12 +774,6 @@
       var chargerID = e.features[0].id
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      // map.once('idle', function(e) {
-      //   console.log('Map idle',chargerID);
-      //   popup.setHTML(chargerDescription(chargerID).text)
-      // });
-      // var coordinates = e.features[0].geometry.coordinates.slice();
-      // popup.setLngLat(coordinates)
       popup.setLngLat(e.features[0].geometry.coordinates)
       .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
       .once('open',function () {
@@ -825,6 +792,50 @@
     map.on('mouseleave', 'chargers', function () {
       map.getCanvas().style.cursor = '';
     });
+
+    // Events to listen to long touch
+    var touchLong;
+    var touchStart = function (e) {
+      console.log('A click event has occurred at ' + e.lngLat);
+      clearTimeout(touchLong);
+      touchLong = setTimeout(function() {
+        console.log('again: ' + e.lngLat);
+        onLongTouch(e)
+      }, 500);
+    };
+
+    var touchStop = function () {
+      clearTimeout(touchLong);
+      console.log('Long Touch cancelled');
+    };
+
+    function onLongTouch(e) {
+      console.log("Opening Popup: " + e.lngLat);
+
+      stopAutoZoom();
+      stopHeadUp();
+      console.log("AutoFollow stopped");
+      autoFollow = false;
+      gtag('event', 'Location Details', {'event_category': 'Location', 'event_label': `${e.lngLat}`});
+
+      map.flyTo({ 'center': e.lngLat});
+
+      var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      popup.setLngLat(e.lngLat)
+      // .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
+      // .once('open',function () {
+      //   addChargerDetails(e.features[0].id);
+      //   addChargerDistance(e.features[0].id, e.features[0].geometry.coordinates);
+      // })
+      .addTo(map);
+    };
+
+    map.on('touchstart', touchStart);
+    map.on('touchend', touchStop);
+    map.on('touchcancel', touchStop);
+
+    map.on('mousedown', touchStart);
+    map.on('mouseup', touchStop);
 
     function createPositionImage() {
       // Create Position Image
