@@ -864,7 +864,7 @@
 
 
     var touchLong;
-    var function touchStart(e) {
+    function touchStart(e) {
       console.log('A click event has occurred at ' + e.lngLat);
       clearTimeout(touchLong);
       touchLong = setTimeout(function() {
