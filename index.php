@@ -731,6 +731,25 @@
 
     });
 
+    var touchLong;
+    var touchStart = function (e) {
+      console.log('A click event has occurred at ' + e.lngLat);
+      clearTimeout(touchLong);
+      touchLong = setTimeout(function() {
+        console.log('again: ' + e.lngLat);
+        onLongTouch(e)
+      }, 500);
+    };
+
+    var touchStop = function () {
+      clearTimeout(touchLong);
+      console.log('Long Touch cancelled');
+    };
+
+    function onLongTouch(e) {
+      console.log("Hello World: " + e.lngLat);
+    };
+
     // Events to listen to long touch
     map.on('touchstart', touchStart);
     map.on('touchend', touchStop);
@@ -862,27 +881,6 @@
       console.log("HeadUp stopped");
       headUp = false;
     };
-
-
-    var touchLong;
-    var touchStart = function (e) {
-      console.log('A click event has occurred at ' + e.lngLat);
-      clearTimeout(touchLong);
-      touchLong = setTimeout(function() {
-        console.log('again: ' + e.lngLat);
-        onLongTouch(e)
-      }, 500);
-    };
-
-    var touchStop = function () {
-      clearTimeout(touchLong);
-      console.log('Long Touch cancelled');
-    };
-
-    function onLongTouch(e) {
-      console.log("Hello World: " + e.lngLat);
-    };
-
 
     function updateZoomIcon() {
       nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon;
