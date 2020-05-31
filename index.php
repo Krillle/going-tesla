@@ -731,7 +731,7 @@
 
     });
 
-    // Events to disable AutoZoom
+    // Events to listen to long touch
     map.on('touchstart', touchStart);
     map.on('touchend', touchStop);
     map.on('touchcancel', touchStop);
@@ -739,6 +739,7 @@
     map.on('mousedown', touchStart);
     map.on('mouseup', touchStop);
 
+    // Events to disable AutoZoom
     map.on('dragstart', function() {
       touchStop();
       stopHeadUp();
@@ -864,19 +865,18 @@
 
 
     var touchLong;
-    function touchStart(e) {
+    var touchStart = function (e) {
       console.log('A click event has occurred at ' + e.lngLat);
       clearTimeout(touchLong);
       touchLong = setTimeout(function() {
         console.log('again: ' + e.lngLat);
         onLongTouch(e)
       }, 500);
-    });
+    };
 
-    function touchStop() {
+    var touchStop = function () {
       clearTimeout(touchLong);
       console.log('Long Touch cancelled');
-
     };
 
     function onLongTouch(e) {
