@@ -810,7 +810,7 @@
     };
 
     function onLongTouch(e) {
-      console.log("Opening Popup: " + e.lngLat);
+      console.log("Opening Popup: " + e);
 
       stopAutoZoom();
       stopHeadUp();
@@ -822,7 +822,7 @@
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       popup.setLngLat(e.lngLat)
-      // .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
+      .setHTML(locationShortDescription(e)
       // .once('open',function () {
       //   addChargerDetails(e.features[0].id);
       //   addChargerDistance(e.features[0].id, e.features[0].geometry.coordinates);
@@ -1861,6 +1861,27 @@
           };
         }
       });
+    };
+
+    function locationShortDescription(e) {
+      var description = '';
+      description = `<strong>${e.lngLat}</strong>`;
+
+      // description += `<p style="text-align: center;">Ladestationen für die Route<br>werden gesucht</p>`;
+      description += `<img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/>`;
+
+      // description += `<span id='location_description_${id}'></span><p>`;
+      // description += `<span id='fault_report_${id}'></span>`;
+      // description += '<hr>';
+      // description += `<span id='ladeweile_${id}'></span>`;
+      //
+      // // description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
+      // description += `<span id='distance_${id}'></span>`;
+      //
+      // description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
+
+      return {'text': description};
+
     };
 
     // function settingsContent(){
