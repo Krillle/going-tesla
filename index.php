@@ -1896,11 +1896,9 @@
       var addressSpan = document.getElementById(`address_${id}`);
 
       getAddress({'longitude' : coordinates[0], 'latitude' : coordinates[1]}, function () {
-        console.log('readyState', this.readyState);
         if (this.readyState === 4) {
-          console.log('Adding address', id, coordinates);
           var result = JSON.parse(this.responseText);
-          if (result.code == "Ok") {
+          if (result.features.lenght > 0) {
             titleSpan.innerHTML = result.features[0].text;
             addressSpan.innerHTML = result.features[0].place_name;
           };
