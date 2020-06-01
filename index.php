@@ -825,7 +825,7 @@
       .setHTML(pointOnMap.text)
       .once('open',function () {
         // addLocationAddress(e.features[0].id);
-        addChargerDistance(pointOnMap.id, pointOnMap.coordinates);
+        addChargerDistance(pointOnMap.id, e.lngLat);
       })
       .addTo(map);
     };
