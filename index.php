@@ -545,7 +545,8 @@
     var geocoderControl = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      trackProximity: true
+      trackProximity: true,
+      fuzzyMatch: true
     })
     geocoderControl.on('result', function(destination) {
       cancelRouteChargerList(); // Stop previous list update in case one is running
@@ -822,7 +823,7 @@
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       popup.setLngLat(e.lngLat)
-      .setHTML(locationShortDescription(e)
+      .setHTML(locationShortDescription(e).text)
       // .once('open',function () {
       //   addChargerDetails(e.features[0].id);
       //   addChargerDistance(e.features[0].id, e.features[0].geometry.coordinates);
