@@ -1904,7 +1904,7 @@
           if (result.features.length > 0) {
             titleSpan.innerHTML = result.features[0].text;
             addressSpan.innerHTML = result.features[0].place_name;
-            buttonsSpan.innerHTML = `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a></div>`;
+            buttonsSpan.innerHTML = `<a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a>`;
           };
         }
       });
@@ -1918,7 +1918,7 @@
 
       description += `<span id='address_${id}'><img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/></span><p>`;
       description += `<span id='distance_${id}'></span>`;
-      description += `<span id='buttons_${id}'></span>`;
+      description += `<div class="twocolumns" id='buttons_${id}'></div>`;
 
       return {'text': description, 'id': id};
 
