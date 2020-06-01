@@ -824,8 +824,7 @@
       popup.setLngLat(e.lngLat)
       .setHTML(pointOnMap.text)
       .once('open',function () {
-        // addLocationAddress(e.features[0].id);
-        console.log(pointOnMap);
+        addLocationAddress(pointOnMap.id, pointOnMap.coordinates);
         addChargerDistance(pointOnMap.id, pointOnMap.coordinates);
       })
       .addTo(map);
@@ -1499,6 +1498,27 @@
       };
     };
 
+    function getAddress(destination,f){
+       var apiUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'
+          + destination.longitude + ',' + destination.latitude
+          + '.json?access_token=' + mapboxgl.accessToken;
+      result = httpGet(apiUrl,false,f);
+      if (result) {
+        result = JSON.parse(result);
+        if (result.features.lenght > 0) {
+          return {
+            'center': result.features[0].center,
+            'name': result.features[0].place_name,
+            'text': result.features[0].text
+          }
+        } else {
+          return null
+        }
+      } else {
+        return null;
+      };
+    };
+
     // - - - - - - - - GoingElectric requests - - - - - - - -
     function getChargersInBoundingBox(boundingBox, minPower, f) {
       var geUrl = 'https://api.goingelectric.de/chargepoints/?'+
@@ -1871,13 +1891,28 @@
       });
     };
 
+    function addLocationAddress(id, coordinates) {
+      var titleSpan = document.getElementById(`title_${id}`);
+      var addressSpan = document.getElementById(`address_${id}`);
+
+      getAddress(teslaPosition,{'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
+        if (this.readyState === 4) {
+          var result = JSON.parse(this.responseText);
+          if (result.code == "Ok") {
+            titleSpan.innerHTML = result.features[0].text;
+            addressSpan.innerHTML = result.features[0].place_name;
+          };
+        }
+      });
+    };
+
     function locationShortDescription(e) {
       var id = uuidv4()
       console.log(id);
       var description = '';
-      description = `<strong><span id='location_title_${id}'></span></strong><p>`;
+      description = `<strong><span id='title_${id}'></span></strong><p>`;
 
-      description += `<span id='location_address_${id}'><img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/></span><p>`;
+      description += `<span id='address_${id}'><img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/></span><p>`;
       // // description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
 
       description += `<span id='distance_${id}'></span>`;
