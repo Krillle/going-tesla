@@ -818,7 +818,7 @@
       map.flyTo({ 'center': e.lngLat});
 
       var pointOnMap = locationShortDescription();
-      pointOnMap.coordinates = e.lngLat;
+      pointOnMap.coordinates = (e.lngLat.lgn,e.lngLat.lat);
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       popup.setLngLat(e.lngLat)
@@ -826,7 +826,7 @@
       .once('open',function () {
         // addLocationAddress(e.features[0].id);
         console.log(pointOnMap);
-        addChargerDistance(pointOnMap.id, e.lngLat);
+        addChargerDistance(pointOnMap.id, pointOnMap.coordinates);
       })
       .addTo(map);
     };
