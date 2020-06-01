@@ -983,10 +983,10 @@
 
       console.log('Hash:' + ' latitude ' + payload[0]+ ', longitude ' + payload[1]+ ', zoom ' + payload[2] +', heading '+ payload[3]);
 
-      if (payload[0]) {teslaPosition.latitude =  Number(payload[0]);console.log('longitude'+ Number(payload[0]));};
-      if (payload[1]) {teslaPosition.longitude =  Number(payload[1]);console.log('latitude'+ Number(payload[1]));};
-      if (payload[2]) {teslaPosition.zoom =  Number(payload[2]);console.log('zoom'+ Number(payload[2]));};
-      if (payload[3]) {teslaPosition.heading =  Number(payload[3]);console.log('heading' + Number(payload[3]));};
+      if (payload[0]) {teslaPosition.latitude =  Number(payload[0])};
+      if (payload[1]) {teslaPosition.longitude =  Number(payload[1])};
+      if (payload[2]) {teslaPosition.zoom =  Number(payload[2])};
+      if (payload[3]) {teslaPosition.heading =  Number(payload[3])};
 
     };
 
@@ -1895,8 +1895,9 @@
       var titleSpan = document.getElementById(`title_${id}`);
       var addressSpan = document.getElementById(`address_${id}`);
 
-      getAddress(teslaPosition,{'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
+      getAddress({'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
         if (this.readyState === 4) {
+          console.log('Adding address', id, coordinates);
           var result = JSON.parse(this.responseText);
           if (result.code == "Ok") {
             titleSpan.innerHTML = result.features[0].text;
