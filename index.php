@@ -1505,7 +1505,7 @@
       result = httpGet(apiUrl,false,f);
       if (result) {
         result = JSON.parse(result);
-        if (result.features.lenght > 0) {
+        if (result.features.length > 0) {
           return {
             'center': result.features[0].center,
             'name': result.features[0].place_name,
@@ -1899,7 +1899,8 @@
         if (this.readyState === 4) {
           var result = JSON.parse(this.responseText);
           console.log(result);
-          if (result.features.lenght > 0) {
+          console.log(result.features.length);
+          if (result.features.length > 0) {
             titleSpan.innerHTML = result.features[0].text;
             addressSpan.innerHTML = result.features[0].place_name;
           };
