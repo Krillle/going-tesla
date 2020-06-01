@@ -546,7 +546,7 @@
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
       trackProximity: true,
-      fuzzyMatch: true
+      fuzzyMatch: false
     })
     geocoderControl.on('result', function(destination) {
       cancelRouteChargerList(); // Stop previous list update in case one is running
@@ -811,7 +811,7 @@
     };
 
     function onLongTouch(e) {
-      console.log("Opening Popup: " + e);
+      console.log("Opening Popup: ", e);
 
       stopAutoZoom();
       stopHeadUp();
