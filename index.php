@@ -818,7 +818,7 @@
       map.flyTo({ 'center': e.lngLat});
 
       var pointOnMap = locationShortDescription();
-      pointOnMap.coordinates = [e.lngLat.lgn,e.lngLat.lat];
+      pointOnMap.coordinates = [e.lngLat.lng,e.lngLat.lat];
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       popup.setLngLat(e.lngLat)
