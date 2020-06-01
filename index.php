@@ -1896,6 +1896,7 @@
       var addressSpan = document.getElementById(`address_${id}`);
 
       getAddress({'longitude' : coordinates[0], 'latitude' : coordinates[1]}, false, function () {
+        console.log('readyState', this.readyState);
         if (this.readyState === 4) {
           console.log('Adding address', id, coordinates);
           var result = JSON.parse(this.responseText);
