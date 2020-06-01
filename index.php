@@ -1894,6 +1894,7 @@
     function addLocationAddress(id, coordinates) {
       var titleSpan = document.getElementById(`title_${id}`);
       var addressSpan = document.getElementById(`address_${id}`);
+      var buttonsSpan = document.getElementById(`buttons_${id}`);
 
       getAddress({'longitude' : coordinates[0], 'latitude' : coordinates[1]}, function () {
         if (this.readyState === 4) {
@@ -1903,6 +1904,7 @@
           if (result.features.length > 0) {
             titleSpan.innerHTML = result.features[0].text;
             addressSpan.innerHTML = result.features[0].place_name;
+            buttonsSpan.innerHTML = `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a></div>`;
           };
         }
       });
@@ -1915,11 +1917,8 @@
       description = `<strong><span id='title_${id}'></span></strong><p>`;
 
       description += `<span id='address_${id}'><img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/></span><p>`;
-      // // description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
-
       description += `<span id='distance_${id}'></span>`;
-
-      // description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
+      description += `<span id='buttons_${id}'></span>`;
 
       return {'text': description, 'id': id};
 
