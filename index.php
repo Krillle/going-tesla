@@ -1898,6 +1898,7 @@
       getAddress({'longitude' : coordinates[0], 'latitude' : coordinates[1]}, function () {
         if (this.readyState === 4) {
           var result = JSON.parse(this.responseText);
+          console.log(result);
           if (result.features.lenght > 0) {
             titleSpan.innerHTML = result.features[0].text;
             addressSpan.innerHTML = result.features[0].place_name;
