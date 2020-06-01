@@ -545,8 +545,7 @@
     var geocoderControl = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      trackProximity: true,
-      fuzzyMatch: false
+      trackProximity: true
     })
     geocoderControl.on('result', function(destination) {
       cancelRouteChargerList(); // Stop previous list update in case one is running
@@ -797,17 +796,14 @@
     // Events to listen to long touch
     var touchLong;
     var touchStart = function (e) {
-      console.log('A click event has occurred at ' + e.lngLat);
       clearTimeout(touchLong);
       touchLong = setTimeout(function() {
-        console.log('again: ' + e.lngLat);
         onLongTouch(e)
       }, 500);
     };
 
     var touchStop = function () {
       clearTimeout(touchLong);
-      console.log('Long Touch cancelled');
     };
 
     function onLongTouch(e) {
@@ -817,17 +813,20 @@
       stopHeadUp();
       console.log("AutoFollow stopped");
       autoFollow = false;
-      gtag('event', 'Location Details', {'event_category': 'Location', 'event_label': `${e.lngLat}`});
+      gtag('event', 'Point on Map', {'event_category': 'Destination', 'event_label': `${e.lngLat}`});
 
       map.flyTo({ 'center': e.lngLat});
 
+      var pointOnMap = locationShortDescription();
+      pointOnMap.coordinates = e.lngLat;
+
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       popup.setLngLat(e.lngLat)
-      .setHTML(locationShortDescription(e).text)
-      // .once('open',function () {
-      //   addChargerDetails(e.features[0].id);
-      //   addChargerDistance(e.features[0].id, e.features[0].geometry.coordinates);
-      // })
+      .setHTML(pointOnMap.text)
+      .once('open',function () {
+        // addLocationAddress(e.features[0].id);
+        addChargerDistance(pointOnMap.id, pointOnMap.coordinates);
+      })
       .addTo(map);
     };
 
@@ -990,6 +989,13 @@
       if (payload[3]) {teslaPosition.heading =  Number(payload[3]);console.log('heading' + Number(payload[3]));};
 
     };
+
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
 
     function settingsPopup () {
       // var popup = new mapboxgl.Popup({closeOnClick: false})
@@ -1865,23 +1871,19 @@
     };
 
     function locationShortDescription(e) {
+      var id = uuidv4()
+      console.log(id);
       var description = '';
-      description = `<strong>${e.lngLat}</strong>`;
+      description = `<strong><span id='location_title_${id}'></span></strong><p>`;
 
-      // description += `<p style="text-align: center;">Ladestationen für die Route<br>werden gesucht</p>`;
-      description += `<img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/>`;
-
-      // description += `<span id='location_description_${id}'></span><p>`;
-      // description += `<span id='fault_report_${id}'></span>`;
-      // description += '<hr>';
-      // description += `<span id='ladeweile_${id}'></span>`;
-      //
+      description += `<span id='location_address_${id}'><img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/></span><p>`;
       // // description += `${chargeLocation.street}<br>${chargeLocation.city}<p>`;
-      // description += `<span id='distance_${id}'></span>`;
-      //
+
+      description += `<span id='distance_${id}'></span>`;
+
       // description += `<div class="twocolumns"><a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${address}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="http://${chargeLocation.url}" target="_blank"></a></div>`;
 
-      return {'text': description};
+      return {'text': description, 'id': id};
 
     };
 
