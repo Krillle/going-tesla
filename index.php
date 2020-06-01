@@ -825,6 +825,7 @@
       .setHTML(pointOnMap.text)
       .once('open',function () {
         // addLocationAddress(e.features[0].id);
+        console.log(pointOnMap);
         addChargerDistance(pointOnMap.id, e.lngLat);
       })
       .addTo(map);
