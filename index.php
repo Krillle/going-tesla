@@ -815,7 +815,6 @@
       stopHeadUp();
       console.log("AutoFollow stopped");
       autoFollow = false;
-      gtag('event', 'Point on Map', {'event_category': 'Destination', 'event_label': `${e.lngLat}`});
 
       map.flyTo({ 'center': e.lngLat});
 
@@ -1908,6 +1907,9 @@
             titleSpan.innerHTML = result.features[0].text;
             addressSpan.innerHTML = result.features[0].place_name;
             buttonsSpan.innerHTML = `<a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a>`;
+            
+            gtag('event', 'Point on Map', {'event_category': 'Destination', 'event_label': `${place_name}`});
+
           };
         }
       });
