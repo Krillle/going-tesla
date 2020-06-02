@@ -520,7 +520,7 @@
     var logContainer = document.getElementById('log');
     var routeContainer = document.getElementById('route');
 
-    var popup;
+    var popup = new mapboxgl.Popup();
 
     var positionIcon = {
       type: 'Feature',
