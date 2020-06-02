@@ -520,6 +520,8 @@
     var logContainer = document.getElementById('log');
     var routeContainer = document.getElementById('route');
 
+    var popup;
+
     var positionIcon = {
       type: 'Feature',
       properties: {'bearing': teslaPosition.heading},
@@ -773,7 +775,7 @@
 
       var chargerID = e.features[0].id
 
-      var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom', closeButton: false })
       popup.setLngLat(e.features[0].geometry.coordinates)
       .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
       .once('open',function () {
@@ -820,7 +822,8 @@
       var pointOnMap = locationShortDescription();
       pointOnMap.coordinates = [e.lngLat.lng,e.lngLat.lat];
 
-      var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
+      popup.remove();
+      popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom', closeButton: false })
       popup.setLngLat(e.lngLat)
       .setHTML(pointOnMap.text)
       .once('open',function () {
