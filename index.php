@@ -818,7 +818,7 @@
 
       map.flyTo({ 'center': e.lngLat});
 
-      var pointOnMap = locationShortDescription();
+      var pointOnMap = locationShortDescription(e);
       pointOnMap.coordinates = [e.lngLat.lng,e.lngLat.lat];
 
       popup.remove();
