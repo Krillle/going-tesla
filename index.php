@@ -1907,8 +1907,8 @@
             titleSpan.innerHTML = result.features[0].text;
             addressSpan.innerHTML = result.features[0].place_name;
             buttonsSpan.innerHTML = `<a class="popupbutton popupbutton-icon-navigate" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a><a class="popupbutton popupbutton-icon-link" href="#" onclick="sendDestinationToTesla('${result.features[0].place_name}'); return false;"></a>`;
-            
-            gtag('event', 'Point on Map', {'event_category': 'Destination', 'event_label': `${place_name}`});
+
+            gtag('event', 'Point on Map', {'event_category': 'Destination', 'event_label': `${result.features[0].place_name}`});
 
           };
         }
@@ -1919,9 +1919,10 @@
       var id = uuidv4()
       console.log(id);
       var description = '';
-      description = `<strong><span id='title_${id}'></span></strong><p>`;
+      description = `<strong><span id='title_${id}'>Unbekannter Ort</span></strong><p>`;
 
-      description += `<span id='address_${id}'><img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/></span><p>`;
+      // description += `<span id='address_${id}'><img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/></span><p>`;
+      description += `<span id='address_${id}'>(${e.lngLat.lat} N ${e.lngLat.lng} E)</span><p>`;
       description += `<span id='distance_${id}'></span>`;
       description += `<div class="twocolumns" id='buttons_${id}'></div>`;
 
