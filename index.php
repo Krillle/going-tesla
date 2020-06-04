@@ -1922,7 +1922,7 @@
       description = `<strong><span id='title_${id}'>Unbekannter Ort</span></strong><p>`;
 
       // description += `<span id='address_${id}'><img style="display: block; margin-left: auto; margin-right: auto;" src="${waitImage}"/></span><p>`;
-      description += `<span id='address_${id}'>(${e.lngLat.lat} N ${e.lngLat.lng} E)</span><p>`;
+      description += `<span id='address_${id}'>(${e.lngLat.lat.toFixed(6)} N, ${e.lngLat.lng.toFixed(6)} E)</span><p>`;
       description += `<span id='distance_${id}'></span>`;
       description += `<div class="twocolumns" id='buttons_${id}'></div>`;
 
