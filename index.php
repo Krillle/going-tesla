@@ -1901,8 +1901,6 @@
       getAddress({'longitude' : coordinates[0], 'latitude' : coordinates[1]}, function () {
         if (this.readyState === 4) {
           var result = JSON.parse(this.responseText);
-          console.log(result);
-          console.log(result.features.length);
           if (result.features.length > 0) {
             titleSpan.innerHTML = result.features[0].text;
             addressSpan.innerHTML = result.features[0].place_name;
@@ -1917,7 +1915,6 @@
 
     function locationShortDescription(e) {
       var id = uuidv4()
-      console.log(id);
       var description = '';
       description = `<strong><span id='title_${id}'>Unbekannter Ort</span></strong><p>`;
 
