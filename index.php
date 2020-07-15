@@ -378,9 +378,16 @@
     }
 
     img.battery-icon {
-      margin-left: 4px;
+      margin-left: 16px;
       margin-right: 4px;
       margin-bottom: -6px;
+      margin-top: -4px;
+    }
+
+    img.connection-icon {
+      margin-left: 0px;
+      margin-right: 0px;
+      margin-bottom: -5px;
       margin-top: -4px;
     }
 
@@ -389,7 +396,7 @@
 <body>
   <div id='map'></div>
   <div id='info' class='info-container'></div>
-  <div id='range' class='range-container'></div>
+  <a href="#" onclick="settingsPopup(); return false;"><div id='range' class='range-container'></div></a>
   <div id='log' class='log-container'></div>
   <div id='route' class='route-container'></div>
   <script>
@@ -415,6 +422,7 @@
     const chargerFaultSize = '24';
     const destinationSize = '39';
     const batterySize = '25';
+    const connectionSize = '25';
 
     const iconColumnWidth = Number(chargerBigSize)+10;
 
@@ -424,7 +432,8 @@
     var chargerThirdColor = "4b535a"; // dark marker for light map
     var chargerParkColor = "5a5a5a"; // dark marker for light map
     const chargerFaultColor = "ffb800";
-    const batteryColor = "8F8F8F";
+    var batteryColor = "8F8F8F";
+    var connectionColor = "8F8F8F";
 
     var routeColor = "4d69ea";
 
@@ -433,7 +442,8 @@
       mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
       chargerThirdColor = "787878"; // light marker for dark map
       chargerParkColor = "e6e6e6"; // light marker for dark map
-      const batteryColor = "9c9c9c";
+      batteryColor = "9c9c9c";
+      connectionColor = "9c9c9c";
     };
 
     const teslaSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`;
@@ -444,6 +454,9 @@
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
     const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
     const waitImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/hourglass.png`;
+
+    const offlineImage = `https://img.icons8.com/ios-glyphs/${connectionSize}/${connectionColor}/wifi-off.png`
+    const onlineImage = `https://img.icons8.com/ios-glyphs/${connectionSize}/${connectionColor}/wifi.png`
 
     const batteryImageSet = [
       `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/no-battery.png`,
@@ -716,6 +729,7 @@
         }
       });
 
+      rangeDisplay(`<img class="connection-icon" src="${offlineImage}">`);
       console.log('Establishing Connection to Tesla');
       connectTesla ();
 
@@ -967,6 +981,7 @@
       //
       // document.querySelector('status').textContent = teslaConnection.status;
 
+
       var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
       if (email == null) {return};
       var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
@@ -986,13 +1001,8 @@
     };
 
     function rangeDisplay(message) {
-      // if (rangeContainer.innerHTML) {rangeContainer.innerHTML = null;};
-      // var pre = document.createElement('pre');
-      // pre.textContent = message;
-      // infoContainer.appendChild(pre);
       rangeContainer.innerHTML = message;
       rangeContainer.style.visibility = 'visible';
-      // setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
     };
 
     function logMessage(message) {
@@ -1019,7 +1029,6 @@
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
         gtag('event', 'No Token', {'event_category': 'Connect'});
-        settingsPopup ();   // Connection is done after popup by recursive call in getTeslaVehicles callback
       } else {
         updatePosition(true);
       };
@@ -1055,7 +1064,6 @@
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
               gtag('event', 'Invalid Token', {'event_category': 'Connect'});
-              settingsPopup ();
               return;
 
             } else if (vehicleData.response == null) {
@@ -1068,6 +1076,7 @@
               return;
             }
             else {
+              rangeDisplay(`<img class="connection-icon" src="${onlineImage}">`)
               teslaConnection.status = 'Verbunden mit ' + vehicleData.response.vehicle_state.vehicle_name;
               teslaConnection.connected = true;
               console.log(teslaConnection.status);
@@ -1081,7 +1090,7 @@
           };
 
           setTeslaPosition(vehicleData.response);
-          rangeDisplay(`<img class="battery-icon" src="${batteryImage(teslaPosition.range)}">${teslaPosition.range.toFixed(0).toString()} km`);
+          rangeDisplay(`<img class="connection-icon" src="${onlineImage}"><img class="battery-icon" src="${batteryImage(teslaPosition.range)}">${teslaPosition.range.toFixed(0).toString()} km`);
           if (positionIcon.geometry.coordinates[0] != teslaPosition.longitude ||
               positionIcon.geometry.coordinates[1] != teslaPosition.latitude ||
               positionIcon.properties.bearing != teslaPosition.heading) {
