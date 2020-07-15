@@ -728,7 +728,7 @@
         }
       });
 
-      rangeDisplay(<img class="connection-icon" src="${offlineImage}">)
+      rangeDisplay(`<img class="connection-icon" src="${offlineImage}">`)
       console.log('Establishing Connection to Tesla');
       connectTesla ();
 
