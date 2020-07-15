@@ -379,14 +379,14 @@
 
     img.battery-icon {
       margin-left: 4px;
-      margin-right: 8px;
+      margin-right: 16px;
       margin-bottom: -6px;
       margin-top: -4px;
     }
 
     img.connection-icon {
       margin-left: 0px;
-      margin-right: 12px;
+      margin-right: 0px;
       margin-bottom: -5px;
       margin-top: -4px;
     }
