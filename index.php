@@ -999,7 +999,7 @@
     };
 
     function rangeDisplay(message) {
-      rangeContainer.innerHTML = message;
+      rangeContainer.innerHTML = `<a class="" href="#" onclick="settingsPopup(); return false;">${message}</a>;`
       rangeContainer.style.visibility = 'visible';
     };
 
@@ -1027,7 +1027,7 @@
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
         gtag('event', 'No Token', {'event_category': 'Connect'});
-        settingsPopup ();   // Connection is done after popup by recursive call in getTeslaVehicles callback
+        // settingsPopup ();   // Connection is done after popup by recursive call in getTeslaVehicles callback
       } else {
         updatePosition(true);
       };
@@ -1076,6 +1076,7 @@
               return;
             }
             else {
+              rangeDisplay(`<img class="connection-icon" src="${onlineImage}">`)
               teslaConnection.status = 'Verbunden mit ' + vehicleData.response.vehicle_state.vehicle_name;
               teslaConnection.connected = true;
               console.log(teslaConnection.status);
