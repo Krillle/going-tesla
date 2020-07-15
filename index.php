@@ -396,7 +396,7 @@
 <body>
   <div id='map'></div>
   <div id='info' class='info-container'></div>
-  <div id='range' class='range-container'></div>
+  <a href="#" onclick="settingsPopup(); return false;"><div id='range' class='range-container'></div></a>
   <div id='log' class='log-container'></div>
   <div id='route' class='route-container'></div>
   <script>
@@ -999,7 +999,7 @@
     };
 
     function rangeDisplay(message) {
-      rangeContainer.innerHTML = `<a class="" href="#" onclick="settingsPopup(); return false;">${message}</a>;`
+      rangeContainer.innerHTML = message;
       rangeContainer.style.visibility = 'visible';
     };
 
