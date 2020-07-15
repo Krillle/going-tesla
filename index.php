@@ -379,15 +379,15 @@
 
     img.battery-icon {
       margin-left: 4px;
-      margin-right: 4px;
+      margin-right: 8px;
       margin-bottom: -6px;
       margin-top: -4px;
     }
 
-    img.conection-icon {
-      margin-left: 4px;
-      margin-right: 4px;
-      margin-bottom: -6px;
+    img.connection-icon {
+      margin-left: 0px;
+      margin-right: 12px;
+      margin-bottom: -5px;
       margin-top: -4px;
     }
 
@@ -728,8 +728,7 @@
         }
       });
 
-      // rangeDisplay(`<img class="connection-icon" src="${offlineImage}">`);
-      rangeDisplay(`<img class="connection-icon" src="${onlineImage}"><img class="battery-icon" src="${batteryImage(300)}">300 km`);
+      rangeDisplay(`<img class="connection-icon" src="${offlineImage}">`);
       console.log('Establishing Connection to Tesla');
       connectTesla ();
 
@@ -981,12 +980,15 @@
       //
       // document.querySelector('status').textContent = teslaConnection.status;
 
-      var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
-      if (email == null) {return};
-      var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
-      if (password == null) {return};
+      rangeDisplay(`<img class="connection-icon" src="${onlineImage}"><img class="battery-icon" src="${batteryImage(300)}">300 km`);
 
-      createTeslaToken(email, password);
+
+      // var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
+      // if (email == null) {return};
+      // var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
+      // if (password == null) {return};
+      //
+      // createTeslaToken(email, password);
     };
 
     function infoMessage(message) {
@@ -1028,7 +1030,6 @@
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
         gtag('event', 'No Token', {'event_category': 'Connect'});
-        // settingsPopup ();   // Connection is done after popup by recursive call in getTeslaVehicles callback
       } else {
         updatePosition(true);
       };
@@ -1064,7 +1065,6 @@
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
               gtag('event', 'Invalid Token', {'event_category': 'Connect'});
-              settingsPopup ();
               return;
 
             } else if (vehicleData.response == null) {
@@ -1091,7 +1091,7 @@
           };
 
           setTeslaPosition(vehicleData.response);
-          rangeDisplay(`<img class="battery-icon" src="${batteryImage(teslaPosition.range)}">${teslaPosition.range.toFixed(0).toString()} km`);
+          rangeDisplay(`<img class="connection-icon" src="${onlineImage}"><img class="battery-icon" src="${batteryImage(teslaPosition.range)}">${teslaPosition.range.toFixed(0).toString()} km`);
           if (positionIcon.geometry.coordinates[0] != teslaPosition.longitude ||
               positionIcon.geometry.coordinates[1] != teslaPosition.latitude ||
               positionIcon.properties.bearing != teslaPosition.heading) {
