@@ -728,7 +728,8 @@
         }
       });
 
-      rangeDisplay(`<img class="connection-icon" src="${offlineImage}">`)
+      // rangeDisplay(`<img class="connection-icon" src="${offlineImage}">`)
+      rangeDisplay(`<img class="connection-icon" src="${onlineImage}"><img class="battery-icon" src="${batteryImage(300)}">300 km`);
       console.log('Establishing Connection to Tesla');
       connectTesla ();
 
