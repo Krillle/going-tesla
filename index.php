@@ -378,8 +378,8 @@
     }
 
     img.battery-icon {
-      margin-left: 4px;
-      margin-right: 16px;
+      margin-left: 16px;
+      margin-right: 4px;
       margin-bottom: -6px;
       margin-top: -4px;
     }
