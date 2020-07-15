@@ -384,6 +384,13 @@
       margin-top: -4px;
     }
 
+    img.conection-icon {
+      margin-left: 4px;
+      margin-right: 4px;
+      margin-bottom: -6px;
+      margin-top: -4px;
+    }
+
   </style>
 </head>
 <body>
@@ -415,6 +422,7 @@
     const chargerFaultSize = '24';
     const destinationSize = '39';
     const batterySize = '25';
+    const connectionSize = '25';
 
     const iconColumnWidth = Number(chargerBigSize)+10;
 
@@ -425,6 +433,7 @@
     var chargerParkColor = "5a5a5a"; // dark marker for light map
     const chargerFaultColor = "ffb800";
     const batteryColor = "8F8F8F";
+    const connectionColor = "8F8F8F";
 
     var routeColor = "4d69ea";
 
@@ -444,6 +453,9 @@
     const faultReportImage = `https://img.icons8.com/ios-glyphs/${chargerFaultSize}/${chargerFaultColor}/error.png`;
     const destinationImage = `https://img.icons8.com/small/${destinationSize}/${routeColor}/order-delivered.png`;
     const waitImage = `https://img.icons8.com/ios-glyphs/${chargerParkSize}/${chargerParkColor}/hourglass.png`;
+
+    const offlineImage = `https://img.icons8.com/ios-glyphs/${connectionSize}/${connectionColor}/wifi-off.png`
+    const onlineImage = `https://img.icons8.com/ios-glyphs/${connectionSize}/${connectionColor}/wifi.png`
 
     const batteryImageSet = [
       `https://img.icons8.com/ios-glyphs/${batterySize}/${batteryColor}/no-battery.png`,
@@ -716,6 +728,7 @@
         }
       });
 
+      rangeDisplay(<img class="connection-icon" src="${offlineImage}">)
       console.log('Establishing Connection to Tesla');
       connectTesla ();
 
@@ -986,13 +999,8 @@
     };
 
     function rangeDisplay(message) {
-      // if (rangeContainer.innerHTML) {rangeContainer.innerHTML = null;};
-      // var pre = document.createElement('pre');
-      // pre.textContent = message;
-      // infoContainer.appendChild(pre);
       rangeContainer.innerHTML = message;
       rangeContainer.style.visibility = 'visible';
-      // setTimeout(function(){ infoContainer.style.visibility = 'hidden';  infoContainer.innerHTML = null; }, 3000);
     };
 
     function logMessage(message) {
