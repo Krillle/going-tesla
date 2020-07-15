@@ -432,8 +432,8 @@
     var chargerThirdColor = "4b535a"; // dark marker for light map
     var chargerParkColor = "5a5a5a"; // dark marker for light map
     const chargerFaultColor = "ffb800";
-    const batteryColor = "8F8F8F";
-    const connectionColor = "8F8F8F";
+    var batteryColor = "8F8F8F";
+    var connectionColor = "8F8F8F";
 
     var routeColor = "4d69ea";
 
@@ -442,7 +442,8 @@
       mapStyle = 'mapbox://styles/krillle/ck1fdx1ok208r1drsdxwqur5f?optimize=true'; // Dark Tesla
       chargerThirdColor = "787878"; // light marker for dark map
       chargerParkColor = "e6e6e6"; // light marker for dark map
-      const batteryColor = "9c9c9c";
+      batteryColor = "9c9c9c";
+      connectionColor = "9c9c9c";
     };
 
     const teslaSuperChargerImage = `https://img.icons8.com/material-sharp/${chargerBigSize}/${chargerTeslaColor}/tesla-supercharger-pin--v1.png`;
