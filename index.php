@@ -981,15 +981,13 @@
       //
       // document.querySelector('status').textContent = teslaConnection.status;
 
-      rangeDisplay(`<img class="connection-icon" src="${onlineImage}"><img class="battery-icon" src="${batteryImage(300)}">300 km`);
 
+      var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
+      if (email == null) {return};
+      var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
+      if (password == null) {return};
 
-      // var email = prompt('Verbindungsstatus: ' + teslaConnection.status + '\rBitte Tesla-Account E-Mail eingeben');
-      // if (email == null) {return};
-      // var password = prompt("Bitte Passwort für diesen Tesla-Account eingeben");
-      // if (password == null) {return};
-      //
-      // createTeslaToken(email, password);
+      createTeslaToken(email, password);
     };
 
     function infoMessage(message) {
