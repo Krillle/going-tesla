@@ -474,7 +474,7 @@
 
     const iconPriority = {
       "faultReport" : 1,
-      "teslaSuperCharger" : 0,
+      "teslaSuperCharger" : 9,
       "thirdSuperCharger" : 2,
       "highwayCharger" : 3,
       "parkCharger" : 4,
