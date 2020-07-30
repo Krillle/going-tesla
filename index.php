@@ -472,6 +472,15 @@
     const highwayCharger = {'minPower':'50', 'minZoom':11, 'toggle':2}
     const destinationCharger = {'minPower':'3', 'minZoom':14, 'toggle':1}
 
+    const iconPriority = {
+      "faultReport" : 1,
+      "teslaSuperCharger" : 0,
+      "thirdSuperCharger" : 2,
+      "highwayCharger" : 3,
+      "parkCharger" : 4,
+      "socketCharger" : 5
+    }
+
     var minPower = superCharger.minPower;
     var minPowerList = superCharger.minPower;
 
@@ -717,9 +726,10 @@
         "source": "chargers",
         "layout": {
            "icon-image": "{icon}",
-           "icon-anchor": "bottom"
+           "icon-anchor": "bottom",
+           "symbol-sort-key": ["get", "priority"],
+           "icon-allow-overlap": false
 
-           // "icon-allow-overlap": true
           // "icon-size": 0.25
 
           // "text-field": ["get", "status"],
@@ -1510,17 +1520,20 @@
       if (includeDistance) {
         var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
       };
+
+      var icon = (chargeLocation.fault_report) ? "faultReport" :
+        (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
+        (maxChargePoint.power >= superCharger.minPower) ? "thirdSuperCharger" :
+        (maxChargePoint.power >= highwayCharger.minPower) ? "highwayCharger" :
+        (maxChargePoint.type == "Typ2") ? "parkCharger" :
+        "socketCharger";
+
       return {
         "id": chargeLocation.ge_id.toString(),
         "type": "Feature",
         "properties": {
-          "icon": (chargeLocation.fault_report) ? "faultReport" :
-            (chargeLocation.network.toString().toLowerCase().includes("tesla supercharger")) ? "teslaSuperCharger" :
-            (maxChargePoint.power >= superCharger.minPower) ? "thirdSuperCharger" :
-            (maxChargePoint.power >= highwayCharger.minPower) ? "highwayCharger" :
-            (maxChargePoint.type == "Typ2") ? "parkCharger" :
-            "socketCharger",
-
+          "icon": icon,
+          "priority": iconPriority[icon],
           "coordinates": chargeLocation.coordinates,
           "chargepoints": chargeLocation.chargepoints,
           "name": chargeLocation.name.replace("\'","’"),
