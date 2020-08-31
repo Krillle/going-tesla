@@ -874,11 +874,11 @@
       });
     };
 
-    function (toggleSatellite) {
+    function toggleSatellite() {
 
     };
-    
-    function (toggleTraffic) {
+
+    function toggleTraffic() {
 
     };
 
