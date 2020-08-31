@@ -630,7 +630,7 @@
       visualizePitch: false
     })
     nav._satellite = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-satellite', 'Satellite', () => toggleSatellite());
-    const el_satelite = window.document.createElement('span');
+    const el_satellite = window.document.createElement('span');
     el_satellite.className = 'mapboxgl-ctrl-satellite-icon';
     nav._satelliteIcon = nav._satellite.appendChild(el_satellite);
     map.addControl(nav, 'bottom-right');
