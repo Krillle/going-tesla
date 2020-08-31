@@ -629,12 +629,20 @@
       showZoom: false,
       visualizePitch: false
     })
-    nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-satelite', 'Satellite', () => toggleSatellite());
-    nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-traffic', 'Traffic', () => toggleTraffic());
-    nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-autozoom', 'Autozoom', () => toggleAutoZoom());
     const el = window.document.createElement('span');
+    nav._satelite = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-satelite', 'Satellite', () => toggleSatellite());
+    el.className = 'mapboxgl-ctrl-satelite-icon';
+    nav._sateliteIcon = nav._satelite.appendChild(el);
+    map.addControl(nav, 'bottom-right');
+
+    nav._traffic = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-traffic', 'Traffic', () => toggleTraffic());
+    el.className = 'mapboxgl-ctrl-traffic-icon';
+    nav._trafficIcon = nav._traffic.appendChild(el);
+    map.addControl(nav, 'bottom-right');
+
+    nav._autozoom = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-autozoom', 'Autozoom', () => toggleAutoZoom());
     el.className = 'mapboxgl-ctrl-autozoom-icon';
-    nav._icon = nav._toggle.appendChild(el);
+    nav._autozoomIcon = nav._autozoom.appendChild(el);
     map.addControl(nav, 'bottom-right');
 
     zoomToPower(teslaPosition.zoom);
