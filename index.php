@@ -150,6 +150,24 @@
       height:40px;
     }
 
+    .mapboxgl-ctrl-icon.mapboxgl-ctrl-satellite > .mapboxgl-ctrl-satellite-icon {
+      width: 40px;
+      height: 40px;
+      margin: 5px;
+      background-image: url("https://img.icons8.com/ios-glyphs/40/333333/europe.png");
+      background-repeat: no-repeat;
+      display: inline-block;
+    }
+
+    .mapboxgl-ctrl-icon.mapboxgl-ctrl-traffic > .mapboxgl-ctrl-traffic-icon {
+      width: 40px;
+      height: 40px;
+      margin: 5px;
+      background-image: url("https://img.icons8.com/ios/40/333333/traffic-light.png");
+      background-repeat: no-repeat;
+      display: inline-block;
+    }
+
     .mapboxgl-ctrl-icon.mapboxgl-ctrl-autozoom > .mapboxgl-ctrl-autozoom-icon {
       width: 40px;
       height: 40px;
@@ -611,7 +629,9 @@
       showZoom: false,
       visualizePitch: false
     })
-    nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-autozoom', 'Toggle Autozoom', () => toggleAutoZoom());
+    nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-satelite', 'Satellite', () => toggleSatellite());
+    nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-traffic', 'Traffic', () => toggleTraffic());
+    nav._toggle = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-autozoom', 'Autozoom', () => toggleAutoZoom());
     const el = window.document.createElement('span');
     el.className = 'mapboxgl-ctrl-autozoom-icon';
     nav._icon = nav._toggle.appendChild(el);
@@ -852,6 +872,14 @@
           }
         });
       });
+    };
+
+    function (toggleSatellite) {
+
+    };
+    
+    function (toggleTraffic) {
+
     };
 
     function toggleAutoZoom() {
