@@ -929,7 +929,7 @@
     };
 
     function updateZoomIcon() {
-      nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon;
+      nav._autozoomIcon['background-image'] = zoomToogle[zoomToggleState].icon;
     };
 
     function updateMapFocus() {
