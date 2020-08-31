@@ -777,7 +777,9 @@
     map.on('moveend', function() {
       console.log("Move End: Invoke Update");
       updateChargers();
-      location.hash = encodeHash();
+      if (!autoFollow) {
+        location.hash = encodeHash();
+      };
     });
 
     map.on('zoomend', function() {
@@ -861,6 +863,10 @@
       autoZoom = zoomToogle[zoomToggleState].autoZoom;
       autoFollow = zoomToogle[zoomToggleState].autoFollow;
       headUp = zoomToogle[zoomToggleState].headUp;
+
+      if (autoFollow) {
+        location.hash = '';
+      };
 
       if (zoomToogle[zoomToggleState].zoom) {
         map.jumpTo({ 'zoom': zoomToogle[zoomToggleState].zoom });
