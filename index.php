@@ -963,7 +963,7 @@
         minPower = superCharger.minPower;
         zoomToggleState = superCharger.toggle;
       }
-      if (!autoZoom) {nav._icon.style['background-image'] = zoomToogle[zoomToggleState].icon};
+      if (!autoZoom) {nav._autozoomIcon.style['background-image'] = zoomToogle[zoomToggleState].icon};
     };
 
     function batteryImage(range) {
