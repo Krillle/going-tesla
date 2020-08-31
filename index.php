@@ -629,18 +629,20 @@
       showZoom: false,
       visualizePitch: false
     })
-    const el = window.document.createElement('span');
     nav._satelite = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-satelite', 'Satellite', () => toggleSatellite());
-    el.className = 'mapboxgl-ctrl-satelite-icon';
-    nav._sateliteIcon = nav._satelite.appendChild(el);
+    const el1 = window.document.createElement('span');
+    el1.className = 'mapboxgl-ctrl-satelite-icon';
+    nav._sateliteIcon = nav._satelite.appendChild(el1);
     map.addControl(nav, 'bottom-right');
 
     nav._traffic = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-traffic', 'Traffic', () => toggleTraffic());
-    el.className = 'mapboxgl-ctrl-traffic-icon';
-    nav._trafficIcon = nav._traffic.appendChild(el);
+    const el2 = window.document.createElement('span');
+    el2.className = 'mapboxgl-ctrl-traffic-icon';
+    nav._trafficIcon = nav._traffic.appendChild(el2);
     map.addControl(nav, 'bottom-right');
 
     nav._autozoom = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-autozoom', 'Autozoom', () => toggleAutoZoom());
+    const el = window.document.createElement('span');
     el.className = 'mapboxgl-ctrl-autozoom-icon';
     nav._autozoomIcon = nav._autozoom.appendChild(el);
     map.addControl(nav, 'bottom-right');
