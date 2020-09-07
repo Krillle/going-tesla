@@ -929,8 +929,7 @@
     };
 
     function updateZoomIcon() {
-      nav._autozoomIcon['background-image'] = zoomToogle[zoomToggleState].icon;
-      console.log('Icon',nav._autozoomIcon['background-image']);
+      nav._autozoomIcon.style['background-image'] = zoomToogle[zoomToggleState].icon;
     };
 
     function updateMapFocus() {
