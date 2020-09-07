@@ -642,9 +642,9 @@
     map.addControl(nav, 'bottom-right');
 
     nav._autozoom = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-autozoom', 'Toggle Zoom', () => toggleAutoZoom());
-    const el = window.document.createElement('span');
-    el.className = 'mapboxgl-ctrl-autozoom-icon';
-    nav._autozoomIcon = nav._autozoom.appendChild(el);
+    const el_autozoom = window.document.createElement('span');
+    el_autozoom.className = 'mapboxgl-ctrl-autozoom-icon';
+    nav._autozoomIcon = nav._autozoom.appendChild(el_autozoom);
     map.addControl(nav, 'bottom-right');
 
     zoomToPower(teslaPosition.zoom);
@@ -930,6 +930,7 @@
 
     function updateZoomIcon() {
       nav._autozoomIcon['background-image'] = zoomToogle[zoomToggleState].icon;
+      console.log('Icon',nav._autozoomIcon['background-image']);
     };
 
     function updateMapFocus() {
