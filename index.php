@@ -1172,37 +1172,36 @@
     // - - - - - - - - Tesla requests - - - - - - - - -
 
     // function getTeslaChargeStatus() {
-    //   var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+    //   var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
     //       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/charge_state';
     //
     //   return JSON.parse(httpGet(teslaUrl,true));
     // };
     //
     // function getTeslaDriveStatus() {
-    //   var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+    //   var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
     //       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
     //
     //   return JSON.parse(httpGet(teslaUrl,true));
     // };
 
     function getTeslaCarData(f) {
-      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
 
       httpGet(teslaUrl,true,f);
     };
 
     function getTeslaVehicles(f) {
-      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
           + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles';
 
       httpGet(teslaUrl,true,f);
     };
 
     function createTeslaToken (email, password) {
-      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
-      + 'csurl=https://owner-api.teslamotors.com//oauth/token?grant_type=password';
-
+      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
+      + 'csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password';
       var body = JSON.stringify({
         "grant_type": "password",
         "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
@@ -1252,7 +1251,7 @@
 
     function sendDestinationToTesla(destination) {
       console.log('Set destination: ' + destination);
-      var teslaUrl = 'https://goingtesla.herokuapp.com/corsproxy.php?'
+      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/command/share';
 
       var body = JSON.stringify({
