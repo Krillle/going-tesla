@@ -412,7 +412,7 @@
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
 
-    const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
+    // const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
     const corsproxy = 'https://yacdn.org/proxy/';
 
     const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
