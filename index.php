@@ -412,6 +412,8 @@
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
 
+    const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
+
     const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
@@ -1134,36 +1136,31 @@
     // - - - - - - - - Tesla requests - - - - - - - - -
 
     // function getTeslaChargeStatus() {
-    //   var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-    //       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/charge_state';
+    //   var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/charge_state';
     //
     //   return JSON.parse(httpGet(teslaUrl,true));
     // };
     //
     // function getTeslaDriveStatus() {
-    //   var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-    //       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
+    //   var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
     //
     //   return JSON.parse(httpGet(teslaUrl,true));
     // };
 
     function getTeslaCarData(f) {
-      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
+      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
 
       httpGet(teslaUrl,true,f);
     };
 
     function getTeslaVehicles(f) {
-      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles';
+      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles';
 
       httpGet(teslaUrl,true,f);
     };
 
     function createTeslaToken (email, password) {
-      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-      + 'csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password';
+      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/oauth/token?grant_type=password';
       var body = JSON.stringify({
         "grant_type": "password",
         "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
@@ -1213,8 +1210,7 @@
 
     function sendDestinationToTesla(destination) {
       console.log('Set destination: ' + destination);
-      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-      + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/command/share';
+      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/command/share';
 
       var body = JSON.stringify({
         "type": "share_ext_content_raw",
