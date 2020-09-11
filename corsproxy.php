@@ -39,7 +39,7 @@ define('CSAJAX_SUPPRESS_EXPECT', false);
 /**
  * Set debugging to true to receive additional messages - really helpful on development
  */
-define('CSAJAX_DEBUG', false);
+define('CSAJAX_DEBUG', true);
 
 /**
  * A set of valid cross domain requests
@@ -194,8 +194,8 @@ print($response_content);
 
 function csajax_debug_message($message)
 {
-    // if (true == CSAJAX_DEBUG) {
+    if (true == CSAJAX_DEBUG) {
         // print JSON.stringify({error: $message . PHP_EOL});
         print $message . PHP_EOL;
-    // }
+    }
 }
