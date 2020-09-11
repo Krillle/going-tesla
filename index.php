@@ -1164,7 +1164,6 @@
     function createTeslaToken (email, password) {
       var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
       + 'csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password';
-console.log('URL:',teslaUrl);
       var body = JSON.stringify({
         "grant_type": "password",
         "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
