@@ -1161,6 +1161,9 @@
 
     function createTeslaToken (email, password) {
       var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/oauth/token?grant_type=password';
+  console.log('URL' + teslaUrl);
+  if (debugLog) {logMessage('URL' + teslaUrl)};
+
       var body = JSON.stringify({
         "grant_type": "password",
         "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
@@ -1175,6 +1178,8 @@
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
           console.log("GetToken Listener Result: " + this.responseText);
+          if (debugLog) {logMessage("GetToken Listener Result: " + this.responseText)};
+
           var result = JSON.parse(this.responseText);
           teslaConnection.accessToken = result.access_token;
           teslaConnection.refreshToken = result.refresh_token;
