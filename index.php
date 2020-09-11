@@ -412,8 +412,8 @@
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
 
-    // const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
-    const corsproxy = 'https://yacdn.org/proxy/';
+    const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
+    // const corsproxy = 'https://yacdn.org/proxy/';
 
     const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
@@ -1162,8 +1162,8 @@
 
     function createTeslaToken (email, password) {
       var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/oauth/token?grant_type=password';
-  console.log('URL' + teslaUrl);
-  if (debugLog) {logMessage('URL' + teslaUrl)};
+  console.log('URL: ' + teslaUrl);
+  if (debugLog) {logMessage('UR: ' + teslaUrl)};
 
       var body = JSON.stringify({
         "grant_type": "password",
