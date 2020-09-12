@@ -352,7 +352,7 @@
       z-index: 2;
 
       opacity: 0.7;
-      font-weight: 700;
+      font-weight: 100;
       display: block;
       padding: 10px 20px;
     }
@@ -413,8 +413,10 @@
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
 
     // const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
-    const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl='
-                    + 'https://kunden.mediaworx.com/php/cw-cors/corsproxy.php?csurl=';
+    const corsproxy = 'https://kunden.mediaworx.com/php/cw-cors/corsproxy.php?csurl=';
+
+    // const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl='
+    //                 + 'https://kunden.mediaworx.com/php/cw-cors/corsproxy.php?csurl=';
     // const corsproxy = 'https://yacdn.org/proxy/';
 
     const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
