@@ -412,7 +412,9 @@
     <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
     <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
 
-    const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
+    // const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
+    const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl='
+                    + 'https://kunden.mediaworx.com/php/cw-cors/corsproxy.php?csurl=';
     // const corsproxy = 'https://yacdn.org/proxy/';
 
     const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
@@ -1162,8 +1164,8 @@
 
     function createTeslaToken (email, password) {
       var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/oauth/token?grant_type=password';
-  console.log('URL: ' + teslaUrl);
-  if (debugLog) {logMessage('UR: ' + teslaUrl)};
+      console.log('Requesting Token: ' + teslaUrl);
+      if (debugLog) {logMessage('Requesting Token: ' + teslaUrl)};
 
       var body = JSON.stringify({
         "grant_type": "password",
