@@ -1175,8 +1175,6 @@
       var xhr = new XMLHttpRequest();
       xhr.withCredentials = true;
 
-      xhr._XMLHTTPRequest.setProxy(2, '192.240.46.123');
-
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
           console.log("GetToken Listener Result: " + this.responseText);
@@ -1211,6 +1209,7 @@
       xhr.open("POST", teslaUrl);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("cache-control", "no-cache");
+      xhr.setProxy(2, '192.240.46.123');
 
       xhr.send(body);
     };
