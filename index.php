@@ -1209,7 +1209,7 @@
       xhr.open("POST", teslaUrl);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("cache-control", "no-cache");
-      xhr.setProxy(2, '192.240.46.123');
+      xhr.SetProxy(2, '192.240.46.123');
 
       xhr.send(body);
     };
