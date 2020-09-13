@@ -1172,7 +1172,7 @@
         "password": password
       });
 
-      var xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest(proxy: {host: '192.240.46.123', port: 80});
       xhr.withCredentials = true;
 
       xhr.addEventListener("readystatechange", function () {
