@@ -1175,7 +1175,7 @@
       var xhr = new XMLHttpRequest();
       xhr.withCredentials = true;
 
-      xhr.setProxy(2, '192.240.46.123');
+      xhr._XMLHTTPRequest.setProxy(2, '192.240.46.123');
 
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
