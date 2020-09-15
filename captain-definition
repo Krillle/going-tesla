@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
  "templateId": "php/7",
- ARG mapbox=${mapbox}
+ ARG mapbox=${mapbox},
  ARG goingelectric=${goingelectric}
 }
