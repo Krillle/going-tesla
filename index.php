@@ -415,7 +415,7 @@
     const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
 
     const goingelectricToken = '<?php echo $_SERVER["goingelectric"] ?>';
-    console.log('All Variables: <?php echo $_SERVER["goingelectric"] ?>');
+    console.log('All Variables: <?php echo $_SERVER ?>');
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
