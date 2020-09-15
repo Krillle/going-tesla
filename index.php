@@ -556,6 +556,7 @@
     if (debugLog) {logMessage('Debug started')};
 
     mapboxgl.accessToken = '<?php echo $_SERVER["mapbox"] ?>';
+    console.log(mapboxgl.accessToken);
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: mapStyle,
