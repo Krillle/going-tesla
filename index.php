@@ -416,6 +416,7 @@
 
     const goingelectricToken = '<?php echo $_SERVER["goingelectric"] ?>';
     console.log('Going Electric: ', goingelectricToken);
+    console.log('Going Electric: ', '<?php echo getenv('goingelectric'); ?>');
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
