@@ -957,7 +957,12 @@
     function httpGet(url, token, f) {
       var httpReq = new XMLHttpRequest();
       httpReq.open('GET', url, f ? true : false);
-      if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
+      if (token) {
+        console.log('Using Token',teslaConnection.accessToken);
+        if (debugLog) {logMessage('Using Token',teslaConnection.accessToken)};
+
+        httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)
+      };
       if (f) {httpReq.addEventListener("readystatechange", f)}
       httpReq.send(null);
       if (f) { return false}
