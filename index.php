@@ -1157,6 +1157,8 @@
 
     function getTeslaVehicles(f) {
       var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles';
+      console.log('Requesting Vehicles: ' + teslaUrl);
+      if (debugLog) {logMessage('Requesting Vehicles: ' + teslaUrl)};
 
       httpGet(teslaUrl,true,f);
     };
