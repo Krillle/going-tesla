@@ -6,7 +6,7 @@
   </head>
   <body>
     PHP $_Server:
-    <?php echo $_SERVER; ?>
+    <?php print_r($_SERVER); ?><br>
     GoingElectric Token: <?php echo getenv('goingelectric'); ?>
   </body>
 </html>
