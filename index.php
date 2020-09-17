@@ -10,11 +10,11 @@
       echo $js_code;
   };
 
-  if (!isset($_SERVER["mapbox"]) or $_SERVER["mapbox"] == "") {
+  if (!isset($_ENV["mapbox"]) or $_ENV["mapbox"] == "") {
     console_log("No mapbox API key found.",true);
   };
 
-  if (!isset($_SERVER["goingelectric"]) or $_SERVER["goingelectric"] == "") {
+  if (!isset($_ENV["goingelectric"]) or $_ENV["goingelectric"] == "") {
     console_log("No GoingElectric API key found.",true);
   };
 
@@ -414,7 +414,7 @@
 
     const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
 
-    const goingelectricToken = '<?php echo $_SERVER["goingelectric"]; ?>';
+    const goingelectricToken = '<?php echo $_ENV["goingelectric"]; ?>';
     console.log('Going Electric: ', goingelectricToken);
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
@@ -556,7 +556,7 @@
 
     if (debugLog) {logMessage('Debug started')};
 
-    mapboxgl.accessToken = '<?php echo $_SERVER["mapbox"]; ?>';
+    mapboxgl.accessToken = '<?php echo $_ENV["mapbox"]; ?>';
     console.log('Mabox Token: ', mapboxgl.accessToken);
     var map = new mapboxgl.Map({
       container: 'map', // container id
