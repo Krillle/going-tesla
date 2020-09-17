@@ -1508,7 +1508,7 @@
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
-      httpGet(geUrl,true,f);
+      httpGet(geUrl,false,f);
     };
 
     function getMaxChargePoint (chargePoints) {
