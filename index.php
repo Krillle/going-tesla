@@ -959,7 +959,7 @@
       httpReq.open('GET', url, f ? true : false);
       if (token) {
         console.log('Using Token',teslaConnection.accessToken);
-        if (debugLog) {logMessage('Using Token',teslaConnection.accessToken)};
+        if (debugLog) {logMessage('Using Token' + teslaConnection.accessToken)};
 
         httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)
       };
