@@ -1499,7 +1499,7 @@
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `sw_lat=${boundingBox[0][1]}&sw_lng=${boundingBox[0][0]}&`+
         `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
-      httpGet(geUrl,true,f);
+      httpGet(geUrl,false,f);
     };
 
     function getChargersInBounds(searchField, f) {
