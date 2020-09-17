@@ -10,11 +10,11 @@
       echo $js_code;
   };
 
-  if (!isset($_SERVER["mapbox"])) {
+  if (!isset($_SERVER["mapbox"]) or $_SERVER["mapbox"] == "") {
     console_log("No mapbox API key found.",true);
   };
 
-  if (!isset($_SERVER["goingelectric"])) {
+  if (!isset($_SERVER["goingelectric"]) or $_SERVER["goingelectric"] == "") {
     console_log("No GoingElectric API key found.",true);
   };
 
