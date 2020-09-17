@@ -197,6 +197,6 @@ function csajax_debug_message($message)
 {
     if (true == CSAJAX_DEBUG) {
         // print JSON.stringify({error: $message . PHP_EOL});
-        print $message . PHP_EOL;
+        error_log ($message . PHP_EOL);
     }
 }
