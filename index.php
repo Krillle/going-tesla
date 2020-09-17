@@ -414,7 +414,7 @@
 
     const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
 
-    const goingelectricToken = '<?php echo getenv('goingelectric'); ?>';
+    const goingelectricToken = '<?php echo $_SERVER["goingelectric"]; ?>';
     console.log('Going Electric: ', goingelectricToken);
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
@@ -556,7 +556,7 @@
 
     if (debugLog) {logMessage('Debug started')};
 
-    mapboxgl.accessToken = '<?php echo getenv('mapbox'); ?>';
+    mapboxgl.accessToken = '<?php echo $_SERVER["mapbox"]; ?>';
     console.log('Mabox Token: ', mapboxgl.accessToken);
     var map = new mapboxgl.Map({
       container: 'map', // container id
