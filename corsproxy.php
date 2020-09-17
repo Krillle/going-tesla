@@ -60,6 +60,9 @@ $curl_options = array(
     // CURLOPT_SSL_VERIFYHOST => 2,
 );
 
+phpinfo();
+exit;
+
 /* * * STOP EDITING HERE UNLESS YOU KNOW WHAT YOU ARE DOING * * */
 
 // identify request headers
