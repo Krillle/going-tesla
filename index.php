@@ -1149,7 +1149,7 @@
 
     function getTeslaCarData(f) {
       var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
-      console.log('Requesting Car Data: ' + teslaUrl);
+      // console.log('Requesting Car Data: ' + teslaUrl);
       if (debugLog) {logMessage('Requesting Car Data: ' + teslaUrl)};
 
       httpGet(teslaUrl,true,f);
