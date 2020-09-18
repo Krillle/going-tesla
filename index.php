@@ -10,11 +10,11 @@
       echo $js_code;
   };
 
-  if (!isset($_SERVER["mapbox"])) {
+  if (!isset($_ENV["mapbox"]) or $_ENV["mapbox"] == "") {
     console_log("No mapbox API key found.",true);
   };
 
-  if (!isset($_SERVER["goingelectric"])) {
+  if (!isset($_ENV["goingelectric"]) or $_ENV["goingelectric"] == "") {
     console_log("No GoingElectric API key found.",true);
   };
 
@@ -91,7 +91,7 @@
     .log-container,
     .route-container {
       background:#ffffff; /* light theme  */
-      <? if ($darkmode) {echo "background:#000000; /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "background:#000000; /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-geocoder--input,
@@ -107,7 +107,7 @@
     .route-container,
     .route-container a {
       color:#8F8F8F; /* light theme  */
-      <? if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "color:#9c9c9c; /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-geocoder,
@@ -123,7 +123,7 @@
     .mapboxgl-popup-content strong {
       font-weight: 700;
       color:#000000; /* light theme  */
-      <? if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "color:#e6e6e6; /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-group > button {
@@ -133,7 +133,7 @@
 
     .mapboxgl-ctrl-group > button + button {
         border-top: 1px solid #ddd;
-        <? if ($darkmode) {echo "border-top: 1px solid #333333; /* dark theme */";} ?>
+        <?php if ($darkmode) {echo "border-top: 1px solid #333333; /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-group > button:focus,
@@ -198,19 +198,19 @@
 
     .mapboxgl-popup-anchor-bottom > .mapboxgl-popup-tip {
       border-top-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-top-color: #000000; /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "border-top-color: #000000; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
       border-bottom-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-bottom-color: #000000; /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "border-bottom-color: #000000; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-left > .mapboxgl-popup-tip {
       border-right-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-right-color: #000000; /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "border-right-color: #000000; /* dark theme */";} ?>
     }
     .mapboxgl-popup-anchor-right > .mapboxgl-popup-tip {
       border-left-color: #ffffff; /* light theme */
-      <? if ($darkmode) {echo "border-left-color: #000000; /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "border-left-color: #000000; /* dark theme */";} ?>
     }
     .mapboxgl-popup-close-button {
       display:none;
@@ -265,7 +265,7 @@
     	width: 100%;
     	height: 60px;
     	background: #d6d6d6; /* light theme */
-      <? if ($darkmode) {echo "background: #4a4848; /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "background: #4a4848; /* dark theme */";} ?>
     	margin: 0px 0;
     	line-height: 1;
     	break-inside: avoid-column;
@@ -278,35 +278,35 @@
 
     a.popupbutton-icon-navigate {
       background-image: url('https://img.icons8.com/ios-glyphs/40/333333/navigation.png'); /* light theme  */
-      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/ios-glyphs/40/ffffff/navigation.png'); /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "background-image: url('https://img.icons8.com/ios-glyphs/40/ffffff/navigation.png'); /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
 
     a.popupbutton-icon-link {
       background-image: url('https://img.icons8.com/material-outlined/40/333333/globe--v2.png'); /* light theme */
-      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png'); /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "background-image: url('https://img.icons8.com/material-outlined/40/ffffff/globe--v2.png'); /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
 
     a.popupbutton-icon-superCharger {
       background-image: url('https://img.icons8.com/material-sharp/44/333333/tesla-supercharger-pin--v1.png'); /* light theme */
-      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/material-sharp/44/ffffff/tesla-supercharger-pin--v1.png');  /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "background-image: url('https://img.icons8.com/material-sharp/44/ffffff/tesla-supercharger-pin--v1.png');  /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
 
     a.popupbutton-icon-highwayCharger {
       background-image: url('https://img.icons8.com/small/39/8F8F8F/tesla-supercharger-pin.png'); /* light theme */
-      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/9c9c9c/tesla-supercharger-pin.png');  /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/9c9c9c/tesla-supercharger-pin.png');  /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
 
     a.popupbutton-icon-highwayCharger-active {
       background-image: url('https://img.icons8.com/small/39/5a5a5a/tesla-supercharger-pin.png'); /* light theme */
-      <? if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/e6e6e6/tesla-supercharger-pin.png');  /* dark theme */";} ?>
+      <?php if ($darkmode) {echo "background-image: url('https://img.icons8.com/small/39/e6e6e6/tesla-supercharger-pin.png');  /* dark theme */";} ?>
       background-repeat: no-repeat;
       background-position: center;
     }
@@ -352,7 +352,7 @@
       z-index: 2;
 
       opacity: 0.7;
-      font-weight: 700;
+      font-weight: 100;
       display: block;
       padding: 10px 20px;
     }
@@ -409,10 +409,12 @@
 
     console.log("App started");
 
-    <? if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
-    <? if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
+    <?php if ($darkmode) {echo "const darkmode = true;";} else {echo "const darkmode = false;";}  ?>
+    <?php if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
 
-    const goingelectricToken = '<? echo $_SERVER["goingelectric"] ?>';
+    const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
+
+    const goingelectricToken = '<?php echo $_ENV["goingelectric"]; ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
@@ -555,7 +557,7 @@
 
     if (debugLog) {logMessage('Debug started')};
 
-    mapboxgl.accessToken = '<? echo $_SERVER["mapbox"] ?>';
+    mapboxgl.accessToken = '<?php echo $_ENV["mapbox"]; ?>';
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: mapStyle,
@@ -1176,36 +1178,38 @@
     // - - - - - - - - Tesla requests - - - - - - - - -
 
     // function getTeslaChargeStatus() {
-    //   var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-    //       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/charge_state';
+    //   var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/charge_state';
     //
     //   return JSON.parse(httpGet(teslaUrl,true));
     // };
     //
     // function getTeslaDriveStatus() {
-    //   var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-    //       + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
+    //   var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/data_request/drive_state';
     //
     //   return JSON.parse(httpGet(teslaUrl,true));
     // };
 
     function getTeslaCarData(f) {
-      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
+      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
+      // console.log('Requesting Car Data: ' + teslaUrl);
+      if (debugLog) {logMessage('Requesting Car Data: ' + teslaUrl)};
 
       httpGet(teslaUrl,true,f);
     };
 
     function getTeslaVehicles(f) {
-      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-          + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles';
+      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles';
+      console.log('Requesting Vehicles: ' + teslaUrl);
+      if (debugLog) {logMessage('Requesting Vehicles: ' + teslaUrl)};
 
       httpGet(teslaUrl,true,f);
     };
 
     function createTeslaToken (email, password) {
-      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-      + 'csurl=https://owner-api.teslamotors.com/oauth/token?grant_type=password';
+      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/oauth/token?grant_type=password';
+      console.log('Requesting Token: ' + teslaUrl);
+      if (debugLog) {logMessage('Requesting Token: ' + teslaUrl)};
+
       var body = JSON.stringify({
         "grant_type": "password",
         "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
@@ -1220,6 +1224,8 @@
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
           console.log("GetToken Listener Result: " + this.responseText);
+          if (debugLog) {logMessage("GetToken Listener Result: " + this.responseText)};
+
           var result = JSON.parse(this.responseText);
           teslaConnection.accessToken = result.access_token;
           teslaConnection.refreshToken = result.refresh_token;
@@ -1255,8 +1261,7 @@
 
     function sendDestinationToTesla(destination) {
       console.log('Set destination: ' + destination);
-      var teslaUrl = 'https://' + location.hostname + '/corsproxy.php?'
-      + 'csurl=https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/command/share';
+      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/command/share';
 
       var body = JSON.stringify({
         "type": "share_ext_content_raw",
@@ -1552,7 +1557,7 @@
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `sw_lat=${boundingBox[0][1]}&sw_lng=${boundingBox[0][0]}&`+
         `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
-      httpGet(geUrl,true,f);
+      httpGet(geUrl,false,f);
     };
 
     function getChargersInBounds(searchField, f) {
@@ -1561,7 +1566,7 @@
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
-      httpGet(geUrl,true,f);
+      httpGet(geUrl,false,f);
     };
 
     function getMaxChargePoint (chargePoints) {
@@ -1806,9 +1811,9 @@
             if (showWait) {
               waitChargerList()
             };
-            <? if (isset($_GET["bigbox"])) {echo "showBigBox();";} ?>
-            <? if (isset($_GET["boxes"])) {echo "showBoxes();";} ?>
-            <? if (isset($_GET["debugroute"])) {echo "showRoute(currentRoute.coordinates);";} ?>
+            <?php if (isset($_GET["bigbox"])) {echo "showBigBox();";} ?>
+            <?php if (isset($_GET["boxes"])) {echo "showBoxes();";} ?>
+            <?php if (isset($_GET["debugroute"])) {echo "showRoute(currentRoute.coordinates);";} ?>
             processRouteChargers();
           };
         }
