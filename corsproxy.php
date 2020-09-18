@@ -60,14 +60,11 @@ $curl_options = array(
     // CURLOPT_SSL_VERIFYHOST => 2,
 );
 
-phpinfo();
-exit;
-
 /* * * STOP EDITING HERE UNLESS YOU KNOW WHAT YOU ARE DOING * * */
 
 // identify request headers
 $request_headers = array( );
-foreach ($_SERVER as $key => $value) {
+foreach (getallheaders() as $key => $value) {
     csajax_debug_message('Header ' . $key . ' - ' . $value);
     if (strpos($key, 'HTTP_') === 0  ||  strpos($key, 'CONTENT_') === 0) {
         $headername = str_replace('_', ' ', str_replace('HTTP_', '', $key));
