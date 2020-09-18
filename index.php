@@ -10,11 +10,11 @@
       echo $js_code;
   };
 
-  if (!isset($_SERVER["mapbox"])) {
+  if (!isset($_ENV["mapbox"]) or $_ENV["mapbox"] == "") {
     console_log("No mapbox API key found.",true);
   };
 
-  if (!isset($_SERVER["goingelectric"])) {
+  if (!isset($_ENV["goingelectric"]) or $_ENV["goingelectric"] == "") {
     console_log("No GoingElectric API key found.",true);
   };
 
@@ -414,8 +414,7 @@
 
     const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
 
-    const goingelectricToken = '<?php echo getenv('goingelectric'); ?>';
-    console.log('Going Electric: ', goingelectricToken);
+    const goingelectricToken = '<?php echo $_ENV["goingelectric"]; ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
@@ -556,8 +555,7 @@
 
     if (debugLog) {logMessage('Debug started')};
 
-    mapboxgl.accessToken = '<?php echo getenv('mapbox'); ?>';
-    console.log('Mabox Token: ', mapboxgl.accessToken);
+    mapboxgl.accessToken = '<?php echo $_ENV["mapbox"]; ?>';
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: mapStyle,
@@ -1151,12 +1149,16 @@
 
     function getTeslaCarData(f) {
       var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
+      // console.log('Requesting Car Data: ' + teslaUrl);
+      if (debugLog) {logMessage('Requesting Car Data: ' + teslaUrl)};
 
       httpGet(teslaUrl,true,f);
     };
 
     function getTeslaVehicles(f) {
       var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles';
+      console.log('Requesting Vehicles: ' + teslaUrl);
+      if (debugLog) {logMessage('Requesting Vehicles: ' + teslaUrl)};
 
       httpGet(teslaUrl,true,f);
     };
@@ -1492,7 +1494,7 @@
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `sw_lat=${boundingBox[0][1]}&sw_lng=${boundingBox[0][0]}&`+
         `ne_lat=${boundingBox[1][1]}&ne_lng=${boundingBox[1][0]}`;
-      httpGet(geUrl,true,f);
+      httpGet(geUrl,false,f);
     };
 
     function getChargersInBounds(searchField, f) {
@@ -1501,7 +1503,7 @@
         `plugs=${compatiblePlugs}&min_power=${minPower}&`+
         `ne_lat=${searchField.getNorthEast().lat}&ne_lng=${searchField.getNorthEast().lng}&`+
         `sw_lat=${searchField.getSouthWest().lat}&sw_lng=${searchField.getSouthWest().lng}`;
-      httpGet(geUrl,true,f);
+      httpGet(geUrl,false,f);
     };
 
     function getMaxChargePoint (chargePoints) {
