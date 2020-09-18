@@ -62,7 +62,7 @@ $curl_options = array(
 
 /* * * STOP EDITING HERE UNLESS YOU KNOW WHAT YOU ARE DOING * * */
 
-// // identify request headers
+// // identify request headers (old dirty version based on $_SERVER)
 // $request_headers = array( );
 // foreach ($_SERVER as $key => $value) {
 //     csajax_debug_message('Header ' . $key . ' - ' . $value);

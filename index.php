@@ -415,7 +415,6 @@
     const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
 
     const goingelectricToken = '<?php echo $_ENV["goingelectric"]; ?>';
-    console.log('Going Electric: ', goingelectricToken);
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
 
     const chargerBigSize = '44';
@@ -557,7 +556,6 @@
     if (debugLog) {logMessage('Debug started')};
 
     mapboxgl.accessToken = '<?php echo $_ENV["mapbox"]; ?>';
-    console.log('Mabox Token: ', mapboxgl.accessToken);
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: mapStyle,
@@ -957,12 +955,7 @@
     function httpGet(url, token, f) {
       var httpReq = new XMLHttpRequest();
       httpReq.open('GET', url, f ? true : false);
-      if (token) {
-        console.log('Using Token ',teslaConnection.accessToken);
-        if (debugLog) {logMessage('Using Token ' + teslaConnection.accessToken)};
-
-        httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)
-      };
+      if (token) {httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)};
       if (f) {httpReq.addEventListener("readystatechange", f)}
       httpReq.send(null);
       if (f) { return false}
