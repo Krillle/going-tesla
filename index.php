@@ -958,8 +958,8 @@
       var httpReq = new XMLHttpRequest();
       httpReq.open('GET', url, f ? true : false);
       if (token) {
-        console.log('Using Token',teslaConnection.accessToken);
-        if (debugLog) {logMessage('Using Token' + teslaConnection.accessToken)};
+        console.log('Using Token ',teslaConnection.accessToken);
+        if (debugLog) {logMessage('Using Token ' + teslaConnection.accessToken)};
 
         httpReq.setRequestHeader('authorization','bearer ' + teslaConnection.accessToken)
       };
@@ -1156,6 +1156,8 @@
 
     function getTeslaCarData(f) {
       var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/api/1/vehicles/' + teslaConnection.vehicle + '/vehicle_data';
+      console.log('Requesting Car Data: ' + teslaUrl);
+      if (debugLog) {logMessage('Requesting Car Data: ' + teslaUrl)};
 
       httpGet(teslaUrl,true,f);
     };

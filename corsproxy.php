@@ -78,7 +78,7 @@ $curl_options = array(
 // identify request headers
 $request_headers = array( );
 foreach (getallheaders() as $headername => $value) {
-    csajax_debug_message('Header ' . $key . ' - ' . $value);
+    csajax_debug_message('Header: ' . $headername . ' - ' . $value);
     if (!in_array($headername, array( 'Host', 'X-Proxy-Url' ))) {
         $request_headers[] = "$headername: $value";
     }
