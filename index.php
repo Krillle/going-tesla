@@ -784,7 +784,19 @@
         "paint": {
           "line-offset": 5,
           "line-width": 2,
-          "line-opacity": 0,
+          "line-opacity": [
+            "case",
+            [
+              "==",
+              "low",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            0,
+            1
+          ],
           "line-color": [
             "case",
             [
