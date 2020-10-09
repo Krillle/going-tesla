@@ -782,7 +782,8 @@
         "source-layer": "traffic",
         "type": "line",
         "paint": {
-          "line-width": 1.5,
+          "line-offset": 2,
+          "line-width": 3,
           "line-color": [
             "case",
             [
