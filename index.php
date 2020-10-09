@@ -676,6 +676,9 @@
         "source": "mapbox-traffic",
         "source-layer": "traffic",
         "type": "line",
+        'layout': {
+          'visibility': 'visible',
+        },
         "paint": {
           "line-offset": 2,
           "line-width": 3,
@@ -961,6 +964,11 @@
     };
 
     function toggleTraffic() {
+      if (map.getLayoutProperty('traffic', 'visibility') === 'visible') {
+        map.setLayoutProperty('traffic', 'visibility', 'none');
+      } else {
+        map.setLayoutProperty('traffic', 'visibility', 'visible');
+      }
 
     };
 
