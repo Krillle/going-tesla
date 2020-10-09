@@ -771,6 +771,62 @@
         }
       });
 
+      // Prepare Traffic Layer
+      map.addSource('mapbox-traffic', {
+        "type": "vector",
+        "url": "mapbox://mapbox.mapbox-traffic-v1"
+      });
+      map.addLayer({
+        "id": "traffic",
+        "source": "mapbox-traffic",
+        "source-layer": "traffic",
+        "type": "line",
+        "paint": {
+          "line-width": 1.5,
+          "line-color": [
+            "case",
+            [
+              "==",
+              "low",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            "#aab7ef",
+            [
+              "==",
+              "moderate",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            "#4264fb",
+            [
+              "==",
+              "heavy",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            "#ee4e8b",
+            [
+              "==",
+              "severe",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            "#b43b71",
+            "#000000"
+          ]
+        }
+      }
+    });
+
       rangeDisplay(`<img class="connection-icon" src="${offlineImage}">`);
       console.log('Establishing Connection to Tesla');
       connectTesla ();
