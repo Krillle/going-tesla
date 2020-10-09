@@ -665,76 +665,77 @@
     // map.setPitch(30);
 
 
-    // Prepare Traffic Layer
-    map.addSource('mapbox-traffic', {
-      "type": "vector",
-      "url": "mapbox://mapbox.mapbox-traffic-v1"
-    });
-    map.addLayer({
-      "id": "traffic",
-      "source": "mapbox-traffic",
-      "source-layer": "traffic",
-      "type": "line",
-      "paint": {
-        "line-offset": 2,
-        "line-width": 3,
-        "line-opacity": [
-          "case",
-          [
-            "==",
-            "low",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          0,
-          1
-        ],
-        "line-color": [
-          "case",
-          [
-            "==",
-            "low",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          "#ffffff",
-          [
-            "==",
-            "moderate",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          "#ea9c2f",
-          [
-            "==",
-            "heavy",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          "#ae150f",
-          [
-            "==",
-            "severe",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          "#391b25",
-          "#000000"
-        ]
-      }
-    });
-
     map.on('load', function() {
+      // Prepare Traffic Layer
+      map.addSource('mapbox-traffic', {
+        "type": "vector",
+        "url": "mapbox://mapbox.mapbox-traffic-v1"
+      });
+      map.addLayer({
+        "id": "traffic",
+        "source": "mapbox-traffic",
+        "source-layer": "traffic",
+        "type": "line",
+        "paint": {
+          "line-offset": 2,
+          "line-width": 3,
+          "line-opacity": [
+            "case",
+            [
+              "==",
+              "low",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            0,
+            1
+          ],
+          "line-color": [
+            "case",
+            [
+              "==",
+              "low",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            "#ffffff",
+            [
+              "==",
+              "moderate",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            "#ea9c2f",
+            [
+              "==",
+              "heavy",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            "#ae150f",
+            [
+              "==",
+              "severe",
+              [
+                "get",
+                "congestion"
+              ]
+            ],
+            "#391b25",
+            "#000000"
+          ]
+        }
+      });
+
+
       // Prepare empty Route Layer
       map.addSource('route', {
         'type': 'geojson',
