@@ -165,12 +165,14 @@
       height: 40px;
       margin: 5px;
       background-image: url("https://img.icons8.com/ios-glyphs/40/d7d7d7/traffic-jam.png");
+      <?php if ($darkmode) {echo "background-image: url('https://img.icons8.com/ios-glyphs/40/333333/traffic-jam.png');  /* dark theme */";} ?>
       background-repeat: no-repeat;
       display: inline-block;
     }
 
     .mapboxgl-ctrl-icon.mapboxgl-ctrl-traffic > .mapboxgl-ctrl-traffic-icon-active {
       background-image: url("https://img.icons8.com/ios-glyphs/40/333333/traffic-jam.png");
+      <?php if ($darkmode) {echo "background-image: url('https://img.icons8.com/ios-glyphs/40/d7d7d7/traffic-jam.png');  /* dark theme */";} ?>
     }
 
     .mapboxgl-ctrl-icon.mapboxgl-ctrl-autozoom > .mapboxgl-ctrl-autozoom-icon {
@@ -971,8 +973,10 @@
     function toggleTraffic() {
       if (map.getLayoutProperty('traffic', 'visibility') === 'visible') {
         map.setLayoutProperty('traffic', 'visibility', 'none');
+        el_traffic.className = 'mapboxgl-ctrl-traffic-icon';
       } else {
         map.setLayoutProperty('traffic', 'visibility', 'visible');
+        el_traffic.className = 'mapboxgl-ctrl-traffic-icon-active';
       }
 
     };
