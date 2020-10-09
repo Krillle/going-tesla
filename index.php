@@ -646,7 +646,7 @@
 
     nav._traffic = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-traffic', 'Toggle Traffic', () => toggleTraffic());
     const el_traffic = window.document.createElement('span');
-    el_traffic.className = 'mapboxgl-ctrl-traffic-icon';
+    el_traffic.className = getCookie('traffic') === 'visible' ? 'mapboxgl-ctrl-traffic-icon-active' : 'mapboxgl-ctrl-traffic-icon';
     nav._trafficIcon = nav._traffic.appendChild(el_traffic);
     map.addControl(nav, 'bottom-right');
 
@@ -684,7 +684,7 @@
         "source-layer": "traffic",
         "type": "line",
         'layout': {
-          'visibility': 'visible',
+          'visibility': getCookie('traffic') === 'visible' ? 'visible' : 'none',
         },
         "paint": {
           "line-offset": 2,
@@ -974,9 +974,11 @@
       if (map.getLayoutProperty('traffic', 'visibility') === 'visible') {
         map.setLayoutProperty('traffic', 'visibility', 'none');
         el_traffic.className = 'mapboxgl-ctrl-traffic-icon';
+        document.cookie = 'traffic=none; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
       } else {
         map.setLayoutProperty('traffic', 'visibility', 'visible');
         el_traffic.className = 'mapboxgl-ctrl-traffic-icon-active';
+        document.cookie = 'traffic=visible; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
       }
 
     };
