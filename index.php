@@ -816,7 +816,7 @@
                 "congestion"
               ]
             ],
-            "#ad7a4a",
+            "#cc9c5d",
             [
               "==",
               "heavy",
