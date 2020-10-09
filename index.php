@@ -807,7 +807,7 @@
                 "congestion"
               ]
             ],
-            "#aab7ef",
+            "#ffffff",
             [
               "==",
               "moderate",
@@ -816,7 +816,7 @@
                 "congestion"
               ]
             ],
-            "#4264fb",
+            "#af8662",
             [
               "==",
               "heavy",
@@ -825,7 +825,7 @@
                 "congestion"
               ]
             ],
-            "#ee4e8b",
+            "#a44953",
             [
               "==",
               "severe",
@@ -834,7 +834,7 @@
                 "congestion"
               ]
             ],
-            "#b43b71",
+            "#4e2532",
             "#000000"
           ]
         }
