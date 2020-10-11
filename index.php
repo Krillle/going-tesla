@@ -642,7 +642,7 @@
     // const el_satellite = window.document.createElement('span');
     // el_satellite.className = 'mapboxgl-ctrl-satellite-icon';
     // nav._satelliteIcon = nav._satellite.appendChild(el_satellite);
-    // map.addControl(nav, 'bottom-right');
+    // map.addControl(nav, 'bottom-right'); 
 
     nav._traffic = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-traffic', 'Toggle Traffic', () => toggleTraffic());
     const el_traffic = window.document.createElement('span');
