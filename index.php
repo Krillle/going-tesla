@@ -638,11 +638,11 @@
       showZoom: false,
       visualizePitch: false
     })
-    // nav._satellite = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-satellite', 'Toggle Satellite', () => toggleSatellite());
-    // const el_satellite = window.document.createElement('span');
-    // el_satellite.className = 'mapboxgl-ctrl-satellite-icon';
-    // nav._satelliteIcon = nav._satellite.appendChild(el_satellite);
-    // map.addControl(nav, 'bottom-right');
+    nav._satellite = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-satellite', 'Toggle Satellite', () => toggleSatellite());
+    const el_satellite = window.document.createElement('span');
+    el_satellite.className = 'mapboxgl-ctrl-satellite-icon';
+    nav._satelliteIcon = nav._satellite.appendChild(el_satellite);
+    map.addControl(nav, 'bottom-right');
 
     nav._traffic = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-traffic', 'Toggle Traffic', () => toggleTraffic());
     const el_traffic = window.document.createElement('span');
@@ -673,6 +673,28 @@
 
 
     map.on('load', function() {
+      // Prepare empty Route Layer
+      map.addSource('route', {
+        'type': 'geojson',
+        'data': {
+          "type": "FeatureCollection",
+          "features": []
+        }
+      });
+      map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#'+routeColor,
+          'line-width': 6
+        }
+      });
+
       // Prepare Traffic Layer
       map.addSource('mapbox-traffic', {
         "type": "vector",
@@ -742,29 +764,6 @@
             "#650b08",
             "#000000"
           ]
-        }
-      });
-
-
-      // Prepare empty Route Layer
-      map.addSource('route', {
-        'type': 'geojson',
-        'data': {
-          "type": "FeatureCollection",
-          "features": []
-        }
-      });
-      map.addLayer({
-        'id': 'route',
-        'type': 'line',
-        'source': 'route',
-        'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        'paint': {
-          'line-color': '#'+routeColor,
-          'line-width': 6
         }
       });
 
@@ -967,7 +966,7 @@
     };
 
     function toggleSatellite() {
-
+      map.setStyle(mapStyleSatellite);
     };
 
     function toggleTraffic() {
