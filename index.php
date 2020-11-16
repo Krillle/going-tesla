@@ -56,7 +56,26 @@
     gtag('config', 'UA-154570316-1');
   </script>
   <meta charset='utf-8' />
-  <title>Goingtesla</title>
+  <title>Goingtesla - Laden auf der Langstrecke</title>
+  <!-- Social Media Meta Tags -->
+  <meta name="title" content="Goingtesla - Laden auf der Langstrecke">
+  <meta name="description" content="Zeigt auf dem Touchscreen im Tesla alle Schnellader auf der Strecke und mit welcher Restreichweite du dort jeweils vorbeikommst. So kannst du laden wann du willst oder wenn du musst.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://goingtesla-dev.mycaptain.cloud/">
+  <meta property="og:title" content="Goingtesla - Laden auf der Langstrecke">
+  <meta property="og:description" content="Zeigt auf dem Touchscreen im Tesla alle Schnellader auf der Strecke und mit welcher Restreichweite du dort jeweils vorbeikommst. So kannst du laden wann du willst oder wenn du musst.">
+  <meta property="og:image" content="https://goingtesla-dev.mycaptain.cloud/lib/gointesla.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://goingtesla-dev.mycaptain.cloud/">
+  <meta property="twitter:title" content="Goingtesla - Laden auf der Langstrecke">
+  <meta property="twitter:description" content="Zeigt auf dem Touchscreen im Tesla alle Schnellader auf der Strecke und mit welcher Restreichweite du dort jeweils vorbeikommst. So kannst du laden wann du willst oder wenn du musst.">
+  <meta property="twitter:image" content="https://goingtesla-dev.mycaptain.cloud/lib/gointesla.png">
+  <!-- End Social Media Meta Tags -->
+
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
@@ -642,7 +661,7 @@
     // const el_satellite = window.document.createElement('span');
     // el_satellite.className = 'mapboxgl-ctrl-satellite-icon';
     // nav._satelliteIcon = nav._satellite.appendChild(el_satellite);
-    // map.addControl(nav, 'bottom-right'); 
+    // map.addControl(nav, 'bottom-right');
 
     nav._traffic = nav._createButton('mapboxgl-ctrl-icon mapboxgl-ctrl-traffic', 'Toggle Traffic', () => toggleTraffic());
     const el_traffic = window.document.createElement('span');
@@ -1655,6 +1674,7 @@
 
       if (includeDistance) {
         var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
+        // var cont = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
       };
 
       var icon = (chargeLocation.fault_report) ? "faultReport" :
