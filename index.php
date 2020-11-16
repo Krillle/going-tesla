@@ -1955,7 +1955,7 @@
                      // `<br>${chargeLocation.operator}<p>` :
                      '<p>';
 
-      description += `${chargeLocation.count}x ${chargeLocation.power} kW ${chargeLocation.type}`;
+      description += `${chargeLocation.count}× ${chargeLocation.power} kW ${chargeLocation.type}`;
       description += `<span id='location_description_${id}'></span><p>`;
       description += `<span id='fault_report_${id}'></span>`;
       description += '<hr>';
