@@ -1679,7 +1679,7 @@
         var detourRaw = route.distanceRaw + remain.distanceRaw - currentRoute.distanceRaw;
         var delayRaw = route.durationRaw + remain.durationRaw - currentRoute.durationRaw;
         var detour = detourRaw.toFixed((result.routes[0].distance < 10) ? 1 : 0).toString().replace(".",",")  + ' km';
-        var delay = '+'(delayRaw / 60).toFixed(0) + ' Min';
+        var delay = '+' + (delayRaw / 60).toFixed(0) + ' Min';
       };
 
       var icon = (chargeLocation.fault_report) ? "faultReport" :
