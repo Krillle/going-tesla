@@ -1679,7 +1679,7 @@
         var detourRaw = route.distanceRaw + remain.distanceRaw - currentRoute.distanceRaw;
         var delayRaw = route.durationRaw + remain.durationRaw - currentRoute.durationRaw;
         var detour = detourRaw.toFixed((result.routes[0].distance < 10) ? 1 : 0).toString().replace(".",",")  + ' km';
-        var delay = '+' + (delayRaw / 60).toFixed(0) + ' Min';
+        var delay = '+' + Math.max(delayRaw/60,0).toFixed(0) + ' Min';
       };
 
       var icon = (chargeLocation.fault_report) ? "faultReport" :
@@ -1863,7 +1863,7 @@
         routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img class="battery-icon" src="${batteryImage(chargeLocation.properties.rangeRaw)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.network && !chargeLocation.properties.name.includes(chargeLocation.properties.network) ? chargeLocation.properties.network : ''} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}, ${chargeLocation.properties.delay}</p>`;
+        routeChargerList += `${chargeLocation.properties.count}× ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}, ${chargeLocation.properties.delay}</p>`;
         routeChargerList += `</div></a>`;
       });
 
