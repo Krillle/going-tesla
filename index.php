@@ -59,7 +59,7 @@
   <title>Goingtesla - Laden auf der Langstrecke</title>
   <!-- Social Media Meta Tags -->
   <meta name="title" content="Goingtesla - Laden auf der Langstrecke">
-  <meta name="description" content="Zeigt auf dem Touchscreen im Tesla alle Schnellader auf der Strecke und mit welcher Restreichweite du dort jeweils vorbeikommst. So kannst du laden wann du willst oder wenn du musst.">
+  <meta name="description" content="Alle Schnellader auf der Strecke mit Restreichweite bei Ankunft auf dem Touchscreen im Tesla. Entscheide selbst wann du laden willst oder musst.">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -1674,7 +1674,12 @@
 
       if (includeDistance) {
         var route = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
-        // var cont = getRoute(teslaPosition,{'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat});
+        var remain = getRoute({'longitude' : chargeLocation.coordinates.lng, 'latitude' : chargeLocation.coordinates.lat}, {'longitude' : currentDestination.center[0], 'latitude' : currentDestination.center[1]});
+
+        var detourRaw = route.distanceRaw + remain.distanceRaw - currentRoute.distanceRaw;
+        var delayRaw = route.durationRaw + remain.durationRaw - currentRoute.durationRaw;
+        var detour = detourRaw.toFixed((result.routes[0].distance < 10) ? 1 : 0).toString().replace(".",",")  + ' km';
+        var delay = secondsToTime(delayRaw);
       };
 
       var icon = (chargeLocation.fault_report) ? "faultReport" :
@@ -1706,7 +1711,9 @@
           "distance" : includeDistance ? route.distance : false,
           "duration" : includeDistance ? route.duration : false,
           "rangeRaw" : includeDistance ? route.rangeRaw : false,
-          "range" : includeDistance ? route.range : false
+          "range" : includeDistance ? route.range : false,
+          "detour" : includeDistance ? detour : false,
+          "delay" : includeDistance ? delay : false
         },
         "geometry": {
           "type": "Point",
@@ -1856,7 +1863,7 @@
         routeChargerList += `<td align="right" style="padding: 0px;margin: 0px;"><img class="battery-icon" src="${batteryImage(chargeLocation.properties.rangeRaw)}">${chargeLocation.properties.range ? chargeLocation.properties.range : ""}</td>`;
         routeChargerList += `</tr></tbody></table>`;
         routeChargerList += `${chargeLocation.properties.network && !chargeLocation.properties.name.includes(chargeLocation.properties.network) ? chargeLocation.properties.network : ''} ${chargeLocation.properties.name} ${chargeLocation.properties.name.includes(chargeLocation.properties.city) ? '' : chargeLocation.properties.city}<br>`;
-        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}</p>`;
+        routeChargerList += `${chargeLocation.properties.count}x ${chargeLocation.properties.power} kW ${chargeLocation.properties.type}, ${chargeLocation.properties.detour}, ${chargeLocation.properties.delay}</p>`;
         routeChargerList += `</div></a>`;
       });
 
