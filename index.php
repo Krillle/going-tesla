@@ -66,14 +66,14 @@
   <meta property="og:url" content="https://goingtesla-dev.mycaptain.cloud/">
   <meta property="og:title" content="Goingtesla - Laden auf der Langstrecke">
   <meta property="og:description" content="Zeigt auf dem Touchscreen im Tesla alle Schnellader auf der Strecke und mit welcher Restreichweite du dort jeweils vorbeikommst. So kannst du laden wann du willst oder wenn du musst.">
-  <meta property="og:image" content="https://goingtesla-dev.mycaptain.cloud/lib/gointesla.png">
+  <meta property="og:image" content="https://goingtesla-dev.mycaptain.cloud/lib/goingtesla.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://goingtesla-dev.mycaptain.cloud/">
   <meta property="twitter:title" content="Goingtesla - Laden auf der Langstrecke">
   <meta property="twitter:description" content="Zeigt auf dem Touchscreen im Tesla alle Schnellader auf der Strecke und mit welcher Restreichweite du dort jeweils vorbeikommst. So kannst du laden wann du willst oder wenn du musst.">
-  <meta property="twitter:image" content="https://goingtesla-dev.mycaptain.cloud/lib/gointesla.png">
+  <meta property="twitter:image" content="https://goingtesla-dev.mycaptain.cloud/lib/goingtesla.png">
   <!-- End Social Media Meta Tags -->
 
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
