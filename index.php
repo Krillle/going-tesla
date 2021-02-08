@@ -1862,7 +1862,8 @@
                (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
                parkChargerImage;
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;${chargeLocation.properties.rangeRaw < 0 || chargeLocation.properties.delayRaw > 9 ? ' opacity: 0.5;' : ''}">`;
+        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;${chargeLocation.properties.rangeRaw < 0 || chargeLocation.properties.delayRaw > 2 ? ' opacity: 0.5;' : ''}">`;
+        debugLog(chargeLocation.properties.name, chargeLocation.properties.delayRaw);
         routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
         routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
         routeChargerList += `</div>`;
