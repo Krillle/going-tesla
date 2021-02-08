@@ -520,6 +520,8 @@ var_dump(file_get_contents('php://input'));
 
 $body = json_decode(file_get_contents('php://input'), true);
 
+var_dump($body);
+
 
 // var_dump($t->getAccessToken($_POST["email"], $_POST["password"]));
 
