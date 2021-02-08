@@ -516,7 +516,7 @@ $secret=explode('=',$api[1]);
 $t->setClientId(trim($id[1]));
 $t->setClientSecret(trim($secret[1]));
 
-var_dump($_POST)
+var_dump($_POST);
 
 $body = json_decode($_POST[0], true);
 
