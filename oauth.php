@@ -519,4 +519,11 @@ $t->setClientSecret(trim($secret[1]));
 print($_POST["email"]);
 print($_POST["password"]);
 
+$body = json_encode($_POST);
+print($body["email"]);
+print($body["password"]);
+
+
+// var_dump($t->getAccessToken($_POST["email"], $_POST["password"]));
+
 ?>
