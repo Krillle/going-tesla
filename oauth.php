@@ -516,10 +516,9 @@ $secret=explode('=',$api[1]);
 $t->setClientId(trim($id[1]));
 $t->setClientSecret(trim($secret[1]));
 
-print($_POST["email"]);
-print($_POST["password"]);
+var_dump($_POST)
 
-$body = json_decode($_POST, true);
+$body = json_decode($_POST[0], true);
 
 var_dump($body);
 
