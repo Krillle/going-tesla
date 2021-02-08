@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Tesla OAuth Token Proxy
+ * Based on PHP to Generate Refresh Token
+ * https://github.com/timdorr/tesla-api/discussions/288
+ *
+ */
+
 class Tesla
 {
 protected $apiBaseUrl = "https://owner-api.teslamotors.com/api/1";
