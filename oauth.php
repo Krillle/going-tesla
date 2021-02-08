@@ -517,6 +517,6 @@ $t->setClientId(trim($id[1]));
 $t->setClientSecret(trim($secret[1]));
 
 $body = json_decode(file_get_contents('php://input'), true);
-var_dump($t->getAccessToken($body['email'], $body['password']));
+print(json_encode($t->getAccessToken($body['email'], $body['password'])));
 
 ?>
