@@ -516,9 +516,9 @@ $secret=explode('=',$api[1]);
 $t->setClientId(trim($id[1]));
 $t->setClientSecret(trim($secret[1]));
 
-var_dump($_POST);
+var_dump(file_get_contents('php://input'));
 
-$body = json_decode($_POST[0], true);
+$body = json_decode(file_get_contents('php://input'), true);
 
 
 // var_dump($t->getAccessToken($_POST["email"], $_POST["password"]));
