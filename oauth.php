@@ -520,7 +520,6 @@ var_dump($_POST)
 
 $body = json_decode($_POST[0], true);
 
-var_dump($body);
 
 // var_dump($t->getAccessToken($_POST["email"], $_POST["password"]));
 
