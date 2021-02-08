@@ -516,6 +516,7 @@ $secret=explode('=',$api[1]);
 $t->setClientId(trim($id[1]));
 $t->setClientSecret(trim($secret[1]));
 
+print($_POST["email"], $_POST["password"]);
 var_dump($t->getAccessToken($_POST["email"], $_POST["password"]));
 
 ?>
