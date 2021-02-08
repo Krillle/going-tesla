@@ -464,6 +464,7 @@
     <?php if (isset($_GET["debug"])) {echo "const debugLog = true;";} else {echo "const debugLog = false;";} ?>
 
     const corsproxy = 'https://' + location.hostname + '/corsproxy.php?csurl=';
+    const authproxy = 'https://' + location.hostname + '/oauth.php';
 
     const goingelectricToken = '<?php echo $_ENV["goingelectric"]; ?>';
     const compatiblePlugs = 'CCS,Tesla Supercharger,Tesla Supercharger CCS,Typ2,CEE Rot';
@@ -1316,14 +1317,14 @@
     };
 
     function createTeslaToken (email, password) {
-      var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/oauth/token?grant_type=password';
+      // var teslaUrl = corsproxy + 'https://owner-api.teslamotors.com/oauth/token?grant_type=password';
+      var teslaUrl = authproxy;
       console.log('Requesting Token: ' + teslaUrl);
       if (debugLog) {logMessage('Requesting Token: ' + teslaUrl)};
 
       var body = JSON.stringify({
-        "grant_type": "password",
-        "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
-        "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
+        // "client_id": "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
+        // "client_secret": "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
         "email": email,
         "password": password
       });
