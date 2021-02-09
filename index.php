@@ -1844,12 +1844,10 @@
       chargerList.chargelocations.forEach(chargeLocation => {
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
-            console.log('Check:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
             checkList.push(chargeLocation.ge_id);
             chargeLocation = chargeLocationDetails(chargeLocation,true);
-            console.log('Check:', chargeLocation.properties.id, chargeLocation.properties.name, chargeLocation.properties.city, chargeLocation.properties.delay, chargeLocation.properties.delayRaw);
+            console.log('Check:', chargeLocation.id, chargeLocation.properties.name, chargeLocation.properties.city, chargeLocation.properties.delay, chargeLocation.properties.delayRaw);
             if (chargeLocation.properties.delayRaw < maxChargerDelay) {
-              console.log('Add:', chargeLocation.properties.id, chargeLocation.properties.name, chargeLocation.properties.city, chargeLocation.properties.delay, chargeLocation.properties.delayRaw);
               routeChargers.features.push(chargeLocation);
             }
           }
