@@ -1838,15 +1838,17 @@
     };
 
     function processRouteSegments(i) {
-      var lineBox, chargeLocationProperties;
+      var lineBox;
       lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
       chargerList.chargelocations.forEach(chargeLocation => {
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
-            console.log('Add:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
+            console.log('Check:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
             checkList.push(chargeLocation.ge_id);
-            chargeLocationProperties = chargeLocationDetails(chargeLocation,true)
-            if (chargeLocationProperties.delayRaw < 15,5 * 60) { // list only chargers with max 15 min delay
+            chargeLocation = chargeLocationDetails(chargeLocation,true);
+            console.log('Check:', chargeLocation.properties.id, chargeLocation.properties.name, chargeLocation.properties.city, chargeLocation.properties.delay, chargeLocation.properties.delayRaw);
+            if (chargeLocation.properties.delayRaw < 15,5 * 60) { // list only chargers with max 15 min delay
+              console.log('Add:', chargeLocation.properties.id, chargeLocation.properties.name, chargeLocation.properties.city, chargeLocation.properties.delay, chargeLocation.properties.delayRaw);
               routeChargers.features.push(chargeLocationProperties);
             }
           }
