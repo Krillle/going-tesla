@@ -1846,7 +1846,7 @@
             console.log('Add:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
             checkList.push(chargeLocation.ge_id);
             chargeLocationProperties = chargeLocationDetails(chargeLocation,true)
-            if chargeLocationProperties.delayRaw < 15,5 * 60 { // list only chargers with max 15 min delay
+            if (chargeLocationProperties.delayRaw < 15,5 * 60) { // list only chargers with max 15 min delay
               routeChargers.features.push(chargeLocationProperties);
             }
           }
