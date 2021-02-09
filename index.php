@@ -544,6 +544,7 @@
     const highSpeedZoom = '9';
 
     const maxChargerDistance = 6000; // max senkrechter Abstand Charger von Route in m
+    const maxChargerDelay = 15.5 * 60; // max Umweg zu einem Charger auf der Route in s
 
     const connectionState = [ // Used for debug message
       'UNSENT',
@@ -1847,9 +1848,9 @@
             checkList.push(chargeLocation.ge_id);
             chargeLocation = chargeLocationDetails(chargeLocation,true);
             console.log('Check:', chargeLocation.properties.id, chargeLocation.properties.name, chargeLocation.properties.city, chargeLocation.properties.delay, chargeLocation.properties.delayRaw);
-            if (chargeLocation.properties.delayRaw < 15,5 * 60) { // list only chargers with max 15 min delay
+            if (chargeLocation.properties.delayRaw < maxChargerDelay) {
               console.log('Add:', chargeLocation.properties.id, chargeLocation.properties.name, chargeLocation.properties.city, chargeLocation.properties.delay, chargeLocation.properties.delayRaw);
-              routeChargers.features.push(chargeLocationProperties);
+              routeChargers.features.push(chargeLocation);
             }
           }
         }
