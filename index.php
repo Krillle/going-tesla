@@ -1838,14 +1838,17 @@
     };
 
     function processRouteSegments(i) {
-      var lineBox;
+      var lineBox, chargeLocationProperties;
       lineBox = distantLineBox([currentRoute.coordinates[i],currentRoute.coordinates[i+1]],maxChargerDistance);
       chargerList.chargelocations.forEach(chargeLocation => {
         if (!checkList.includes(chargeLocation.ge_id)) {
           if (pointIsInBox([chargeLocation.coordinates.lng, chargeLocation.coordinates.lat],lineBox)) {
             console.log('Add:', chargeLocation.ge_id, chargeLocation.name, chargeLocation.address.city);
             checkList.push(chargeLocation.ge_id);
-            routeChargers.features.push(chargeLocationDetails(chargeLocation,true));
+            chargeLocationProperties = chargeLocationDetails(chargeLocation,true)
+            if chargeLocationProperties.delayRaw < 15,5 * 60 { // list only chargers with max 15 min delay
+              routeChargers.features.push(chargeLocationProperties);
+            }
           }
         }
       });
@@ -1863,7 +1866,7 @@
                (chargeLocation.properties.icon == "highwayCharger") ? highwayChargerImage :
                parkChargerImage;
         routeChargerList += `<a href="#" onclick="flyToCharger(${chargeLocation.properties.coordinates.lng},${chargeLocation.properties.coordinates.lat},'${chargeLocation.properties.name}','${chargeLocation.properties.city}'); return false;">`;
-        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;${chargeLocation.properties.rangeRaw < 0 || chargeLocation.properties.delayRaw > 9.5 * 60 ? ' opacity: 0.5;' : ''}">`;
+        routeChargerList += `<div style="position: relative; padding-left: ${iconColumnWidth}px;${chargeLocation.properties.rangeRaw < 0 ? ' opacity: 0.5;' : ''}">`;
         routeChargerList += `<div style="position: absolute; left: -10px; width: ${iconColumnWidth}px;">`;
         routeChargerList += `<img style="display: block; margin-left: auto; margin-right: auto; padding-top: 20px;" src="${icon}"/>`
         routeChargerList += `</div>`;
