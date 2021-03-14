@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<title>Tesla Logout</title>
+  <?php ?>
+  <script>
+
+  function setCookies () {
+
+    // document.cookie = 'access=' + document.getElementById('accessToken').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+    console.log("Access: " + document.getElementById('accessToken').value);
+    // document.cookie = 'refresh=' + document.getElementById('refreshToken').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+    console.log("Refresh: " + document.getElementById('refreshToken').value);
+    // document.cookie = 'vehicle=' + document	.getElementById('vehicle').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+    console.log("Vehicle: " + document.getElementById('vehicle').value);
+
+  }
+
+  </script>
+	</head>
+	<body>
+    <h1>Tesla Connection</h1>
+		<form>
+		  <div class="form-group">
+		    <label>Access Token *</label> <input type="text" class="form-control" id="accessToken" placeholder="" required="required">
+		  </div>
+
+		  <div class="form-group">
+		    <label>Refresh Token</label> <input type="text" class="form-control" id="refreshToken" placeholder="">
+		  </div>
+
+		  <div class="form-group">
+		    <label>Vehicle</label> <input type="text" class="form-control" id="vehicle" placeholder="">
+		  </div>
+
+		  <div class="form-group">
+		    <input type="button" class="btn btn-primary" name="saveButton" value="Save" onclick="setCookies ();">
+		  </div><small>Felder markiert mit * sind Pflichtfelder.</small>
+		</form>
+	</body>
+</html>
