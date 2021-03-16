@@ -2,17 +2,17 @@
 <html lang="de">
 	<head>
 		<meta charset="utf-8" />
-		<title>Tesla Logout</title>
+		<title>Tesla Connection</title>
   <?php ?>
   <script>
 
   function setCookies () {
 
-    // document.cookie = 'access=' + document.getElementById('accessToken').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+    document.cookie = 'access=' + document.getElementById('accessToken').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
     console.log("Access: " + document.getElementById('accessToken').value);
-    // document.cookie = 'refresh=' + document.getElementById('refreshToken').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+    document.cookie = 'refresh=' + document.getElementById('refreshToken').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
     console.log("Refresh: " + document.getElementById('refreshToken').value);
-    // document.cookie = 'vehicle=' + document	.getElementById('vehicle').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+    document.cookie = 'vehicle=' + document	.getElementById('vehicle').value + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
     console.log("Vehicle: " + document.getElementById('vehicle').value);
 
   }
