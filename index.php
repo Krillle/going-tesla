@@ -608,9 +608,9 @@
 
     if (debugLog) {
       logMessage('Debug started')
-      logMessage('Access Token', teslaConnection.accessToken)
-      logMessage('Refresh Token', teslaConnection.refreshToken)
-      logMessage('Vehicle', teslaConnection.vehicle)
+      logMessage('Access Token ' + teslaConnection.accessToken)
+      logMessage('Refresh Token ' +  teslaConnection.refreshToken)
+      logMessage('Vehicle '+ teslaConnection.vehicle)
     };
 
     mapboxgl.accessToken = '<?php echo $_ENV["mapbox"]; ?>';
