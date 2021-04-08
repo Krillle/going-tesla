@@ -84,7 +84,7 @@
 
 	input {
 		width:60%;
-  	float:left;
+  	float:right;
 		font: 200 18px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     color: #8F8F8F;
 		height: 30px;
