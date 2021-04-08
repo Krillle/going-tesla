@@ -61,14 +61,15 @@
 		  </div>
 
 			<div class="form-group">
-		    <input type="button" class="btn btn-primary" name="setButton" value="load" onclick="setToken ();">
+		    <input type="button" class="btn btn-primary" name="setButton" value="Set" onclick="setToken ();">
 		  </div>
 			<div class="form-group">
-		    <input type="button" class="btn btn-primary" name="loadButton" value="load" onclick="presets ();">
+		    <input type="button" class="btn btn-primary" name="loadButton" value="Load" onclick="presets ();">
 		  </div>
 			<div class="form-group">
 		    <input type="button" class="btn btn-primary" name="saveButton" value="Save" onclick="setCookies ();">
-		  </div><small>Felder markiert mit * sind Pflichtfelder.</small>
+		  </div>
+			<div><small>Felder markiert mit * sind Pflichtfelder.</small></div>
 		</form>
 	</body>
 </html>
