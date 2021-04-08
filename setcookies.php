@@ -44,6 +44,27 @@
 	// document.onload = presets()
 
   </script>
+	<style>
+		a.popupbutton {
+	    box-sizing: border-box;
+	    display: inline-block;
+	    text-decoration: none;
+	    text-align: center;
+	    text-transform: uppercase;
+	    font-weight: 900;
+	    font-size: 18px;
+	    padding: 8px;
+	    padding-top: 21px;
+	    border-radius: 10px;
+	    width: 100%;
+	    height: 60px;
+	    background: #d6d6d6;
+	    margin: 0px 0;
+	    line-height: 1;
+	    break-inside: avoid-column;
+	    page-break-inside: avoid;
+	}
+	</style>
 	</head>
 	<body>
     <h1>Tesla Connection</h1>
@@ -69,6 +90,7 @@
 			<div class="form-group">
 		    <input type="button" class="btn btn-primary" name="saveButton" value="Save" onclick="setCookies ();">
 		  </div>
+			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a></div>;
 			<div><small>Felder markiert mit * sind Pflichtfelder.</small></div>
 		</form>
 	</body>
