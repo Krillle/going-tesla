@@ -55,16 +55,39 @@
 			text-transform: uppercase;
 	}
 
+	#formContainer{
+	  width:40%;
+	  margin:auto;
+	}
+
+	#formC{
+	  width:100%;
+	}
+
+	.rows{
+	  width:100%;
+	  display:block;
+
+	}
+	.column{
+	    width:100%;
+	    display:inline-block;
+
+	}
 	label {
+		width:30%
+		float:left;
 		font: 200 18px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     color: #8F8F8F;
 	}
 
 	input {
+		width:60%;
+  	float:right;
 		font: 200 18px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     color: #8F8F8F;
 		height: 30px;
-		width: 500px;
+		width: 750px;
 
 	}
 
@@ -93,16 +116,17 @@
 	</head>
 	<body>
     <h1>Tesla Connection</h1>
-		<form>
-		  <div class="form-group">
+		<form id="formC">
+	  <div class="rows">
+		  <div class="column">
 		    <label>Access Token</label> <input type="text" class="form-control" id="accessToken" placeholder="" required="required">
 		  </div>
 
-		  <div class="form-group">
+		  <div class="column">
 		    <label>Refresh Token</label> <input type="text" class="form-control" id="refreshToken" placeholder="">
 		  </div>
 
-		  <div class="form-group">
+		  <div class="column">
 		    <label>Vehicle</label> <input type="text" class="form-control" id="vehicle" placeholder="">
 		  </div>
 			<p></p>
@@ -112,6 +136,7 @@
 			<p></p>
 			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="setCookies(); return false;">Set Cookies</a></div>
 			<p></p>
+		</div>
 		</form>
 	</body>
 </html>
