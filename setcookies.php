@@ -45,10 +45,6 @@
 
   </script>
 	<style>
-	 p {
-    font: 200 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-    color: #8F8F8F;
-	}
 	 a.popupbutton {
     font: 400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     color: #8F8F8F;
