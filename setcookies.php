@@ -45,6 +45,7 @@
 
   </script>
 	<style>
+
 	body {
 		margin:20;
 		padding:20;
@@ -83,7 +84,7 @@
 
 	input {
 		width:60%;
-  	float:right;
+  	float:left;
 		font: 200 18px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     color: #8F8F8F;
 		height: 30px;
