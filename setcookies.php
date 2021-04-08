@@ -45,12 +45,13 @@
 
   </script>
 	<style>
-	 a.popupbutton {
-    font: 400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+	label {
+		font: 200 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     color: #8F8F8F;
 	}
-	}
-		a.popupbutton {
+	a.popupbutton {
+			font: 400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+	    color: #8F8F8F;
 	    box-sizing: border-box;
 	    display: inline-block;
 	    text-decoration: none;
