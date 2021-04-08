@@ -45,6 +45,9 @@
 
   </script>
 	<style>
+	 a.popupbutton {
+    font: 400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+	}
 		a.popupbutton {
 	    box-sizing: border-box;
 	    display: inline-block;
