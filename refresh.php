@@ -15,6 +15,7 @@ $t->setClientSecret(trim($secret[1]));
 
 $body = json_decode(file_get_contents('php://input'), true);
 
+echo $body;
 echo $body['refreshtoken'];
 
 print(json_encode($t->refreshAccessToken($body['refreshtoken'])));
