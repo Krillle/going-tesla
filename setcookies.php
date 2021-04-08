@@ -49,6 +49,10 @@
 		font: 200 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     color: #8F8F8F;
 	}
+	input {
+		font: 200 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    color: #8F8F8F;
+	}
 	a.popupbutton {
 			font: 400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
 	    color: #8F8F8F;
@@ -86,9 +90,10 @@
 		  <div class="form-group">
 		    <label>Vehicle</label> <input type="text" class="form-control" id="vehicle" placeholder="">
 		  </div>
-			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="setToken(); return false;">Add Token</a></div>;
-			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="presets(); return false;">Load Cookies</a></div>;
-			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="setCookies(); return false;">Set Cookies</a></div>;
+			<p></p>
+			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="setToken(); return false;">Add Token</a></div>
+			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="presets(); return false;">Load Cookies</a></div>
+			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="setCookies(); return false;">Set Cookies</a></div>
 			<div><small>Felder markiert mit * sind Pflichtfelder.</small></div>
 		</form>
 	</body>
