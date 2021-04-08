@@ -45,7 +45,10 @@
 
   </script>
 	<style>
-	body { margin:20; padding:20; }
+	body {
+		margin:20;
+		padding:20;
+	}
 	h1 {
 			font: 400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
 	    color: #8F8F8F;
@@ -61,7 +64,7 @@
 		font: 200 18px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
     color: #8F8F8F;
 		height: 30px;
-		width: 280px;
+		width: 500px;
 
 	}
 
