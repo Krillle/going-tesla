@@ -1,7 +1,5 @@
 <?php
 
-echo "Hello API";
-
 /**
  * Tesla OAuth Token Proxy
  * Based on PHP to Generate Refresh Token
