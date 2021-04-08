@@ -45,8 +45,14 @@
 
   </script>
 	<style>
+	 p {
+    font: 200 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    color: #8F8F8F;
+	}
 	 a.popupbutton {
     font: 400 20px/1.15 'Gotham Medium', 'Verdana', 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    color: #8F8F8F;
+	}
 	}
 		a.popupbutton {
 	    box-sizing: border-box;
@@ -83,17 +89,9 @@
 		  <div class="form-group">
 		    <label>Vehicle</label> <input type="text" class="form-control" id="vehicle" placeholder="">
 		  </div>
-
-			<div class="form-group">
-		    <input type="button" class="btn btn-primary" name="setButton" value="Set" onclick="setToken ();">
-		  </div>
-			<div class="form-group">
-		    <input type="button" class="btn btn-primary" name="loadButton" value="Load" onclick="presets ();">
-		  </div>
-			<div class="form-group">
-		    <input type="button" class="btn btn-primary" name="saveButton" value="Save" onclick="setCookies ();">
-		  </div>
-			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="cancelRouteChargerList(); return false;">Abbrechen</a></div>;
+			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="setToken(); return false;">Add Token</a></div>;
+			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="presets(); return false;">Load Cookies</a></div>;
+			<div><a class="popupbutton" href="#" style="width: 280px;" onclick="setCookies(); return false;">Set Cookies</a></div>;
 			<div><small>Felder markiert mit * sind Pflichtfelder.</small></div>
 		</form>
 	</body>
