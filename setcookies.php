@@ -34,6 +34,13 @@
 	 	document.getElementById("vehicle").value = getCookie('vehicle') || "";
 	}
 
+	function setToken() {
+		console.log("Set Token started")
+		document.getElementById("accessToken").value = '<?php echo $_ENV["token"]; ?>' || "";
+		document.getElementById("refreshToken").value = getCookie('refresh') || "";
+	 	document.getElementById("vehicle").value = getCookie('vehicle') || "";
+	}
+
 	// document.onload = presets()
 
   </script>
@@ -53,6 +60,9 @@
 		    <label>Vehicle</label> <input type="text" class="form-control" id="vehicle" placeholder="">
 		  </div>
 
+			<div class="form-group">
+		    <input type="button" class="btn btn-primary" name="setButton" value="load" onclick="setToken ();">
+		  </div>
 			<div class="form-group">
 		    <input type="button" class="btn btn-primary" name="loadButton" value="load" onclick="presets ();">
 		  </div>
