@@ -1739,7 +1739,7 @@
 
     function chargerListHeader() {
       var routeChargerList = '';
-      routeChargerList += `<div style="max-height: ${y-120}px; box-sizing: border-box; overflow-y: auto; padding: 0px 20px;">`;
+      routeChargerList += `<div style="max-height: ${y-180}px; box-sizing: border-box; overflow-y: auto; padding: 0px 20px;">`;
       return routeChargerList;
     };
 
