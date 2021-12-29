@@ -591,7 +591,6 @@
     };
     
     var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
-    if (debugLog) {logMessage('Screen Height: ' + y + 'px')};
 
     var infoContainer = document.getElementById('info');
     var rangeContainer = document.getElementById('range');
@@ -612,6 +611,7 @@
       logMessage('Access Token ' + teslaConnection.accessToken)
       logMessage('Refresh Token ' +  teslaConnection.refreshToken)
       logMessage('Vehicle '+ teslaConnection.vehicle)
+      logMessage('Screen Height: ' + y + 'px')
     };
 
     mapboxgl.accessToken = '<?php echo $_ENV["mapbox"]; ?>';
