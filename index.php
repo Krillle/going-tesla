@@ -591,6 +591,8 @@
       decodeHash(location.hash);
 
     };
+    
+    var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
 
     var infoContainer = document.getElementById('info');
     var rangeContainer = document.getElementById('range');
@@ -1739,7 +1741,7 @@
 
     function chargerListHeader() {
       var routeChargerList = '';
-      routeChargerList += `<div style="max-height: 660px; box-sizing: border-box; overflow-y: auto; padding: 0px 20px;">`;
+      routeChargerList += `<div style="max-height: ${y-120}px; box-sizing: border-box; overflow-y: auto; padding: 0px 20px;">`;
       return routeChargerList;
     };
 
