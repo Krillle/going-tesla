@@ -307,7 +307,6 @@
     	display: inline-block;
     	text-decoration: none;
     	text-align: center;
-      text-transform: uppercase;
       font-weight: 900;
       font-size: 18px;
     	padding: 8px;
@@ -415,7 +414,6 @@
       z-index: 1;
 
       width: 400px;
-      max-height: 800px;
       box-sizing: border-box;
       overflow-y: auto;
 
