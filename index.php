@@ -1235,21 +1235,27 @@
           var vehicleData = JSON.parse(this.responseText);
 
           if (initial) {
-            if (debugLog) {logMessage('Initial: Checking Vehicle Data')};
+            if (debugLog) {logMessage('Initial: Vehicle Data:',vehicleData)};
             console.log('Vehicle Data:',vehicleData);
             if (vehicleData == null) {
-              teslaConnection.status = 'Ungültiges Token';
+              teslaConnection.status = 'Keine Antwort';
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
-              gtag('event', 'Invalid Token', {'event_category': 'Connect'});
+              gtag('event', 'No Answer', {'event_category': 'Connect'});
               return;
             } else if (vehicleData.error == 'invalid bearer token') {
-              teslaConnection.status = 'Ungültiges Token';
-              console.log(teslaConnection.status);
-              infoMessage(teslaConnection.status);
               if (teslaConnection.refreshToken) {
-                infoMessage('Refreshing Token');
+                teslaConnection.status = 'Erneuere Token';
+                console.log(teslaConnection.status);
+                infoMessage(teslaConnection.status);
+                gtag('event', 'Refreshing Token', {'event_category': 'Connect'});
                 refreshTeslaToken();
+              } else {
+                teslaConnection.status = 'Kein Refresh Token';
+                console.log(teslaConnection.status);
+                infoMessageg(teslaConnection.status);
+                gtag('event', 'No Refresh Token', {'event_category': 'Connect'});
+                return;
               }
             } else if (vehicleData.response == null) {
               // Car sleeps
@@ -1400,8 +1406,8 @@
 
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
-          console.log("GetToken Listener Result: " + this.responseText);
-          if (debugLog) {logMessage("GetToken Listener Result: " + this.responseText)};
+          console.log("refreshToken Listener Result: " + this.responseText);
+          if (debugLog) {logMessage("refreshToken Listener Result: " + this.responseText)};
 
           var result = JSON.parse(this.responseText);
           teslaConnection.accessToken = result.access_token;
