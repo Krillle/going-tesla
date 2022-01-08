@@ -638,7 +638,7 @@
         'name': destination.result.place_name,
         'text': destination.result.text
       };
-      document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+      document.cookie = 'destination=' + encodeURIComponent(JSON.stringify(currentDestination)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC;';
 
       gtag('event', 'Route Chargers', {'event_category': 'Destination', 'event_label': `${currentDestination.text}`});
       updateRouteChargerList(true);
@@ -1006,11 +1006,11 @@
       if (map.getLayoutProperty('traffic', 'visibility') === 'visible') {
         map.setLayoutProperty('traffic', 'visibility', 'none');
         el_traffic.className = 'mapboxgl-ctrl-traffic-icon';
-        document.cookie = 'traffic=none; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+        document.cookie = 'traffic=none; expires=Thu, 10 Aug 2022 12:00:00 UTC;';
       } else {
         map.setLayoutProperty('traffic', 'visibility', 'visible');
         el_traffic.className = 'mapboxgl-ctrl-traffic-icon-active';
-        document.cookie = 'traffic=visible; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+        document.cookie = 'traffic=visible; expires=Thu, 10 Aug 2022 12:00:00 UTC;';
       }
 
     };
@@ -1223,7 +1223,7 @@
         'zoom': zoom,
         'range': milesToKm(vehicleData.charge_state.est_battery_range).kmRaw
       };
-      document.cookie = 'location=' + encodeURIComponent(JSON.stringify(teslaPosition)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+      document.cookie = 'location=' + encodeURIComponent(JSON.stringify(teslaPosition)) + '; expires=Thu, 10 Aug 2022 12:00:00 UTC;';
     };
 
     function updatePosition(initial) {
@@ -1349,8 +1349,8 @@
           // result.expires_in
           // result.created_at
 
-          document.cookie = 'access=' + teslaConnection.accessToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
-          document.cookie = 'refresh=' + teslaConnection.refreshToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+          document.cookie = 'access=' + teslaConnection.accessToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC;';
+          document.cookie = 'refresh=' + teslaConnection.refreshToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC;';
 
           console.log("Access: " + teslaConnection.accessToken);
           console.log("Refresh: " + teslaConnection.refreshToken);
@@ -1360,7 +1360,7 @@
               var result = JSON.parse(this.responseText);
               teslaConnection.vehicle = result.response[0].id_s;
 
-              document.cookie = 'vehicle=' + teslaConnection.vehicle + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+              document.cookie = 'vehicle=' + teslaConnection.vehicle + '; expires=Thu, 10 Aug 2022 12:00:00 UTC;';
               console.log("Vehicle: " + teslaConnection.vehicle);
 
               connectTesla();
