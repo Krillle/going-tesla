@@ -231,7 +231,6 @@
 
     .mapboxgl-ctrl-geocoder--icon {
       top: 18px;
-      left: 5px;
       width: 25px;
       height: 25px;
     }
@@ -589,7 +588,7 @@
       decodeHash(location.hash);
 
     };
-    
+
     var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
 
     var infoContainer = document.getElementById('info');
@@ -1389,7 +1388,7 @@
 
       xhr.send(body);
     };
-    
+
     function refreshTeslaToken() {
       var teslaUrl = corsproxy + 'https://auth.tesla.com/oauth2/v3/token';
       console.log('Refreshing Token: ' + teslaUrl);
@@ -1431,7 +1430,7 @@
           });
         }
       });
-      
+
       xhr.open("POST", teslaUrl);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("cache-control", "no-cache");
