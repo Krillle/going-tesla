@@ -307,7 +307,6 @@
     	display: inline-block;
     	text-decoration: none;
     	text-align: center;
-      text-transform: uppercase;
       font-weight: 900;
       font-size: 18px;
     	padding: 8px;
@@ -415,7 +414,6 @@
       z-index: 1;
 
       width: 400px;
-      max-height: 800px;
       box-sizing: border-box;
       overflow-y: auto;
 
@@ -591,6 +589,8 @@
       decodeHash(location.hash);
 
     };
+    
+    var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
 
     var infoContainer = document.getElementById('info');
     var rangeContainer = document.getElementById('range');
@@ -611,6 +611,7 @@
       logMessage('Access Token ' + teslaConnection.accessToken)
       logMessage('Refresh Token ' +  teslaConnection.refreshToken)
       logMessage('Vehicle '+ teslaConnection.vehicle)
+      logMessage('Screen Height: ' + y + 'px')
     };
 
     mapboxgl.accessToken = '<?php echo $_ENV["mapbox"]; ?>';
@@ -1234,15 +1235,28 @@
           var vehicleData = JSON.parse(this.responseText);
 
           if (initial) {
-            if (debugLog) {logMessage('Initial: Checking Vehicle Data')};
+            if (debugLog) {logMessage('Initial: Vehicle Data:',vehicleData)};
             console.log('Vehicle Data:',vehicleData);
             if (vehicleData == null) {
-              teslaConnection.status = 'Ungültiges Token';
+              teslaConnection.status = 'Keine Antwort';
               console.log(teslaConnection.status);
               infoMessage(teslaConnection.status);
-              gtag('event', 'Invalid Token', {'event_category': 'Connect'});
+              gtag('event', 'No Answer', {'event_category': 'Connect'});
               return;
-
+            } else if (vehicleData.error == 'invalid bearer token') {
+              if (teslaConnection.refreshToken) {
+                teslaConnection.status = 'Erneuere Token';
+                console.log(teslaConnection.status);
+                infoMessage(teslaConnection.status);
+                gtag('event', 'Refreshing Token', {'event_category': 'Connect'});
+                refreshTeslaToken();
+              } else {
+                teslaConnection.status = 'Kein Refresh Token';
+                console.log(teslaConnection.status);
+                infoMessageg(teslaConnection.status);
+                gtag('event', 'No Refresh Token', {'event_category': 'Connect'});
+                return;
+              }
             } else if (vehicleData.response == null) {
               // Car sleeps
               teslaConnection.status = 'Fahrzeug nicht erreichbar';
@@ -1369,6 +1383,55 @@
         }
       });
 
+      xhr.open("POST", teslaUrl);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader("cache-control", "no-cache");
+
+      xhr.send(body);
+    };
+    
+    function refreshTeslaToken() {
+      var teslaUrl = corsproxy + 'https://auth.tesla.com/oauth2/v3/token';
+      console.log('Refreshing Token: ' + teslaUrl);
+      if (debugLog) {logMessage('Refreshing Token: ' + teslaUrl)};
+
+      var body = JSON.stringify({
+        'grant_type': 'refresh_token',
+        'client_id': 'ownerapi',
+        'refresh_token': teslaConnection.refreshToken
+      });
+
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+          console.log("refreshToken Listener Result: " + this.responseText);
+          if (debugLog) {logMessage("refreshToken Listener Result: " + this.responseText)};
+
+          var result = JSON.parse(this.responseText);
+          teslaConnection.accessToken = result.access_token;
+          // result.expires_in
+          // result.created_at
+
+          document.cookie = 'access=' + teslaConnection.accessToken + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+
+          console.log("Access: " + teslaConnection.accessToken);
+
+          getTeslaVehicles (function () {
+            if (this.readyState === 4) {
+              var result = JSON.parse(this.responseText);
+              teslaConnection.vehicle = result.response[0].id_s;
+
+              document.cookie = 'vehicle=' + teslaConnection.vehicle + '; expires=Thu, 10 Aug 2022 12:00:00 UTC";';
+              console.log("Vehicle: " + teslaConnection.vehicle);
+
+              connectTesla();
+            }
+          });
+        }
+      });
+      
       xhr.open("POST", teslaUrl);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("cache-control", "no-cache");
@@ -1739,7 +1802,7 @@
 
     function chargerListHeader() {
       var routeChargerList = '';
-      routeChargerList += `<div style="max-height: 690px; box-sizing: border-box; overflow-y: auto; padding: 0px 20px;">`;
+      routeChargerList += `<div style="max-height: ${y-200}px; box-sizing: border-box; overflow-y: auto; padding: 0px 20px;">`;
       return routeChargerList;
     };
 
