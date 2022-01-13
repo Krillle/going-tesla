@@ -946,15 +946,7 @@
 
       map.flyTo({ 'center': e.features[0].geometry.coordinates});
 
-      var chargerID = e.features[0].id
-
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
-      // map.once('idle', function(e) {
-      //   console.log('Map idle',chargerID);
-      //   popup.setHTML(chargerDescription(chargerID).text)
-      // });
-      // var coordinates = e.features[0].geometry.coordinates.slice();
-      // popup.setLngLat(coordinates)
       popup.setLngLat(e.features[0].geometry.coordinates)
       .setHTML(chargerShortDescription(e.features[0].id, e.features[0].properties).text)
       .once('open',function () {
