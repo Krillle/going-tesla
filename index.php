@@ -947,7 +947,7 @@
 
       map.flyTo({
         'center': e.features[0].geometry.coordinates,
-        'offset': [0, y-200]
+        'offset': [0, y/2-200]
       });
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
