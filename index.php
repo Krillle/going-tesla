@@ -589,6 +589,7 @@
 
     };
 
+    // x,y viewport size
     var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
 
     var infoContainer = document.getElementById('info');
@@ -944,7 +945,10 @@
       autoFollow = false;
       gtag('event', 'Charger Details', {'event_category': 'Charger', 'event_label': `${e.features[0].properties.name} ${e.features[0].properties.city}`});
 
-      map.flyTo({ 'center': e.features[0].geometry.coordinates});
+      map.flyTo({
+        'center': e.features[0].geometry.coordinates,
+        'offset': [0, y-200]
+      });
 
       var popup = new mapboxgl.Popup({ offset: 25, anchor: 'bottom' })
       popup.setLngLat(e.features[0].geometry.coordinates)
