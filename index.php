@@ -1209,7 +1209,7 @@
           infoMessage(teslaConnection.status);
           gtag('event', 'Refreshing Token', {'event_category': 'Connect'});
           refreshTeslaToken();
-
+        }
       } else {
         updatePosition(true);
       };
