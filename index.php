@@ -1202,6 +1202,14 @@
         console.log(teslaConnection.status);
         infoMessage(teslaConnection.status);
         gtag('event', 'No Token', {'event_category': 'Connect'});
+
+        if (teslaConnection.refreshToken) {
+          teslaConnection.status = 'Erneuere Token';
+          console.log(teslaConnection.status);
+          infoMessage(teslaConnection.status);
+          gtag('event', 'Refreshing Token', {'event_category': 'Connect'});
+          refreshTeslaToken();
+
       } else {
         updatePosition(true);
       };
