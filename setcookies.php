@@ -36,8 +36,8 @@
 
 	function setToken() {
 		console.log("Set Token started")
-		document.getElementById("accessToken").value = getCookie('access') || "";
-		document.getElementById("refreshToken").value = '<?php echo $_ENV["token"]; ?>' || "";
+		document.getElementById("accessToken").value = '<?php echo $_ENV["access"]; ?>' || "";
+		document.getElementById("refreshToken").value = '<?php echo $_ENV["refresh"]; ?>' || "";
 	 	document.getElementById("vehicle").value = getCookie('vehicle') || "";
 	}
 
